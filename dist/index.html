@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madison88 | IT Headquarters</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23283f63'/%3E%3Ctext x='32' y='24' text-anchor='middle' font-family='Arial, sans-serif' font-size='8.5' letter-spacing='0.5' fill='white'%3Emadison%3C/text%3E%3Ctext x='32' y='52' text-anchor='middle' font-family='Arial Black, Arial, sans-serif' font-size='29' font-weight='900' fill='white'%3E88%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        window.M88_SUPABASE = {
+            url: "https://bmlmxeakyivzwjwemrov.supabase.co",
+            anonKey: "sb_publishable_QrZIapvR0-7Cl0joIg4kbA_Xwzon0m0",
+            table: "dashboard_content",
+            photoBucket: "team-photos"
+        };
+    </script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BLYihBGp.css">
+</head>
+<body class="lenis">
+    <div id="universal-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-content glass" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <button class="modal-close" type="button" aria-label="Close modal">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <div id="loader" class="loader-overlay">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <span class="logo-text">Madison<span class="accent-text">88</span></span>
+            </div>
+            <div class="loader-hike-scene" aria-hidden="true">
+                <div class="loader-fog loader-fog-back"></div>
+                <div class="loader-fog loader-fog-front"></div>
+                <div class="loader-mountain loader-mountain-back"></div>
+                <div class="loader-mountain loader-mountain-far"></div>
+                <div class="loader-mountain loader-mountain-mid"></div>
+                <div class="loader-ridge">
+                    <div class="loader-ridge-progress"></div>
+                    <div class="loader-hiker">
+                        <span class="loader-hiker-pack"></span>
+                        <span class="loader-hiker-body"></span>
+                        <span class="loader-hiker-leg loader-hiker-leg-front"></span>
+                        <span class="loader-hiker-leg loader-hiker-leg-back"></span>
+                        <span class="loader-hiker-stick"></span>
+                    </div>
+                </div>
+            </div>
+            <p class="loader-copy">Launching IT Headquarters</p>
+        </div>
+    </div>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+    <div class="noise-overlay"></div>
+    <div class="bg-gradient"></div>
+
+    <div class="app-shell">
+        <aside class="sidebar glass" aria-label="Primary navigation">
+            <div class="sidebar-brand">
+                <span class="logo-text">Madison<span class="accent-text">88</span></span>
+                <p>IT Headquarters</p>
+            </div>
+
+            <div class="sidebar-group">
+                <span class="sidebar-label">Command</span>
+                <nav class="sidebar-nav">
+                    <a href="#overview" class="nav-link is-active" data-section-link><span class="nav-icon">⌘</span><span>Overview</span></a>
+                    <a href="#projects" class="nav-link" data-section-link><span class="nav-icon">◫</span><span>Projects</span></a>
+                    <a href="#services" class="nav-link" data-section-link><span class="nav-icon">◎</span><span>IT Services</span></a>
+                </nav>
+            </div>
+
+            <div class="sidebar-group">
+                <span class="sidebar-label">Operations</span>
+                <nav class="sidebar-nav">
+                    <a href="#team" class="nav-link" data-section-link><span class="nav-icon">◌</span><span>Team</span></a>
+                    <a href="#announcements" class="nav-link" data-section-link><span class="nav-icon">✦</span><span>Reports</span></a>
+                    <a href="#support" class="nav-link" data-section-link><span class="nav-icon">?</span><span>Support</span></a>
+                </nav>
+            </div>
+
+            <div class="sidebar-admin">
+                <span class="sidebar-label">Admin Access</span>
+                <button class="project-login-btn sidebar-login-btn" type="button" id="admin-login-button">
+                    <span class="project-login-dot"></span>
+                    <span>IT Team Login</span>
+                </button>
+            </div>
+
+        </aside>
+
+        <main class="dashboard">
+            <header id="overview" class="hero-dashboard">
+                <section class="hero-top glass reveal">
+                    <div class="hero-copy">
+                        <div class="hero-kicker-row">
+                            <span class="eyebrow">IT Command Center</span>
+                            <div class="weather-widget" aria-label="Current weather in Manila, Philippines">
+                                <span class="weather-icon" aria-hidden="true" id="weather-icon">
+                                    <svg viewBox="0 0 48 48" fill="none">
+                                        <circle cx="18" cy="18" r="7" fill="currentColor"></circle>
+                                        <path d="M18 4v5M18 27v5M4 18h5M27 18h5M8.1 8.1l3.5 3.5M24.4 24.4l3.5 3.5M8.1 27.9l3.5-3.5M24.4 11.6l3.5-3.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path>
+                                        <path d="M30 33.5H15.5a6.5 6.5 0 1 1 1.8-12.8A8.4 8.4 0 0 1 33 23.3a5.5 5.5 0 0 1-3 10.2Z" fill="currentColor" opacity="0.28"></path>
+                                    </svg>
+                                </span>
+                                <div class="weather-copy">
+                                    <strong id="weather-temperature">29&deg;C</strong>
+                                    <span id="weather-condition">Sunny</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h1>Information Technology and Data</h1>
+                        <p id="hero-description">One launchpad for support, systems, projects, and the people keeping Madison88 running at full speed.</p>
+                        <button class="btn btn-secondary admin-inline-button" type="button" id="edit-overview-button" hidden>Edit Overview</button>
+                    </div>
+                    <div class="hero-clock">
+                        <span class="clock-label">Philippines time</span>
+                        <strong id="current-time">--:--</strong>
+                        <span id="current-date">Loading date</span>
+                    </div>
+                </section>
+
+                <section class="section-shell reveal" id="mission-vision">
+                    <div class="section-heading compact-heading">
+                        <div>
+                            <span class="eyebrow">Madison88 IT</span>
+                            <h2>Mission, Vision & Values</h2>
+                            <p class="section-subcopy">The direction guiding the Madison88 IT team across support, systems, and delivery.</p>
+                        </div>
+                    </div>
+                    <div data-mission-vision-panel></div>
+                </section>
+
+                <section class="hero-grid">
+                    <div class="command-panel glass reveal">
+                        <div class="search-panel">
+                            <label for="global-search">What do you need today?</label>
+                            <div class="search-input-wrap">
+                                <input id="global-search" type="search" placeholder="Search systems, services, projects, or team contacts">
+                                <button id="clear-search" class="icon-button" type="button" aria-label="Clear search">×</button>
+                            </div>
+                            <p id="search-meta">Search instantly across tools, project systems, and support contacts.</p>
+                        </div>
+
+                        <div class="status-ticker glass">
+                            <span class="ticker-label">Live feed</span>
+                            <div class="ticker-track" id="status-ticker-track" aria-live="polite"></div>
+                        </div>
+                    </div>
+
+                    <div class="hero-stats">
+                        <article class="stat-card glass reveal"><span class="stat-label">Active Ticket Queue</span><strong class="stat-number" data-stat-key="tickets" data-target="0">0</strong><span class="stat-note">Requests currently in the IT pipeline</span></article>
+                        <article class="stat-card glass reveal"><span class="stat-label">System uptime</span><strong class="stat-number" data-stat-key="uptime" data-target="0">0</strong><span class="stat-note">Across critical internal systems</span></article>
+                        <article class="stat-card glass reveal"><span class="stat-label">Active users</span><strong class="stat-number" data-stat-key="users" data-target="0">0</strong><span class="stat-note">Employees online right now</span></article>
+                        <article class="stat-card glass reveal"><span class="stat-label">Running projects</span><strong class="stat-number" data-stat-key="projects" data-target="0">0</strong><span class="stat-note">Live and moving initiatives</span></article>
+                    </div>
+                </section>
+            </header>
+
+            <section class="section-shell reveal" id="projects">
+                <div class="section-heading">
+                    <div class="project-heading-copy">
+                        <span class="eyebrow">Project Radar</span>
+                        <h2>IT Service Catalogue</h2>
+                    </div>
+                    <div class="project-toolbar">
+                        <div class="filter-tabs" id="project-filters" role="tablist" aria-label="Project filters">
+                            <button class="filter-tab is-active" type="button" data-filter="all">All</button>
+                            <button class="filter-tab" type="button" data-filter="active">Active</button>
+                            <button class="filter-tab" type="button" data-filter="in-progress">In Progress</button>
+                            <button class="filter-tab" type="button" data-filter="completed">Completed</button>
+                        </div>
+                        <button class="btn btn-secondary admin-inline-button" type="button" id="add-project-button" hidden>Add Project</button>
+                    </div>
+                </div>
+                <div class="projects-carousel" id="projects-carousel">
+                    <div class="projects-track" id="projects-grid"></div>
+                </div>
+                <div class="project-pagination" id="project-pagination"></div>
+            </section>
+
+            <section class="content-columns">
+                <section class="section-shell reveal" id="services">
+                    <div class="section-heading">
+                        <div>
+                            <span class="eyebrow">Quick Tools</span>
+                            <h2>Launch services in seconds</h2>
+                        </div>
+                    </div>
+                    <div class="service-category-grid" id="services-grid"></div>
+                </section>
+
+                <aside class="section-shell compact-shell glass reveal" id="support">
+                    <div class="section-heading compact-heading">
+                        <div>
+                            <span class="eyebrow">Who To Contact</span>
+                            <h2>Team Guidance And Coverage</h2>
+                            <p class="section-subcopy">The responsibility map for common staff concerns and who in IT should handle them.</p>
+                        </div>
+                        <button class="btn btn-secondary admin-inline-button" type="button" id="add-support-card-button" hidden>Add Support Card</button>
+                    </div>
+                    <div class="support-stack" id="support-stack"></div>
+                </aside>
+            </section>
+
+            <section class="content-columns lower-columns">
+                <section class="section-shell reveal" id="team">
+                    <div class="section-heading">
+                        <div>
+                            <span class="eyebrow">IT Team</span>
+                            <h2>Who to contact and why</h2>
+                        </div>
+                        <button class="btn btn-secondary admin-inline-button" type="button" id="add-team-button" hidden>Add Team Member</button>
+                    </div>
+                    <div class="contact-guide glass" id="contact-guide"></div>
+                    <div class="team-grid" id="team-grid"></div>
+                </section>
+
+                <section class="section-shell reveal" id="announcements">
+                    <div class="section-heading compact-heading">
+                        <div>
+                            <span class="eyebrow">Who To Contact</span>
+                            <h2>Team Guidance And Coverage</h2>
+                            <p class="section-subcopy">The responsibility map for common staff concerns and who in IT should handle them.</p>
+                        </div>
+                        <button class="btn btn-secondary admin-inline-button" type="button" id="add-quickhelp-card-button" hidden>Add Card</button>
+                    </div>
+                    <div class="quick-help-grid" id="quick-help-grid"></div>
+                </section>
+            </section>
+
+            <footer class="footer-bar glass reveal">
+                <div class="footer-meta">
+                    <div><span class="footer-label">IT operating hours</span><strong>Mon-Fri, 8:00 AM-6:00 PM PHT</strong></div>
+                    <div><span class="footer-label">Emergency support</span><strong>+63 917 800 1188</strong></div>
+                </div>
+                <div class="footer-links">
+                    <a href="#">IT Policies</a>
+                    <a href="#">User Guides</a>
+                    <a href="#">Org Chart</a>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <nav class="mobile-nav glass" aria-label="Mobile navigation">
+        <a href="#overview" class="mobile-nav-link is-active" data-section-link><span>⌘</span><span>Home</span></a>
+        <a href="#projects" class="mobile-nav-link" data-section-link><span>◫</span><span>Projects</span></a>
+        <a href="#services" class="mobile-nav-link" data-section-link><span>◎</span><span>Services</span></a>
+        <a href="#team" class="mobile-nav-link" data-section-link><span>◌</span><span>Team</span></a>
+        <a href="#support" class="mobile-nav-link" data-section-link><span>?</span><span>Support</span></a>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
+</html>
