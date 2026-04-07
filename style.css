@@ -3010,12 +3010,14 @@ body:hover .cursor-outline { opacity: 1; }
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 20px 16px;
     background: rgba(8, 12, 24, 0.86);
     backdrop-filter: blur(14px);
     opacity: 0;
     visibility: hidden;
     transition: 0.3s ease;
     z-index: 2000;
+    overscroll-behavior: contain;
 }
 
 .modal-overlay.active { opacity: 1; visibility: visible; }
@@ -3023,6 +3025,9 @@ body:hover .cursor-outline { opacity: 1; }
     width: min(720px, calc(100vw - 32px));
     max-height: calc(100vh - 40px);
     overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
     border-radius: 28px;
     padding-top: 56px;
     transform: translateY(12px) scale(0.98);
@@ -3115,6 +3120,8 @@ body:hover .cursor-outline { opacity: 1; }
 html.lenis { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto; }
 .lenis.lenis-stopped { overflow: hidden; }
+html.modal-open,
+body.modal-open { overflow: hidden; }
 
 @media (pointer: coarse) {
     .cursor-dot,

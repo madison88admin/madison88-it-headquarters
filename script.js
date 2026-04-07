@@ -2337,20 +2337,28 @@ function setupNavigation() {
 function setupModalSystem() {
     const modal = document.getElementById("universal-modal");
     const modalBody = document.getElementById("modal-body");
+    const modalContent = document.getElementById("universal-modal-content");
     const closeButton = document.querySelector(".modal-close");
-    if (!modal || !modalBody || !closeButton) return;
+    if (!modal || !modalBody || !modalContent || !closeButton) return;
 
     const openModal = (content) => {
         modalBody.innerHTML = content;
+        modalBody.scrollTop = 0;
+        modalContent.scrollTop = 0;
         modal.classList.add("active");
         modal.setAttribute("aria-hidden", "false");
         if (window.lenisInstance) window.lenisInstance.stop();
+        document.documentElement.classList.add("modal-open");
+        document.body.classList.add("modal-open");
         document.body.style.overflow = "hidden";
+        requestAnimationFrame(() => modalContent.focus({ preventScroll: true }));
     };
     const closeModal = () => {
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
         if (window.lenisInstance) window.lenisInstance.start();
+        document.documentElement.classList.remove("modal-open");
+        document.body.classList.remove("modal-open");
         document.body.style.overflow = "";
     };
 
@@ -2359,6 +2367,22 @@ function setupModalSystem() {
 
     closeButton.addEventListener("click", closeModal);
     modal.addEventListener("click", (event) => { if (event.target === modal) closeModal(); });
+    modal.addEventListener("wheel", (event) => {
+        if (!modal.classList.contains("active")) return;
+        const scrollContainer = event.target.closest("[data-native-scroll]") || modalContent;
+        if (!scrollContainer) return;
+
+        const hasVerticalScroll = scrollContainer.scrollHeight > scrollContainer.clientHeight;
+        if (!hasVerticalScroll) {
+            event.preventDefault();
+            return;
+        }
+
+        const nextScrollTop = scrollContainer.scrollTop + event.deltaY;
+        const maxScrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+        scrollContainer.scrollTop = Math.max(0, Math.min(nextScrollTop, maxScrollTop));
+        event.preventDefault();
+    }, { passive: false });
     document.addEventListener("change", async (event) => {
         const fileInput = event.target.closest("[data-team-photo-input]");
         if (!fileInput) return;
@@ -3004,7 +3028,8 @@ function setupLenis() {
     const lenis = new Lenis({
         duration: 1.1,
         easing: (value) => Math.min(1, 1.001 - Math.pow(2, -10 * value)),
-        smoothWheel: true
+        smoothWheel: true,
+        prevent: (node) => Boolean(node?.closest?.("[data-lenis-prevent], [data-native-scroll]"))
     });
     const raf = (time) => { lenis.raf(time); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
