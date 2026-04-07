@@ -889,15 +889,20 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
 .team-card,
 .support-card { min-height: 260px; border-radius: 26px; padding: 22px; transition: var(--transition-smooth); }
 .admin-mode .team-card,
+.admin-mode .project-card,
 .admin-mode .support-card { cursor: grab; }
 .not-admin-mode .team-card,
 body:not(.admin-mode) .team-card,
 .not-admin-mode .support-card,
-body:not(.admin-mode) .support-card { cursor: default; }
+body:not(.admin-mode) .support-card,
+.not-admin-mode .project-card,
+body:not(.admin-mode) .project-card { cursor: default; }
 .team-card.dragging,
-.support-card.dragging { opacity: 0.55; cursor: grabbing; }
+.support-card.dragging,
+.project-card.dragging { opacity: 0.55; cursor: grabbing; }
 .team-card.drag-over,
-.support-card.drag-over { outline: 2px dashed rgba(200, 169, 110, 0.85); transform: translateY(-4px); }
+.support-card.drag-over,
+.project-card.drag-over { outline: 2px dashed rgba(200, 169, 110, 0.85); transform: translateY(-4px); }
 .project-card:hover,
 .service-tile:hover,
 .team-card:hover,

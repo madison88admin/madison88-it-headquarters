@@ -196,7 +196,7 @@ const APP_STATE = {
     adminLoggedIn: sessionStorage.getItem(STORAGE_KEYS.adminSession) === "true",
     currentProjectFilter: "all",
     currentProjectPage: 1,
-    projectsPerPage: 5
+    projectsPerPage: 8
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -523,6 +523,7 @@ function renderProjects(projects) {
     const grid = document.getElementById("projects-grid");
     const pagination = document.getElementById("project-pagination");
     if (!grid) return;
+    const isAdmin = APP_STATE.adminLoggedIn;
 
     const query = String(document.getElementById("global-search")?.value || "").trim().toLowerCase();
     const filteredProjects = projects.filter((project) => {
@@ -533,17 +534,18 @@ function renderProjects(projects) {
     const totalPages = Math.max(1, Math.ceil(filteredProjects.length / APP_STATE.projectsPerPage));
     APP_STATE.currentProjectPage = Math.min(APP_STATE.currentProjectPage, totalPages);
     const startIndex = (APP_STATE.currentProjectPage - 1) * APP_STATE.projectsPerPage;
-    const visibleProjects = filteredProjects.slice(startIndex, startIndex + APP_STATE.projectsPerPage);
+    const visibleProjects = isAdmin
+        ? filteredProjects
+        : filteredProjects.slice(startIndex, startIndex + APP_STATE.projectsPerPage);
 
     grid.innerHTML = visibleProjects.map((project) => {
-        const isAdmin = APP_STATE.adminLoggedIn;
         const openButton = project.systemUrl
             ? `<button class="btn btn-primary" type="button" data-open-url="${project.systemUrl}">Open System</button>`
             : `<button class="btn btn-primary" type="button" data-project-modal="${project.id}">Open System</button>`;
         const requestButton = `<button class="btn btn-secondary" type="button" data-project-modal="${project.id}">View Details</button>`;
 
         return `
-            <article class="project-card glass reveal searchable-item ${isAdmin ? "is-admin" : ""}" data-filter="${project.filter}" data-search="${buildSearchText([project.name, project.description, project.ownerName, project.status, project.overseenBy, project.assignedBy])}">
+            <article class="project-card glass reveal searchable-item ${isAdmin ? "is-admin" : ""}" draggable="${isAdmin ? "true" : "false"}" data-project-id="${project.id}" data-filter="${project.filter}" data-search="${buildSearchText([project.name, project.description, project.ownerName, project.status, project.overseenBy, project.assignedBy])}">
                 <div class="project-header">
                     <div class="project-title-block">
                         <span class="status-badge ${mapStatusClass(project.status)}">${project.status}</span>
@@ -580,22 +582,99 @@ function renderProjects(projects) {
         `;
     }).join("");
 
-    if (pagination) {
+    if (pagination && !isAdmin) {
         const showingFrom = filteredProjects.length ? startIndex + 1 : 0;
         const showingTo = Math.min(startIndex + APP_STATE.projectsPerPage, filteredProjects.length);
         pagination.innerHTML = `
             <div class="project-pagination-status">Showing ${showingFrom}-${showingTo} of ${filteredProjects.length} projects</div>
             <div class="project-pagination-actions">
-                <button class="btn btn-secondary" type="button" data-project-page="prev" ${APP_STATE.currentProjectPage === 1 ? "disabled" : ""}>Previous 5</button>
+                <button class="btn btn-secondary" type="button" data-project-page="prev" ${APP_STATE.currentProjectPage === 1 ? "disabled" : ""}>Previous 8</button>
                 <span class="project-pagination-page">Page ${APP_STATE.currentProjectPage} of ${totalPages}</span>
-                <button class="btn btn-secondary" type="button" data-project-page="next" ${APP_STATE.currentProjectPage >= totalPages ? "disabled" : ""}>Next 5</button>
+                <button class="btn btn-secondary" type="button" data-project-page="next" ${APP_STATE.currentProjectPage >= totalPages ? "disabled" : ""}>Next 8</button>
             </div>
+        `;
+    } else if (pagination) {
+        pagination.innerHTML = `
+            <div class="project-pagination-status">Admin reorder mode: showing all ${filteredProjects.length} projects</div>
         `;
     }
 
     updateAdminUI();
+    setupProjectDragAndDrop();
     setupRevealAnimations();
     refreshSearchResults();
+}
+
+function setupProjectDragAndDrop() {
+    const grid = document.getElementById("projects-grid");
+    if (!grid || !APP_STATE.adminLoggedIn) return;
+
+    let dragProjectId = null;
+
+    const clearDragStyles = () => {
+        grid.querySelectorAll(".project-card").forEach((card) => {
+            card.classList.remove("dragging", "drag-over");
+        });
+    };
+
+    const reorderProjects = (sourceId, targetId) => {
+        if (!sourceId || !targetId || sourceId === targetId) return;
+        const sourceIndex = APP_STATE.projects.findIndex((project) => project.id === sourceId);
+        const targetIndex = APP_STATE.projects.findIndex((project) => project.id === targetId);
+        if (sourceIndex === -1 || targetIndex === -1) return;
+
+        const [moved] = APP_STATE.projects.splice(sourceIndex, 1);
+        APP_STATE.projects.splice(targetIndex, 0, moved);
+        saveProjects();
+        renderProjects(APP_STATE.projects);
+    };
+
+    grid.querySelectorAll(".project-card").forEach((card) => {
+        const projectId = String(card.dataset.projectId || "");
+
+        card.addEventListener("dragstart", (event) => {
+            dragProjectId = projectId;
+            card.classList.add("dragging");
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("text/plain", projectId);
+            if (event.dataTransfer.setDragImage) {
+                event.dataTransfer.setDragImage(card, 20, 20);
+            }
+        });
+
+        card.addEventListener("dragenter", (event) => {
+            event.preventDefault();
+            if (projectId !== dragProjectId) {
+                card.classList.add("drag-over");
+            }
+        });
+
+        card.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            if (projectId !== dragProjectId) {
+                card.classList.add("drag-over");
+            }
+            event.dataTransfer.dropEffect = "move";
+        });
+
+        card.addEventListener("dragleave", () => {
+            card.classList.remove("drag-over");
+        });
+
+        card.addEventListener("drop", (event) => {
+            event.preventDefault();
+            card.classList.remove("drag-over");
+            if (dragProjectId) {
+                reorderProjects(dragProjectId, projectId);
+            }
+            clearDragStyles();
+        });
+
+        card.addEventListener("dragend", () => {
+            dragProjectId = null;
+            clearDragStyles();
+        });
+    });
 }
 
 function renderServices() {
