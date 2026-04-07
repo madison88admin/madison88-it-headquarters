@@ -151,7 +151,8 @@ const STORAGE_KEYS = {
     quickHelpData: "madison88-quickhelp-data",
     contactGuideData: "madison88-contact-guide-data",
     supportData: "madison88-support-data",
-    adminSession: "madison88-admin-session"
+    adminSession: "madison88-admin-session",
+    automationDashboardHidden: "madison88-automation-dashboard-hidden"
 };
 
 const SUPABASE_SECTION_KEYS = {
@@ -231,6 +232,13 @@ const POLICY_VISUALS = [
     }
 ];
 
+const AUTOMATION_COMPARISON = [
+    { projectId: "po-cutting-system", label: "PO Cutting", manualVolume: 920, automatedVolume: 3200, manualHours: 184, automatedHours: 41, moneySaved: 132000 },
+    { projectId: "costing-automation", label: "Costing Automation", manualVolume: 540, automatedVolume: 1900, manualHours: 146, automatedHours: 36, moneySaved: 118000 },
+    { projectId: "it-service-management", label: "ITSM Requests", manualVolume: 780, automatedVolume: 2450, manualHours: 132, automatedHours: 48, moneySaved: 91000 },
+    { projectId: "brand-analysis-pbi", label: "BI Reporting", manualVolume: 310, automatedVolume: 1100, manualHours: 88, automatedHours: 22, moneySaved: 76000 }
+];
+
 function cloneData(value) {
     if (typeof structuredClone === "function") {
         return structuredClone(value);
@@ -301,6 +309,7 @@ const APP_STATE = {
     contactGuide: loadContactGuide(),
     supportCards: loadSupportCards(),
     adminLoggedIn: sessionStorage.getItem(STORAGE_KEYS.adminSession) === "true",
+    automationDashboardHidden: localStorage.getItem(STORAGE_KEYS.automationDashboardHidden) === "true",
     currentProjectFilter: "all",
     currentProjectPage: 1,
     projectsPerPage: 8
@@ -313,6 +322,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     syncOverviewProjectCount();
     renderStats();
     renderTicker();
+    renderAutomationDashboard();
     renderProjects(APP_STATE.projects);
     renderServices();
     renderTeam();
@@ -321,6 +331,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderSupportCards();
     renderMissionVision();
     setupProjectFilters();
+    setupAutomationDashboardToggle();
     setupSearch();
     setupAdminAutofill();
     setupClock();
@@ -471,6 +482,7 @@ function refreshDashboardContent() {
     syncOverviewProjectCount();
     renderStats();
     renderTicker();
+    renderAutomationDashboard();
     renderProjects(APP_STATE.projects);
     renderServices();
     renderTeam();
@@ -701,6 +713,347 @@ function renderTicker() {
     if (!track) return;
     const items = [...APP_STATE.overview.ticketUpdates, ...APP_STATE.overview.ticketUpdates];
     track.innerHTML = items.map((item) => `<span class="ticker-pill"><strong>IT Update</strong><span>${item}</span></span>`).join("");
+}
+
+function renderAutomationDashboard() {
+    const container = document.getElementById("automation-dashboard");
+    if (!container) return;
+
+    const rows = AUTOMATION_COMPARISON.map((entry) => {
+        const project = APP_STATE.projects.find((item) => item.id === entry.projectId);
+        const hoursSaved = Math.max(0, entry.manualHours - entry.automatedHours);
+        return {
+            ...entry,
+            projectName: project?.name || entry.label,
+            hoursSaved
+        };
+    });
+
+    const totalVolumeManual = rows.reduce((sum, item) => sum + item.manualVolume, 0);
+    const totalVolumeAutomated = rows.reduce((sum, item) => sum + item.automatedVolume, 0);
+    const totalHoursSaved = rows.reduce((sum, item) => sum + item.hoursSaved, 0);
+    const totalMoneySaved = rows.reduce((sum, item) => sum + item.moneySaved, 0);
+    const totalProjects = rows.length;
+    const overallChart = buildOverallComparisonChart(rows);
+    const bestPerformer = rows.reduce((best, item) => item.moneySaved > best.moneySaved ? item : best, rows[0]);
+    const maxMultiplier = Math.max(...rows.map((item) => item.automatedVolume / Math.max(item.manualVolume, 1)), 1);
+    const maxTableSavings = Math.max(...rows.map((item) => item.moneySaved), 1);
+    const isHidden = APP_STATE.automationDashboardHidden;
+
+    container.innerHTML = `
+        <div class="automation-dashboard-top">
+            <div>
+                <span class="quick-help-label">Automation Dashboard</span>
+                <h3>Automation Impact Summary</h3>
+                <p class="service-copy">This view compares manual work and automated work so any stakeholder can quickly understand output, time savings, and estimated business value.</p>
+            </div>
+            <div class="automation-kpi-grid">
+                <article class="automation-kpi-card">
+                    <span>Automations Reviewed</span>
+                    <strong>${totalProjects}</strong>
+                    <small>included in this view</small>
+                </article>
+                <article class="automation-kpi-card">
+                    <span>Work Processed</span>
+                    <strong>${formatCompactNumber(totalVolumeAutomated)}</strong>
+                    <small>vs ${formatCompactNumber(totalVolumeManual)} done manually</small>
+                </article>
+                <article class="automation-kpi-card">
+                    <span>Time Saved</span>
+                    <strong>${totalHoursSaved}</strong>
+                    <small>hours saved in one cycle</small>
+                </article>
+                <article class="automation-kpi-card">
+                    <span>Estimated Savings</span>
+                    <strong>${formatCurrencyCompact(totalMoneySaved)}</strong>
+                    <small>projected business value</small>
+                </article>
+            </div>
+        </div>
+        <div class="automation-dashboard-body" id="automation-dashboard-body"${isHidden ? " hidden" : ""}>
+        <div class="automation-overall-chart-card">
+            <div class="automation-overall-chart-copy">
+                <div>
+                    <span class="quick-help-label">Overall Chart</span>
+                    <h4>Overall Comparison of Automation, Manual Input, and Savings</h4>
+                    <p class="automation-chart-intro">Gray bars show manual input, green bars show automation output, and the blue line shows estimated savings in pesos. This gives a clearer side-by-side view of workload and business impact.</p>
+                </div>
+                <div class="automation-chart-legend">
+                    <span><i class="legend-swatch legend-swatch-manual"></i>Manual input</span>
+                    <span><i class="legend-swatch legend-swatch-auto"></i>Automation output</span>
+                    <span><i class="legend-line legend-line-savings"></i>Savings (PHP)</span>
+                </div>
+            </div>
+            <div class="automation-panels-grid">
+                <div class="automation-insight-strip">
+                    <div class="automation-insight-card">
+                        <span>Highest Estimated Value</span>
+                        <strong>${bestPerformer.projectName}</strong>
+                        <small>${formatCurrencyCompact(bestPerformer.moneySaved)} in estimated savings</small>
+                    </div>
+                    <div class="automation-insight-card">
+                        <span>Overall Throughput</span>
+                        <strong>${Math.round((totalVolumeAutomated / Math.max(totalVolumeManual, 1)) * 100)}%</strong>
+                        <small>of the manual baseline volume</small>
+                    </div>
+                </div>
+                <div class="automation-multiplier-card">
+                    <div class="automation-multiplier-header">
+                        <span class="quick-help-label">Multiplier</span>
+                        <h5>Automation Multiplier Per Solution</h5>
+                    </div>
+                    <div class="automation-multiplier-list">
+                        ${rows.map((item) => {
+                            const multiplier = item.automatedVolume / Math.max(item.manualVolume, 1);
+                            return `
+                                <div class="automation-multiplier-row" data-automation-key="${escapeHtml(item.projectId)}" tabindex="0">
+                                    <span>${escapeHtml(item.label)}</span>
+                                    <div class="automation-multiplier-track">
+                                        <div class="automation-multiplier-fill" style="width:${(multiplier / maxMultiplier) * 100}%"></div>
+                                        <strong>${multiplier.toFixed(1)}x</strong>
+                                    </div>
+                                </div>
+                            `;
+                        }).join("")}
+                    </div>
+                </div>
+            </div>
+            <div class="automation-chart-shell">
+                ${overallChart}
+            </div>
+        </div>
+        <div class="automation-breakdown-card">
+            <div class="automation-breakdown-header">
+                <span class="quick-help-label">Breakdown</span>
+                <h5>Savings & Efficiency Breakdown</h5>
+            </div>
+            <div class="automation-breakdown-table-wrap">
+                <table class="automation-breakdown-table">
+                    <thead>
+                        <tr>
+                            <th>Solution</th>
+                            <th>Manual Input</th>
+                            <th>Auto Output</th>
+                            <th>Multiplier</th>
+                            <th>Est. Savings</th>
+                            <th>Efficiency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows.map((item) => {
+                            const multiplier = item.automatedVolume / Math.max(item.manualVolume, 1);
+                            const efficiency = Math.round(((item.manualHours - item.automatedHours) / Math.max(item.manualHours, 1)) * 100);
+                            return `
+                                <tr data-automation-key="${escapeHtml(item.projectId)}" tabindex="0">
+                                    <td data-label="Solution"><strong>${escapeHtml(item.label)}</strong></td>
+                                    <td data-label="Manual Input">${formatCompactNumber(item.manualVolume)}</td>
+                                    <td data-label="Auto Output">${formatCompactNumber(item.automatedVolume)}</td>
+                                    <td data-label="Multiplier"><span class="automation-chip automation-chip-multiplier">${multiplier.toFixed(1)}x</span></td>
+                                    <td data-label="Est. Savings">
+                                        <div class="automation-savings-cell">
+                                            <strong>${formatCurrencyCompact(item.moneySaved)}</strong>
+                                            <span class="automation-savings-meter"><span style="width:${(item.moneySaved / maxTableSavings) * 100}%"></span></span>
+                                        </div>
+                                    </td>
+                                    <td data-label="Efficiency"><span class="automation-chip automation-chip-efficiency">+${efficiency}%</span></td>
+                                </tr>
+                            `;
+                        }).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    `;
+
+    applyAutomationDashboardVisibility(container, isHidden);
+    setupAutomationDashboardInteractions(container);
+}
+
+function toggleAutomationDashboardVisibility() {
+    APP_STATE.automationDashboardHidden = !APP_STATE.automationDashboardHidden;
+    localStorage.setItem(STORAGE_KEYS.automationDashboardHidden, String(APP_STATE.automationDashboardHidden));
+
+    const container = document.getElementById("automation-dashboard");
+    if (container && !container.innerHTML.trim()) {
+        renderAutomationDashboard();
+        return;
+    }
+
+    applyAutomationDashboardVisibility(container, APP_STATE.automationDashboardHidden);
+}
+
+function setupAutomationDashboardToggle() {
+    const toggleButton = document.getElementById("toggle-automation-dashboard");
+    if (!toggleButton) return;
+
+    toggleButton.addEventListener("click", () => {
+        toggleAutomationDashboardVisibility();
+    });
+
+    applyAutomationDashboardVisibility(document.getElementById("automation-dashboard"), APP_STATE.automationDashboardHidden);
+}
+
+function applyAutomationDashboardVisibility(container, isHidden) {
+    const toolbarToggle = document.getElementById("toggle-automation-dashboard");
+
+    if (container) {
+        container.hidden = isHidden;
+        container.classList.toggle("is-collapsed", isHidden);
+    }
+
+    if (toolbarToggle) {
+        toolbarToggle.setAttribute("aria-expanded", String(!isHidden));
+        toolbarToggle.textContent = isHidden ? "Show Dashboard" : "Hide Dashboard";
+    }
+}
+
+function setupAutomationDashboardInteractions(container) {
+    if (!container) return;
+
+    const clearActive = () => {
+        container.classList.remove("has-linked-active");
+        container.querySelectorAll(".is-linked-active").forEach((node) => node.classList.remove("is-linked-active"));
+    };
+
+    const setActive = (key) => {
+        clearActive();
+        if (!key) return;
+        container.classList.add("has-linked-active");
+        container.querySelectorAll(`[data-automation-key="${key}"]`).forEach((node) => node.classList.add("is-linked-active"));
+    };
+
+    container.querySelectorAll("[data-automation-key]").forEach((node) => {
+        const key = node.getAttribute("data-automation-key");
+        node.addEventListener("mouseenter", () => setActive(key));
+        node.addEventListener("focus", () => setActive(key));
+        node.addEventListener("mouseleave", clearActive);
+        node.addEventListener("blur", clearActive);
+    });
+}
+
+function formatCompactNumber(value) {
+    return new Intl.NumberFormat("en-PH", { notation: "compact", maximumFractionDigits: 1 }).format(value);
+}
+
+function formatCurrencyCompact(value) {
+    return new Intl.NumberFormat("en-PH", {
+        style: "currency",
+        currency: "PHP",
+        notation: "compact",
+        maximumFractionDigits: 1
+    }).format(value);
+}
+
+function buildOverallComparisonChart(rows) {
+    const chartWidth = 860;
+    const chartHeight = 360;
+    const leftAxisX = 92;
+    const rightAxisX = 742;
+    const topY = 70;
+    const baseY = 284;
+    const chartInnerHeight = baseY - topY;
+    const maxVolume = Math.max(...rows.flatMap((item) => [item.manualVolume, item.automatedVolume]), 1);
+    const maxMoneySaved = Math.max(...rows.map((item) => item.moneySaved), 1);
+    const chartStartX = 126;
+    const chartStep = 164;
+    const groupWidth = 108;
+    const barWidth = 52;
+    const barGap = 12;
+    const gridValues = [1, 0.833, 0.667, 0.5, 0.333, 0.167, 0];
+
+    const points = rows.map((item, index) => {
+        const groupX = chartStartX + index * chartStep;
+        const centerX = groupX + groupWidth / 2;
+        const manualHeight = Math.max(18, (item.manualVolume / maxVolume) * chartInnerHeight);
+        const autoHeight = Math.max(18, (item.automatedVolume / maxVolume) * chartInnerHeight);
+        const lineY = baseY - (item.moneySaved / maxMoneySaved) * chartInnerHeight;
+        const labelParts = splitChartLabel(item.label);
+        return {
+            ...item,
+            groupX,
+            centerX,
+            manualX: groupX,
+            autoX: groupX + barWidth + barGap,
+            manualY: baseY - manualHeight,
+            autoY: baseY - autoHeight,
+            manualHeight,
+            autoHeight,
+            lineY,
+            labelParts
+        };
+    });
+
+    const savingsPath = points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.centerX} ${point.lineY}`).join(" ");
+
+    return `
+        <svg class="automation-overall-chart" viewBox="0 0 ${chartWidth} ${chartHeight}" role="img" aria-label="Overall automation comparison chart">
+            <defs>
+                <linearGradient id="chartManualBar" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#a8a6a1"></stop>
+                    <stop offset="100%" stop-color="#8f8d88"></stop>
+                </linearGradient>
+                <linearGradient id="chartAutoBar" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#2ab489"></stop>
+                    <stop offset="100%" stop-color="#259e79"></stop>
+                </linearGradient>
+                <linearGradient id="chartSavingsLine" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0%" stop-color="#4798f5"></stop>
+                    <stop offset="100%" stop-color="#2d82e6"></stop>
+                </linearGradient>
+                <filter id="automationSoftGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="7" result="blur"></feGaussianBlur>
+                    <feMerge>
+                        <feMergeNode in="blur"></feMergeNode>
+                        <feMergeNode in="SourceGraphic"></feMergeNode>
+                    </feMerge>
+                </filter>
+            </defs>
+            <rect x="${leftAxisX}" y="${topY}" width="${rightAxisX - leftAxisX}" height="${baseY - topY}" rx="24" class="chart-plot"></rect>
+            <text x="28" y="34" class="chart-axis-title">Volume</text>
+            <text x="828" y="34" class="chart-axis-title chart-axis-title-right">Savings (PHP)</text>
+            <line x1="${leftAxisX}" y1="${baseY}" x2="${rightAxisX}" y2="${baseY}" class="chart-axis"></line>
+            ${gridValues.map((value, index) => {
+                const y = topY + (index * chartInnerHeight) / (gridValues.length - 1);
+                return `
+                    <g>
+                        <line x1="${leftAxisX}" y1="${y}" x2="${rightAxisX}" y2="${y}" class="chart-grid-line"></line>
+                        <text x="72" y="${y + 4}" class="chart-scale chart-scale-left">${formatCompactNumber(Math.round(maxVolume * value))}</text>
+                        <text x="828" y="${y + 4}" class="chart-scale chart-scale-right">${formatCurrencyCompact(Math.round(maxMoneySaved * value))}</text>
+                    </g>
+                `;
+            }).join("")}
+            ${points.map((point) => `
+                <g class="chart-series-group" data-automation-key="${escapeHtml(point.projectId)}">
+                    <rect x="${point.manualX}" y="${point.manualY}" width="${barWidth}" height="${point.manualHeight}" rx="4" class="chart-bar chart-bar-manual"></rect>
+                    <rect x="${point.autoX}" y="${point.autoY}" width="${barWidth}" height="${point.autoHeight}" rx="4" class="chart-bar chart-bar-auto"></rect>
+                    <text x="${point.centerX}" y="${baseY + 22}" text-anchor="middle" class="chart-label">
+                        <tspan x="${point.centerX}" dy="0">${escapeHtml(point.labelParts[0])}</tspan>
+                        ${point.labelParts[1] ? `<tspan x="${point.centerX}" dy="14">${escapeHtml(point.labelParts[1])}</tspan>` : ""}
+                    </text>
+                </g>
+            `).join("")}
+            <path d="${savingsPath}" class="chart-line-glow chart-line-glow-savings"></path>
+            <path d="${savingsPath}" class="chart-line chart-line-savings"></path>
+            ${points.map((point) => `
+                <g class="chart-series-group" data-automation-key="${escapeHtml(point.projectId)}">
+                    <circle cx="${point.centerX}" cy="${point.lineY}" r="9" class="chart-point-ring chart-point-ring-savings"></circle>
+                    <circle cx="${point.centerX}" cy="${point.lineY}" r="5.5" class="chart-point chart-point-savings" filter="url(#automationSoftGlow)"></circle>
+                </g>
+            `).join("")}
+        </svg>
+    `;
+}
+
+function splitChartLabel(label) {
+    const words = String(label || "").trim().split(/\s+/).filter(Boolean);
+    if (words.length <= 1) return [String(label || "").trim()];
+
+    const midpoint = Math.ceil(words.length / 2);
+    return [
+        words.slice(0, midpoint).join(" "),
+        words.slice(midpoint).join(" ")
+    ];
 }
 
 function renderProjects(projects) {
@@ -2050,9 +2403,10 @@ function setupModalSystem() {
             if (username === APP_CONFIG.adminCredentials.username && password === APP_CONFIG.adminCredentials.password) {
                 APP_STATE.adminLoggedIn = true;
                 sessionStorage.setItem(STORAGE_KEYS.adminSession, "true");
-                renderStats();
-                renderTicker();
-                renderProjects(APP_STATE.projects);
+    renderStats();
+    renderTicker();
+    renderAutomationDashboard();
+    renderProjects(APP_STATE.projects);
                 renderServices();
                 renderTeam();
                 renderContactGuide();
