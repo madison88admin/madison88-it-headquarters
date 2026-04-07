@@ -1561,6 +1561,17 @@ body:not(.admin-mode) #add-quickhelp-card-button {
     border: 1px solid rgba(216, 204, 182, 0.1);
 }
 
+.contact-guide-header {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.contact-guide-header h3 {
+    font-size: 2rem;
+    line-height: 1;
+}
+
 .guide-row {
     align-items: center;
     padding: 16px 18px;

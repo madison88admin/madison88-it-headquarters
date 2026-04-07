@@ -1067,7 +1067,12 @@ function renderContactGuide() {
         { label: "Hardware and Setup", issue: "Hardware setup, peripherals, or deployment support", owner: "John Sedrick Sarol", initials: "JS" },
         { label: "Project Ownership", issue: "Project approvals or system rollout concerns", owner: "Paul Avendaño", initials: "PA" }
     ];
-    guide.innerHTML = rows.map((row, index) => `
+    guide.innerHTML = `
+        <div class="contact-guide-header">
+            <span class="eyebrow">Who To Contact</span>
+            <h3>Who to contact and why</h3>
+        </div>
+        ${rows.map((row, index) => `
         <div class="guide-row searchable-item" draggable="${APP_STATE.adminLoggedIn ? "true" : "false"}" data-guide-index="${index}" data-search="${buildSearchText([row.label, row.issue, row.owner])}">
             <div class="guide-main">
                 <span class="guide-kicker">${row.label}</span>
@@ -1076,7 +1081,8 @@ function renderContactGuide() {
             </div>
             <span class="guide-person"><span class="guide-person-badge">${row.initials}</span>${row.owner}</span>
         </div>
-    `).join("");
+    `).join("")}
+    `;
     refreshSearchResults();
 }
 
