@@ -173,11 +173,78 @@ const APP_RUNTIME = {
     supabaseLastSyncAt: ""
 };
 
+const POLICY_DOCUMENTS = [
+    {
+        id: "policy-pdf-1",
+        label: "PDF 01",
+        title: "Madison88 IT Framework Charter",
+        description: "Open the official Madison88 IT Framework Charter PDF.",
+        sectionIndexes: [0, 1],
+        url: "/policies/madison88-it-framework-charter.pdf"
+    },
+    {
+        id: "policy-pdf-2",
+        label: "PDF 02",
+        title: "MADISON88 CHANGE MANAGEMENT POLICY",
+        description: "Open the official Madison88 Change Management Policy PDF.",
+        sectionIndexes: [2, 3],
+        url: "/policies/madison88-change-management-policy.pdf"
+    },
+    {
+        id: "policy-pdf-3",
+        label: "PDF 03",
+        title: "Madison88 Incident Management Policy",
+        description: "Open the official Madison88 Incident Management Policy PDF.",
+        sectionIndexes: [4, 5, 6],
+        url: "/policies/madison88-incident-management-policy.pdf"
+    }
+];
+
+const POLICY_VISUALS = [
+    {
+        image: "/policies/images/it-security-policy.png",
+        alt: "IT Security Policy"
+    },
+    {
+        image: "/policies/images/general-provisions-personal-computers.png",
+        alt: "General Provisions and Use of Personal Computers"
+    },
+    {
+        image: "/policies/images/password-data-storage-intellectual-property.png",
+        alt: "Password Policy, Data Storage and Intellectual Property"
+    },
+    {
+        image: "/policies/images/company-information-internet-usage.png",
+        alt: "Company Information Protection and Internet Usage"
+    },
+    {
+        image: "/policies/images/remote-work-email-usage.png",
+        alt: "Remote Work and Email Usage"
+    },
+    {
+        image: "/policies/images/social-media-compliance.png",
+        alt: "Social Media Posting and Compliance"
+    },
+    {
+        image: "/policies/images/it-security-violations-penalties.png",
+        alt: "IT Security Violations and Penalties"
+    }
+];
+
 function cloneData(value) {
     if (typeof structuredClone === "function") {
         return structuredClone(value);
     }
     return JSON.parse(JSON.stringify(value));
+}
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 }
 
 function clearLegacyContentStorage() {
@@ -213,16 +280,15 @@ function hasLegacyContentStorage() {
 APP_CONFIG.services = [
     { category: "IT Services", items: [
         { icon: "IT", name: "IT Services", description: "Core information technology services supporting employees, business systems, and daily operations.", status: "online", url: "" },
-        { icon: "EUC", name: "End-User Computing (EUC)", description: "Enterprise Architecture & Service Management\nMandatory Change Request & Implementation Standards\nRegional IT Support Assignment\nP3/P4 Response Priority", status: "online", url: "" },
-        { icon: "SD", name: "Service Desk & IT Support", description: "ITIL v4 Service Management\nFormal Initiation & Approval Workflow\nMandatory Logging & Ticket Assignment\nSLA Performance Metrics", status: "online", url: "" },
-        { icon: "IAM", name: "Identity & Access Management (IAM)", description: "Security & Risk Management Governance\nSecurity/Access Change Type Approval\nP1/P2 Access Failure Priority\nFormal Incident Investigation", status: "online", url: "" },
-        { icon: "APP", name: "Business Applications & Data Services", description: "Data & Reporting Scope (Nexus, PLM, Pivot88)\nFunctional Testing & Validation\nDocumented Change Requests\nPost-Incident Review (PIR)", status: "online", url: "" },
-        { icon: "NET", name: "Infrastructure & Network Services", description: "Enterprise Architecture Framework\nTechnical Risk Assessment\nP1 Network-Wide Outage Priority\nRecovery Protocols & Mandatory PIR", status: "online", url: "" },
-        { icon: "SEC", name: "Information Security & Data Protection", description: "Security & Risk Policies\nSecurity/Access Risk Assessment\nSteering Committee Communication\nSecurity Event PIR", status: "online", url: "" },
-        { icon: "BDR", name: "Backup & Disaster Recovery", description: "Charter Authority Policies\nImplementation & Post-Implementation Review\nRecovery Protocols\nP1 Resolution Path Support", status: "online", url: "" },
-        { icon: "CRM", name: "Change & Release Management", description: "Service Management & Policy Governance\nPrimary Change Policy Coverage\nCAB Protocol Adherence\nFailed Change PIR", status: "online", url: "" },
-        { icon: "AUTO", name: "Process Automation & Digital Enablement", description: "Project & Portfolio Management\nPower Platform & API Change Types\nAutomation/API Incident Scope\nBusiness Impact Classification", status: "online", url: "" },
-        { icon: "GRC", name: "IT Governance, Policy & Compliance", description: "Guiding Principles & Governance Model\nKPI Monitoring & Continuous Improvement\nMonthly Leadership Reporting\nAnnual Policy Review Cycle", status: "online", url: "" }
+        { icon: "EUC", name: "End-User Computing (EUC)", description: "End-User Device Provisioning & Lifecycle: Provides, configures, and manages user devices (laptops/desktops/IT peripherals) for employees across MNL & INDO regions.\nEnd-User Software Installation (Standard Apps): Installs approved, licensed applications required for work.\nWorkplace Printing & Peripheral Support: Support for standard printers, scanners, docking stations, monitors, and peripherals.", status: "online", url: "" },
+        { icon: "SD", name: "Service Desk & IT Support", description: "Service Desk (Incident & Request Handling): Central support point for logging, tracking, and resolving IT incidents and requests.", status: "online", url: "" },
+        { icon: "IAM", name: "Identity & Access Management (IAM)", description: "User Account Management (Onboarding / Offboarding): Creates, modifies, or disables accounts based on HR events and approvals.\nAccess Requests (Role-Based Access / System Permissions): Grants or removes access to Madison88 systems based on role and approvals.\nEmail, Teams & SharePoint Collaboration Support: Support for collaboration tools and shared workspaces.", status: "online", url: "" },
+        { icon: "APP", name: "Business Applications & Data Services", description: "ERP Application Support: Support for ERP transactions, user issues, master data requests, and system uptime coordination.\nPLM Support (Vision PLM Next Gen): Support for PLM access, configuration, integration issues, and user enablement.\nHRIS & Timekeeping Support: Support for HRIS access, data issues, workflows, and vendor escalation.\nReporting & BI Support (Power BI / Dashboards): Supports data refresh failures, access, dashboard publishing, and standard KPI reports.", status: "online", url: "" },
+        { icon: "NET", name: "Infrastructure & Network Services", description: "Network & Connectivity (LAN/Wi-Fi/VPN/Internet): Ensures reliable connectivity across offices and for remote work to maintain business continuity.\nServer / Cloud Hosting & Platform Services: Manages cloud and on-premise servers, storage, and platform uptime for business systems.", status: "online", url: "" },
+        { icon: "SEC", name: "Information Security & Data Protection", description: "Endpoint Security, Patching & Vulnerability Management: Protects endpoints and servers via security tooling, patch cycles, and vulnerability remediation.\nSecurity Incident Response (Cybersecurity Events): Coordinates response to suspected compromise, phishing, malware, or data incidents.\nData Protection & Retention (M365 / SharePoint): Implements protection controls for data, including access controls, retention, and backups.", status: "online", url: "" },
+        { icon: "BDR", name: "Backup & Disaster Recovery", description: "Backup & Restore Services: Backup operations for critical systems and restore support for data loss events.", status: "online", url: "" },
+        { icon: "CRG", name: "Change, Release & Governance", description: "Change and Release Management: Controls production changes to reduce disruption and ensure proper approvals and testing.\nIT Asset Management (Hardware / Software Inventory): Tracks asset lifecycle, assignment, licensing, and disposal for audit readiness.", status: "online", url: "" },
+        { icon: "AUTO", name: "Process Automation & Digital Enablement", description: "Workflow Automation & Platform Support: Builds and supports workflow automation (SharePoint, Power Automate), including minor enhancements and fixes.\nSystem Integration Support: Manages integrations between business systems such as ERP, PLM, HRIS, and Reporting.", status: "online", url: "" }
     ] }
 ];
 
@@ -269,9 +335,78 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function updateNavigationLabels() {
+    const commandNav = document.querySelectorAll(".sidebar-nav")[0];
+    const operationsNav = document.querySelectorAll(".sidebar-nav")[1];
+    const mobileNav = document.querySelector(".mobile-nav");
+
+    const overviewLink = document.querySelector('.sidebar .nav-link[href="#overview"]');
+    const teamLink = document.querySelector('.sidebar .nav-link[href="#team"]');
+    const servicesLink = document.querySelector('.sidebar .nav-link[href="#services"]');
+    const projectsLink = document.querySelector('.sidebar .nav-link[href="#projects"]');
+    const policiesLink = document.querySelector('.sidebar .nav-link[href="#announcements"]');
+    const supportLink = document.querySelector('.sidebar .nav-link[href="#support"]');
+
+    if (commandNav) {
+        [overviewLink, teamLink, servicesLink].filter(Boolean).forEach((link) => commandNav.appendChild(link));
+    }
+
+    if (operationsNav) {
+        [projectsLink, policiesLink, supportLink].filter(Boolean).forEach((link) => operationsNav.appendChild(link));
+    }
+
+    const mobileOverviewLink = document.querySelector('.mobile-nav-link[href="#overview"]');
+    const mobileTeamLink = document.querySelector('.mobile-nav-link[href="#team"]');
+    const mobileServicesLink = document.querySelector('.mobile-nav-link[href="#services"]');
+    const mobileProjectsLink = document.querySelector('.mobile-nav-link[href="#projects"]');
+    const mobileSupportLink = document.querySelector('.mobile-nav-link[href="#support"]');
+
+    let mobilePoliciesLink = document.querySelector('.mobile-nav-link[href="#announcements"]');
+    if (!mobilePoliciesLink && mobileNav) {
+        mobilePoliciesLink = document.createElement("a");
+        mobilePoliciesLink.className = "mobile-nav-link";
+        mobilePoliciesLink.innerHTML = '<span>✦</span><span>Policies</span>';
+        mobileNav.appendChild(mobilePoliciesLink);
+    }
+
+    if (mobilePoliciesLink) {
+        mobilePoliciesLink.setAttribute("href", "#");
+        mobilePoliciesLink.setAttribute("data-modal", "other-policies");
+        mobilePoliciesLink.removeAttribute("data-section-link");
+        const label = mobilePoliciesLink.querySelector("span:last-child");
+        if (label) label.textContent = "Policies";
+    }
+
+    if (mobileNav) {
+        [mobileOverviewLink, mobileTeamLink, mobileServicesLink, mobileProjectsLink, mobilePoliciesLink, mobileSupportLink]
+            .filter(Boolean)
+            .forEach((link) => mobileNav.appendChild(link));
+    }
+
     document.querySelectorAll('[href="#announcements"] span:last-child').forEach((label) => {
-        label.textContent = "Policy";
+        label.textContent = "Policies";
     });
+
+    document.querySelectorAll('[href="#announcements"]').forEach((link) => {
+        link.setAttribute("href", "#");
+        link.setAttribute("data-modal", "other-policies");
+        link.removeAttribute("data-section-link");
+    });
+
+    document.querySelectorAll('[href="#support"]').forEach((link) => {
+        link.setAttribute("href", "#");
+        link.setAttribute("data-modal", "support-center");
+        link.removeAttribute("data-section-link");
+    });
+
+    const announcementsSection = document.getElementById("announcements");
+    if (announcementsSection) {
+        announcementsSection.hidden = true;
+    }
+
+    const supportSection = document.getElementById("support");
+    if (supportSection) {
+        supportSection.hidden = true;
+    }
 }
 
 const MANILA_WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=14.5995&longitude=120.9842&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=Asia%2FManila&forecast_days=1";
@@ -341,6 +476,7 @@ function refreshDashboardContent() {
     renderTeam();
     renderContactGuide();
     renderQuickHelp();
+    renderPolicyDocuments();
     renderSupportCards();
     renderMissionVision();
     updateAdminUI();
@@ -741,7 +877,10 @@ function renderServices() {
                         <div class="service-header">
                             <span class="service-icon" aria-hidden="true">${getServiceIconMarkup(service.name)}</span>
                         </div>
-                        <div><h4>${service.name}</h4>${formatServiceDescription(service.description)}</div>
+                        <div class="service-body">
+                            <h4>${service.name}</h4>
+                            ${formatServiceDescription(service.description)}
+                        </div>
                         <div class="tile-meta">
                             <span class="status-badge ${service.status === "online" ? "status-online" : "status-planning"}">${service.status}</span>
                         </div>
@@ -763,13 +902,33 @@ function formatServiceDescription(description) {
         .filter(Boolean);
 
     if (items.length <= 1) {
-        return `<p class="service-copy">${items[0] || ""}</p>`;
+        return formatServiceDescriptionItem(items[0] || "");
     }
 
     return `
         <ul class="service-copy service-bullet-list">
-            ${items.map((item) => `<li>${item}</li>`).join("")}
+            ${items.map((item) => `<li class="service-bullet-item">${formatServiceDescriptionItem(item)}</li>`).join("")}
         </ul>
+    `;
+}
+
+function formatServiceDescriptionItem(item) {
+    const text = String(item || "").trim();
+    if (!text) return `<p class="service-copy"></p>`;
+
+    const colonIndex = text.indexOf(":");
+    if (colonIndex === -1) {
+        return `<p class="service-copy">${text}</p>`;
+    }
+
+    const title = text.slice(0, colonIndex).trim();
+    const detail = text.slice(colonIndex + 1).trim();
+
+    return `
+        <div class="service-description-item">
+            <strong class="service-description-title">${title}</strong>
+            <p class="service-description-detail">${detail}</p>
+        </div>
     `;
 }
 
@@ -1176,7 +1335,77 @@ function renderQuickHelp() {
         </article>
     `).join("");
     setupQuickHelpDragAndDrop();
+    renderPolicyDocuments();
     refreshSearchResults();
+}
+
+function renderPolicyDocuments() {
+    const container = document.getElementById("policy-library-grid");
+    if (!container) return;
+
+    container.innerHTML = POLICY_DOCUMENTS.map((document) => {
+        const sections = document.sectionIndexes
+            .map((index) => APP_STATE.quickHelp[index])
+            .filter(Boolean);
+        const sectionTitles = sections.map((section) => section.title).join(" ");
+
+        return `
+            <article class="policy-document-card glass searchable-item" role="link" tabindex="0" data-open-url="${document.url}" data-search="${buildSearchText([document.title, document.description, sectionTitles, "pdf", "policy"])}">
+                <div class="policy-document-top">
+                    <span class="policy-document-badge">${document.label}</span>
+                    <span class="policy-document-type">Policy PDF</span>
+                </div>
+                <div class="policy-document-icon" aria-hidden="true">PDF</div>
+                <div>
+                    <h3>${document.title}</h3>
+                    <p>${document.description}</p>
+                </div>
+                <div class="policy-document-list">
+                    ${sections.map((section) => `<span>${section.title}</span>`).join("")}
+                </div>
+                <button class="btn btn-secondary" type="button" data-open-url="${document.url}">Open PDF</button>
+            </article>
+        `;
+    }).join("");
+}
+
+function getPolicyVisual(index, item) {
+    const visual = POLICY_VISUALS[index];
+    return {
+        image: visual?.image || "",
+        alt: visual?.alt || item?.title || "Policy preview"
+    };
+}
+
+function buildPolicyPreviewBrowser() {
+    const previewItems = APP_STATE.quickHelp.map((item, index) => {
+        return `
+            <button
+                class="policy-nav-item ${index === 0 ? "is-active" : ""}"
+                type="button"
+                data-policy-preview="${index}"
+                data-policy-title="${escapeHtml(item.title)}"
+            >
+                <strong>${item.title}</strong>
+            </button>
+        `;
+    }).join("");
+
+    const firstItem = APP_STATE.quickHelp[0];
+
+    return `
+        <div class="policy-browser">
+            <div class="policy-browser-list">
+                ${previewItems}
+            </div>
+            <div class="policy-browser-preview">
+                <div class="policy-preview-header">
+                    <h3 id="policy-preview-title">${firstItem?.title || "Policy Preview"}</h3>
+                    <div id="policy-preview-summary" class="announcement-body">${firstItem?.bodyHtml || `<p>${firstItem?.body || ""}</p>`}</div>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 function renderSupportCards() {
@@ -1707,7 +1936,11 @@ function buildWeatherIconMarkup(state) {
 
 function setupNavigation() {
     const links = document.querySelectorAll("[data-section-link]");
-    const sections = [...document.querySelectorAll("main [id]")];
+    const sections = [...links]
+        .map((link) => String(link.getAttribute("href") || "").replace("#", ""))
+        .filter(Boolean)
+        .map((id) => document.getElementById(id))
+        .filter(Boolean);
     if (!links.length || !sections.length) return;
 
     const defaultSection = "overview";
@@ -1824,6 +2057,7 @@ function setupModalSystem() {
                 renderTeam();
                 renderContactGuide();
                 renderQuickHelp();
+                renderPolicyDocuments();
                 renderSupportCards();
                 updateAdminUI();
                 closeModal();
@@ -2169,6 +2403,27 @@ function setupModalSystem() {
             return;
         }
 
+        const policyPreviewButton = event.target.closest("[data-policy-preview]");
+        if (policyPreviewButton) {
+            const modalBody = document.getElementById("modal-body");
+            if (modalBody) {
+                const policyIndex = Number(policyPreviewButton.dataset.policyPreview);
+                const policyItem = APP_STATE.quickHelp[policyIndex];
+                modalBody.querySelectorAll("[data-policy-preview]").forEach((button) => {
+                    button.classList.toggle("is-active", button === policyPreviewButton);
+                });
+
+                const title = modalBody.querySelector("#policy-preview-title");
+                const summary = modalBody.querySelector("#policy-preview-summary");
+
+                if (title) title.textContent = policyPreviewButton.dataset.policyTitle || "Policy Preview";
+                if (summary) {
+                    summary.innerHTML = policyItem?.bodyHtml || `<p>${policyItem?.body || ""}</p>`;
+                }
+            }
+            return;
+        }
+
         const modalTrigger = event.target.closest("[data-modal]");
         if (modalTrigger) {
             const type = modalTrigger.dataset.modal;
@@ -2177,6 +2432,8 @@ function setupModalSystem() {
             if (type === "profile") openModal(buildProfileModal(modalTrigger.dataset.member));
             if (type === "offline") openModal(buildOfflineModal());
             if (type === "notifications") openModal(buildNotificationsModal());
+            if (type === "other-policies") openModal(buildOtherPoliciesModal());
+            if (type === "support-center") openModal(buildSupportCenterModal());
             return;
         }
 
@@ -2522,6 +2779,60 @@ function buildOfflineModal() {
                 <li>Check the announcements panel for maintenance updates.</li>
                 <li>Submit a ticket if the outage is blocking your work.</li>
             </ul>
+        </div>
+    `;
+}
+
+function buildOtherPoliciesModal() {
+    const documentCards = POLICY_DOCUMENTS.map((document) => `
+        <article class="policy-document-card glass searchable-item" role="link" tabindex="0" data-open-url="${document.url}">
+            <div class="policy-document-top">
+                <span class="policy-document-badge">${document.label}</span>
+                <span class="policy-document-type">Policy PDF</span>
+            </div>
+            <div class="policy-document-icon" aria-hidden="true">PDF</div>
+            <div>
+                <h3>${document.title}</h3>
+                <p>${document.description}</p>
+            </div>
+            <button class="btn btn-secondary" type="button" data-open-url="${document.url}">Open PDF</button>
+        </article>
+    `).join("");
+
+    return `
+        <div class="modal-block">
+            <span class="quick-help-label">Policies</span>
+            <h2 id="modal-title">Policies and Other Documents</h2>
+            <p>Open the PDF files below, then click a policy item to show the correct policy image and content preview.</p>
+            <div class="policy-library-grid modal-policy-library-grid">${documentCards}</div>
+            ${buildPolicyPreviewBrowser()}
+        </div>
+    `;
+}
+
+function buildSupportCenterModal() {
+    const isAdmin = APP_STATE.adminLoggedIn;
+    const cards = APP_STATE.supportCards.map((item, index) => `
+        <article class="support-card searchable-item" data-support-index="${index}">
+            <span class="support-kicker">${item.label}</span>
+            <h3>${item.title}</h3>
+            <p>${item.body}</p>
+            ${item.actionType === "modal"
+                ? `<button class="btn btn-primary" type="button" data-modal="${item.value}">${item.action}</button>`
+                : item.actionType === "message"
+                ? `<button class="btn btn-secondary" type="button" data-message="${item.value}" data-member="${item.person}">${item.action}</button>`
+                : `<button class="btn btn-secondary" type="button" data-open-url="${item.value}">${item.action}</button>`
+            }
+            ${isAdmin ? `<button class="btn btn-secondary" type="button" data-edit-support="${index}">Edit Support Card</button>` : ""}
+        </article>
+    `).join("");
+
+    return `
+        <div class="modal-block">
+            <span class="quick-help-label">Support</span>
+            <h2 id="modal-title">Information Security & Acceptable Use Policy</h2>
+            <p>Guidelines for protecting company systems, information, devices, and communication tools across daily work.</p>
+            <div class="support-stack modal-support-stack">${cards}</div>
         </div>
     `;
 }

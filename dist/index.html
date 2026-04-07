@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Madison88 | IT Headquarters</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23283f63'/%3E%3Ctext x='32' y='24' text-anchor='middle' font-family='Arial, sans-serif' font-size='8.5' letter-spacing='0.5' fill='white'%3Emadison%3C/text%3E%3Ctext x='32' y='52' text-anchor='middle' font-family='Arial Black, Arial, sans-serif' font-size='29' font-weight='900' fill='white'%3E88%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23283f63'/%3E%3Ctext x='32' y='24' text-anchor='middle' font-family='Arial, sans-serif' font-size='8.5' letter-spacing='0.5' fill='white'%3Emadison%3C/text%3E%3Ctext x='32' y='52' text-anchor='middle' font-family='Arial Black, Arial, sans-serif' font-size='29' font-weight='900' fill='white'%3E88%3C/text%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -16,8 +16,8 @@
             photoBucket: "team-photos"
         };
     </script>
-  <script type="module" crossorigin src="/assets/index-Di86KIbZ.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-BLYihBGp.css">
+  <script type="module" crossorigin src="/assets/index-D9xDE7Qe.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-4W-9olHl.css">
 </head>
 <body class="lenis">
     <div id="universal-modal" class="modal-overlay" aria-hidden="true">
@@ -60,7 +60,7 @@
 
     <div class="app-shell">
         <aside class="sidebar glass" aria-label="Primary navigation">
-            <div class="sidebar-brand">
+            <div class="sidebar-brand" id="admin-logo-trigger" role="button" tabindex="0" aria-label="Madison88 IT Headquarters">
                 <span class="logo-text">Madison<span class="accent-text">88</span></span>
                 <p>IT Headquarters</p>
             </div>
@@ -69,8 +69,8 @@
                 <span class="sidebar-label">Command</span>
                 <nav class="sidebar-nav">
                     <a href="#overview" class="nav-link is-active" data-section-link><span class="nav-icon">⌘</span><span>Overview</span></a>
-                    <a href="#projects" class="nav-link" data-section-link><span class="nav-icon">◫</span><span>Projects</span></a>
                     <a href="#services" class="nav-link" data-section-link><span class="nav-icon">◎</span><span>IT Services</span></a>
+                    <a href="#projects" class="nav-link" data-section-link><span class="nav-icon">◫</span><span>Projects</span></a>
                 </nav>
             </div>
 
@@ -81,14 +81,6 @@
                     <a href="#announcements" class="nav-link" data-section-link><span class="nav-icon">✦</span><span>Reports</span></a>
                     <a href="#support" class="nav-link" data-section-link><span class="nav-icon">?</span><span>Support</span></a>
                 </nav>
-            </div>
-
-            <div class="sidebar-admin">
-                <span class="sidebar-label">Admin Access</span>
-                <button class="project-login-btn sidebar-login-btn" type="button" id="admin-login-button">
-                    <span class="project-login-dot"></span>
-                    <span>IT Team Login</span>
-                </button>
             </div>
 
         </aside>
@@ -161,11 +153,38 @@
                 </section>
             </header>
 
+            <section class="content-columns lower-columns">
+                <section class="section-shell reveal" id="team">
+                    <div class="section-heading">
+                        <div>
+                            <span class="eyebrow">IT Team</span>
+                            <h2>IT Team Directory</h2>
+                        </div>
+                        <button class="btn btn-secondary admin-inline-button" type="button" id="add-team-button" hidden>Add Team Member</button>
+                    </div>
+                    <div class="team-grid" id="team-grid"></div>
+                </section>
+
+                <section class="section-shell reveal" id="announcements">
+                    <div class="contact-guide glass" id="contact-guide"></div>
+                </section>
+            </section>
+
+            <section class="section-shell reveal" id="services">
+                <div class="section-heading">
+                    <div>
+                        <span class="eyebrow">Project Radar</span>
+                        <h2>IT Service Catalogue</h2>
+                    </div>
+                </div>
+                <div class="service-category-grid" id="services-grid"></div>
+            </section>
+
             <section class="section-shell reveal" id="projects">
                 <div class="section-heading">
                     <div class="project-heading-copy">
-                        <span class="eyebrow">Project Radar</span>
-                        <h2>IT Service Catalogue</h2>
+                        <span class="eyebrow">Quick Tools</span>
+                        <h2>Launch services in seconds</h2>
                     </div>
                     <div class="project-toolbar">
                         <div class="filter-tabs" id="project-filters" role="tablist" aria-label="Project filters">
@@ -183,56 +202,6 @@
                 <div class="project-pagination" id="project-pagination"></div>
             </section>
 
-            <section class="content-columns">
-                <section class="section-shell reveal" id="services">
-                    <div class="section-heading">
-                        <div>
-                            <span class="eyebrow">Quick Tools</span>
-                            <h2>Launch services in seconds</h2>
-                        </div>
-                    </div>
-                    <div class="service-category-grid" id="services-grid"></div>
-                </section>
-
-                <aside class="section-shell compact-shell glass reveal" id="support">
-                    <div class="section-heading compact-heading">
-                        <div>
-                            <span class="eyebrow">Who To Contact</span>
-                            <h2>Team Guidance And Coverage</h2>
-                            <p class="section-subcopy">The responsibility map for common staff concerns and who in IT should handle them.</p>
-                        </div>
-                        <button class="btn btn-secondary admin-inline-button" type="button" id="add-support-card-button" hidden>Add Support Card</button>
-                    </div>
-                    <div class="support-stack" id="support-stack"></div>
-                </aside>
-            </section>
-
-            <section class="content-columns lower-columns">
-                <section class="section-shell reveal" id="team">
-                    <div class="section-heading">
-                        <div>
-                            <span class="eyebrow">IT Team</span>
-                            <h2>Who to contact and why</h2>
-                        </div>
-                        <button class="btn btn-secondary admin-inline-button" type="button" id="add-team-button" hidden>Add Team Member</button>
-                    </div>
-                    <div class="contact-guide glass" id="contact-guide"></div>
-                    <div class="team-grid" id="team-grid"></div>
-                </section>
-
-                <section class="section-shell reveal" id="announcements">
-                    <div class="section-heading compact-heading">
-                        <div>
-                            <span class="eyebrow">Who To Contact</span>
-                            <h2>Team Guidance And Coverage</h2>
-                            <p class="section-subcopy">The responsibility map for common staff concerns and who in IT should handle them.</p>
-                        </div>
-                        <button class="btn btn-secondary admin-inline-button" type="button" id="add-quickhelp-card-button" hidden>Add Card</button>
-                    </div>
-                    <div class="quick-help-grid" id="quick-help-grid"></div>
-                </section>
-            </section>
-
             <footer class="footer-bar glass reveal">
                 <div class="footer-meta">
                     <div><span class="footer-label">IT operating hours</span><strong>Mon-Fri, 8:00 AM-6:00 PM PHT</strong></div>
@@ -248,12 +217,12 @@
     </div>
 
     <nav class="mobile-nav glass" aria-label="Mobile navigation">
-        <a href="#overview" class="mobile-nav-link is-active" data-section-link><span>⌘</span><span>Home</span></a>
+        <a href="#overview" class="mobile-nav-link is-active" data-section-link><span>⌘</span><span>Overview</span></a>
+        <a href="#services" class="mobile-nav-link" data-section-link><span>◎</span><span>IT Services</span></a>
         <a href="#projects" class="mobile-nav-link" data-section-link><span>◫</span><span>Projects</span></a>
-        <a href="#services" class="mobile-nav-link" data-section-link><span>◎</span><span>Services</span></a>
         <a href="#team" class="mobile-nav-link" data-section-link><span>◌</span><span>Team</span></a>
         <a href="#support" class="mobile-nav-link" data-section-link><span>?</span><span>Support</span></a>
     </nav>
-
+
 </body>
 </html>
