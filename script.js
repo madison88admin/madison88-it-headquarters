@@ -61,14 +61,55 @@ const APP_CONFIG = {
         { label: "Find The Right IT Person", title: "Portal guidance, onboarding help, and documentation", body: "For walkthroughs, user guidance, and UI-related help, contact Stephanie Guce or John Carlo Manalo.", action: "View Team", actionType: "url", value: "#team" }
     ],
     contactGuide: [
-        { label: "Identity and Access", issue: "Account access, password reset, or VPN issue", owner: "Lester Mendoza", initials: "LM" },
-        { label: "Training and Guidance", issue: "Need training, portal help, or UI walkthrough", owner: "Stephanie Guce", initials: "SG" },
-        { label: "Hardware and Setup", issue: "Hardware setup, peripherals, or deployment support", owner: "John Sedrick Sarol", initials: "JS" },
         { label: "Project Ownership", issue: "Project approvals or system rollout concerns", owner: "Paul AvendaÃ±o", initials: "PA" }
     ],
     supportCards: [
         { label: "Priority Lane", title: "Submit a ticket", body: "For device, access, printer, email, or account issues.", action: "Open ITSM", actionType: "url", value: "https://m88itsm.netlify.app" },
         { label: "Direct Contact", title: "Talk to the right IT lead", body: "Reach the correct person faster for approvals, access, or urgent coordination.", action: "Contact IT Lead", actionType: "message", value: "lester.mendoza@madison88.com", person: "Lester Mendoza" }
+    ],
+    quickHelp: [
+        {
+            label: "",
+            title: "IT Security Policy",
+            body: "Our Information Technology systems, computers, networks, email, and communication tools are company property. They must be used professionally, lawfully, and ethically. Because they contain confidential and sensitive information, all employees must follow security rules to protect company assets and data.",
+            bodyHtml: "<p>Our Information Technology systems, computers, networks, email, and communication tools are <u>company property</u>. They must be used professionally, lawfully, and ethically. Because they contain confidential and sensitive information, all employees must follow security rules to protect company assets and data.</p>"
+        },
+        {
+            label: "",
+            title: "General Provisions & Use of Personal Computers",
+            body: "General Provisions: Protect all confidential and proprietary information. Do not access or modify data, files, or systems without authorization. Never bypass or tamper with security controls. Secure documents and storage media; shred or destroy confidential items before disposal. Collect confidential printouts immediately. Only IT is authorized to install or update hardware/software. Never share passwords or disclose internal system information. Use of Personal Computers: Take care of company-issued equipment; report loss or damage immediately. Keep laptops and devices secured, especially outside the office. Do not move or lend IT equipment without IT approval. Shut down your PC before leaving. Lock your PC during breaks; ensure screensaver auto-lock is active.",
+            bodyHtml: "<p><strong>General Provisions</strong></p><ul><li>Protect all confidential and proprietary information.</li><li>Do not access or modify data, files, or systems without authorization.</li><li>Never bypass or tamper with security controls.</li><li>Secure documents and storage media; shred or destroy confidential items before disposal.</li><li>Collect confidential printouts immediately.</li><li>Only IT is authorized to install or update hardware/software.</li><li>Never share passwords or disclose internal system information.</li></ul><p><strong>Use of Personal Computers</strong></p><ul><li>Take care of company-issued equipment; report loss or damage immediately.</li><li>Keep laptops and devices secured, especially outside the office.</li><li>Do not move or lend IT equipment without IT approval.</li><li>Shut down your PC before leaving.</li><li>Lock your PC during breaks; ensure screensaver auto-lock is active.</li></ul>"
+        },
+        {
+            label: "",
+            title: "Password Policy, Data Storage & Intellectual Property",
+            body: "Password Policy: Passwords must remain confidential and never written, shared, or stored in readable form. Request IT assistance if a password is compromised or needs changing. Always decline auto-complete or prompts to save passwords. Data Storage: Save work on network drives where backups are automated. Organize folders for easy retrieval. Avoid downloading unnecessary files that do not support work. Regularly clear outdated or redundant files. Intellectual Property: Do not copy, modify, or install unlicensed or personal software. Do not copy music, media, or personal software to work devices. Personal computers cannot connect to company networks without IT approval. Pirated software is strictly prohibited.",
+            bodyHtml: "<p><strong>Password Policy</strong></p><ul><li>Passwords must remain confidential and never written, shared, or stored in readable form.</li><li>Request IT assistance if a password is compromised or needs changing.</li><li>Always decline auto-complete or prompts to save passwords.</li></ul><p><strong>Data Storage</strong></p><ul><li>Save work on network drives where backups are automated.</li><li>Organize folders for easy retrieval.</li><li>Avoid downloading unnecessary files that do not support work.</li><li>Regularly clear outdated or redundant files.</li></ul><p><strong>Intellectual Property</strong></p><ul><li>Do not copy, modify, or install unlicensed or personal software.</li><li>Do not copy music, media, or personal software to work devices.</li><li>Personal computers cannot connect to company networks without IT approval.</li><li>Pirated software is strictly prohibited.</li></ul>"
+        },
+        {
+            label: "",
+            title: "Company Information Protection & Internet Usage",
+            body: "Company Information Protection: All corporate information belongs to the company. Use information only as needed for work. Never copy, remove, or share documents unless required and authorized. Return all company documents upon separation or when requested. Internet Usage: Internet access is for business purposes. Limited personal browsing is allowed, but personal email use is not. Do not download unapproved software. Never post confidential or sensitive information online. Accessing pornographic, hateful, or illegal content is strictly forbidden.",
+            bodyHtml: "<p><strong>Company Information Protection</strong></p><ul><li>All corporate information belongs to the company.</li><li>Use information only as needed for work.</li><li>Never copy, remove, or share documents unless required and authorized.</li><li>Return all company documents upon separation or when requested.</li></ul><p><strong>Internet Usage</strong></p><ul><li>Internet access is for business purposes.</li><li>Limited personal browsing is allowed, but personal email use is not.</li><li>Do not download unapproved software.</li><li>Never post confidential or sensitive information online.</li><li>Accessing pornographic, hateful, or illegal content is strictly forbidden.</li></ul>"
+        },
+        {
+            label: "",
+            title: "Remote Work & Email Usage",
+            body: "Remote Work - Connectivity & Power Outage: Report internet or power issues immediately via Teams or text. Provide outage details and a post-incident report. Employees should maintain backup connectivity (mobile data). Use offline resources (OneDrive) when needed. After 2 hours of no connectivity, employees must return to the office or use leave credits unless business needs require office return immediately. Email Usage: Company owns all email accounts; email is not private. Do not send confidential data without proper encryption. Report suspicious emails immediately. Do not register for unrelated websites, forums, or chatrooms. Avoid unnecessary email storage; delete outdated messages. Prohibited: chain letters, mass mailings, offensive or discriminatory messages. The company may access email logs and content for business or legal reasons.",
+            bodyHtml: "<p><strong>Remote Work - Connectivity & Power Outage</strong></p><ul><li>Report internet or power issues immediately via Teams or text.</li><li>Provide outage details and a post-incident report.</li><li>Employees should maintain backup connectivity (mobile data).</li><li>Use offline resources (OneDrive) when needed.</li><li>After 2 hours of no connectivity, employees must return to the office or use leave credits unless business needs require office return immediately.</li></ul><p><strong>Email Usage</strong></p><ul><li>Company owns all email accounts; email is not private.</li><li>Do not send confidential data without proper encryption.</li><li>Report suspicious emails immediately.</li><li>Do not register for unrelated websites, forums, or chatrooms.</li><li>Avoid unnecessary email storage; delete outdated messages.</li><li>Prohibited: chain letters, mass mailings, offensive or discriminatory messages.</li><li>The company may access email logs and content for business or legal reasons.</li></ul>"
+        },
+        {
+            label: "",
+            title: "Social Media Posting & Compliance",
+            body: "Social Media Posting: Do not post company-related content without explicit permission. Avoid sharing confidential information in photos, videos, or posts. Use only approved company logos or materials. Maintain a clear separation between personal and professional content. Adjust privacy settings and avoid unknown contacts. Compliance & Disciplinary Action: Violations may result in disciplinary action aligned with the Employee Handbook. Serious breaches may be considered gross misconduct. The company reserves the right to remove unauthorized hardware or software and restore system configurations.",
+            bodyHtml: "<p><strong>Social Media Posting</strong></p><ul><li>Do not post company-related content without explicit permission.</li><li>Avoid sharing confidential information in photos, videos, or posts.</li><li>Use only approved company logos or materials.</li><li>Maintain a clear separation between personal and professional content.</li><li>Adjust privacy settings and avoid unknown contacts.</li></ul><p><strong>Compliance & Disciplinary Action</strong></p><ul><li>Violations may result in disciplinary action aligned with the Employee Handbook.</li><li>Serious breaches may be considered gross misconduct.</li><li>The company reserves the right to remove unauthorized hardware or software and restore system configurations.</li></ul>"
+        },
+        {
+            label: "",
+            title: "IT Security Violations & Penalties",
+            body: "Policies include penalties from warning letters to dismissal for offenses such as unauthorized software installation, changing system configurations, non-business internet use, accessing other users' data, disclosing confidential information, bypassing security controls, unauthorized system access, and sharing passwords. Penalties escalate depending on severity, from Warning (WW) to Dismissal (D).",
+            bodyHtml: "<p>Policies include penalties from warning letters to dismissal for offenses such as:</p><ul><li>Unauthorized software installation</li><li>Changing system configurations</li><li>Non-business internet use</li><li>Accessing other users' data</li><li>Disclosing confidential information</li><li>Bypassing security controls</li><li>Unauthorized system access</li><li>Sharing passwords</li></ul><p>Penalties escalate depending on severity, from Warning (WW) to Dismissal (D).</p>"
+        }
     ],
     missionVision: {
         mission: {
@@ -172,16 +213,16 @@ function hasLegacyContentStorage() {
 APP_CONFIG.services = [
     { category: "IT Services", items: [
         { icon: "IT", name: "IT Services", description: "Core information technology services supporting employees, business systems, and daily operations.", status: "online", url: "" },
-        { icon: "EUC", name: "End-User Computing (EUC) Services", description: "Workstation, laptop, device, and endpoint support for employees across the organization.", status: "online", url: "" },
-        { icon: "SD", name: "Service Desk & IT support", description: "Frontline incident handling, request fulfillment, troubleshooting, and user assistance.", status: "online", url: "" },
-        { icon: "IAM", name: "Identity & Access Management (IAM)", description: "User account provisioning, access control, authentication, and permission governance.", status: "online", url: "" },
-        { icon: "APP", name: "Business Applications & Data Services", description: "Support for internal platforms, business applications, data workflows, and reporting tools.", status: "online", url: "" },
-        { icon: "NET", name: "Infrastructure & Network Services", description: "Management of core infrastructure, connectivity, servers, and network operations.", status: "online", url: "" },
-        { icon: "SEC", name: "Information Security & Data Protection", description: "Safeguarding systems, user data, devices, and digital operations through security controls.", status: "online", url: "" },
-        { icon: "BDR", name: "Backup & Disaster Recovery", description: "Business continuity readiness through backup management, recovery planning, and restoration support.", status: "online", url: "" },
-        { icon: "CRM", name: "Change & Release Management", description: "Controlled rollout of system changes, releases, updates, and operational transitions.", status: "online", url: "" },
-        { icon: "AUTO", name: "Process Automation & Digital Enablement", description: "Automation initiatives and digital workflow improvements that reduce manual work and speed up delivery.", status: "online", url: "" },
-        { icon: "GRC", name: "IT Governance, Policy & Compliance", description: "IT standards, policy alignment, compliance practices, and governance support across services.", status: "online", url: "" }
+        { icon: "EUC", name: "End-User Computing (EUC)", description: "Enterprise Architecture & Service Management\nMandatory Change Request & Implementation Standards\nRegional IT Support Assignment\nP3/P4 Response Priority", status: "online", url: "" },
+        { icon: "SD", name: "Service Desk & IT Support", description: "ITIL v4 Service Management\nFormal Initiation & Approval Workflow\nMandatory Logging & Ticket Assignment\nSLA Performance Metrics", status: "online", url: "" },
+        { icon: "IAM", name: "Identity & Access Management (IAM)", description: "Security & Risk Management Governance\nSecurity/Access Change Type Approval\nP1/P2 Access Failure Priority\nFormal Incident Investigation", status: "online", url: "" },
+        { icon: "APP", name: "Business Applications & Data Services", description: "Data & Reporting Scope (Nexus, PLM, Pivot88)\nFunctional Testing & Validation\nDocumented Change Requests\nPost-Incident Review (PIR)", status: "online", url: "" },
+        { icon: "NET", name: "Infrastructure & Network Services", description: "Enterprise Architecture Framework\nTechnical Risk Assessment\nP1 Network-Wide Outage Priority\nRecovery Protocols & Mandatory PIR", status: "online", url: "" },
+        { icon: "SEC", name: "Information Security & Data Protection", description: "Security & Risk Policies\nSecurity/Access Risk Assessment\nSteering Committee Communication\nSecurity Event PIR", status: "online", url: "" },
+        { icon: "BDR", name: "Backup & Disaster Recovery", description: "Charter Authority Policies\nImplementation & Post-Implementation Review\nRecovery Protocols\nP1 Resolution Path Support", status: "online", url: "" },
+        { icon: "CRM", name: "Change & Release Management", description: "Service Management & Policy Governance\nPrimary Change Policy Coverage\nCAB Protocol Adherence\nFailed Change PIR", status: "online", url: "" },
+        { icon: "AUTO", name: "Process Automation & Digital Enablement", description: "Project & Portfolio Management\nPower Platform & API Change Types\nAutomation/API Incident Scope\nBusiness Impact Classification", status: "online", url: "" },
+        { icon: "GRC", name: "IT Governance, Policy & Compliance", description: "Guiding Principles & Governance Model\nKPI Monitoring & Continuous Improvement\nMonthly Leadership Reporting\nAnnual Policy Review Cycle", status: "online", url: "" }
     ] }
 ];
 
@@ -200,6 +241,7 @@ const APP_STATE = {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
+    updateNavigationLabels();
     setupLoader();
     setupCursorAndSpotlight();
     syncOverviewProjectCount();
@@ -225,6 +267,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     setupLenis();
     await hydrateAppStateFromSupabase();
 });
+
+function updateNavigationLabels() {
+    document.querySelectorAll('[href="#announcements"] span:last-child').forEach((label) => {
+        label.textContent = "Policy";
+    });
+}
 
 const MANILA_WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=14.5995&longitude=120.9842&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=Asia%2FManila&forecast_days=1";
 const ITSM_API_BASE = "https://madison88-itsm.onrender.com/api";
@@ -347,7 +395,7 @@ async function hydrateAppStateFromSupabase() {
             APP_STATE.team = snapshot[SUPABASE_SECTION_KEYS.team].map(normalizeTeamMember).sort((a, b) => a.hierarchy - b.hierarchy);
         }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.quickHelp])) {
-            APP_STATE.quickHelp = snapshot[SUPABASE_SECTION_KEYS.quickHelp];
+            APP_STATE.quickHelp = normalizeQuickHelpItems(snapshot[SUPABASE_SECTION_KEYS.quickHelp]);
         }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.contactGuide])) {
             APP_STATE.contactGuide = snapshot[SUPABASE_SECTION_KEYS.contactGuide].map(normalizeContactGuideRow);
@@ -693,7 +741,7 @@ function renderServices() {
                         <div class="service-header">
                             <span class="service-icon" aria-hidden="true">${getServiceIconMarkup(service.name)}</span>
                         </div>
-                        <div><h4>${service.name}</h4><p class="service-copy">${service.description}</p></div>
+                        <div><h4>${service.name}</h4>${formatServiceDescription(service.description)}</div>
                         <div class="tile-meta">
                             <span class="status-badge ${service.status === "online" ? "status-online" : "status-planning"}">${service.status}</span>
                         </div>
@@ -706,6 +754,23 @@ function renderServices() {
     `).join("");
     setupRevealAnimations();
     refreshSearchResults();
+}
+
+function formatServiceDescription(description) {
+    const items = String(description || "")
+        .split("\n")
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+    if (items.length <= 1) {
+        return `<p class="service-copy">${items[0] || ""}</p>`;
+    }
+
+    return `
+        <ul class="service-copy service-bullet-list">
+            ${items.map((item) => `<li>${item}</li>`).join("")}
+        </ul>
+    `;
 }
 
 function getServiceIconMarkup(serviceName) {
@@ -1061,12 +1126,8 @@ function setupQuickHelpDragAndDrop() {
 function renderContactGuide() {
     const guide = document.getElementById("contact-guide");
     if (!guide) return;
-    const rows = [
-        { label: "Identity and Access", issue: "Account access, password reset, or VPN issue", owner: "Lester Mendoza", initials: "LM" },
-        { label: "Training and Guidance", issue: "Need training, portal help, or UI walkthrough", owner: "Stephanie Guce", initials: "SG" },
-        { label: "Hardware and Setup", issue: "Hardware setup, peripherals, or deployment support", owner: "John Sedrick Sarol", initials: "JS" },
-        { label: "Project Ownership", issue: "Project approvals or system rollout concerns", owner: "Paul Avendaño", initials: "PA" }
-    ];
+
+    const rows = APP_STATE.contactGuide;
     guide.innerHTML = `
         <div class="contact-guide-header">
             <span class="eyebrow">Who To Contact</span>
@@ -1083,6 +1144,8 @@ function renderContactGuide() {
         </div>
     `).join("")}
     `;
+
+    setupContactGuideDragAndDrop();
     refreshSearchResults();
 }
 
@@ -1092,15 +1155,18 @@ function renderQuickHelp() {
     const isAdmin = APP_STATE.adminLoggedIn;
 
     container.innerHTML = APP_STATE.quickHelp.map((item, index) => `
-        <article class="quick-help-card glass searchable-item" draggable="${isAdmin ? "true" : "false"}" data-help-index="${index}" data-search="${buildSearchText([item.label, item.title, item.body, item.action, item.person || ""])}">
+        <article class="quick-help-card glass searchable-item" draggable="${isAdmin ? "true" : "false"}" data-help-index="${index}" data-search="${buildSearchText([item.label, item.title, item.body, item.action || "", item.person || ""])}">
+            ${item.label ? `
             <div class="quick-help-top">
                 <span class="quick-help-label">${item.label}</span>
-            </div>
+            </div>` : ""}
             <div>
                 <h3>${item.title}</h3>
-                <p class="announcement-body">${item.body}</p>
+                <div class="announcement-body">${item.bodyHtml || `<p>${item.body}</p>`}</div>
             </div>
-            ${item.actionType === "url"
+            ${!item.action
+                ? ""
+                : item.actionType === "url"
                 ? `<button class="btn btn-secondary" type="button" data-open-url="${item.value}">${item.action}</button>`
                 : item.actionType === "message"
                 ? `<button class="btn btn-secondary" type="button" data-message="${item.value}" data-member="${item.person}">${item.action}</button>`
@@ -3088,10 +3154,29 @@ function loadQuickHelp(source = "default") {
     }
     try {
         const raw = localStorage.getItem(STORAGE_KEYS.quickHelpData);
-        return raw ? JSON.parse(raw) : APP_CONFIG.quickHelp;
+        return raw ? normalizeQuickHelpItems(JSON.parse(raw)) : APP_CONFIG.quickHelp;
     } catch (error) {
         return APP_CONFIG.quickHelp;
     }
+}
+
+function normalizeQuickHelpItems(items) {
+    if (!Array.isArray(items) || !items.length) return APP_CONFIG.quickHelp;
+
+    const hasLegacyContactCards = items.some((item) => {
+        const title = String(item?.title || "").toLowerCase();
+        const action = String(item?.action || "").toLowerCase();
+        const actionType = String(item?.actionType || "").toLowerCase();
+
+        return actionType === "message"
+            || action.includes("message ")
+            || title.includes("project approvals")
+            || title.includes("account access")
+            || title.includes("hardware setup")
+            || title.includes("portal guidance");
+    });
+
+    return hasLegacyContactCards ? cloneData(APP_CONFIG.quickHelp) : items;
 }
 
 function loadContactGuide(source = "default") {
@@ -3452,3 +3537,4 @@ function refreshSearchResults() {
         ? `${visibleCount} result${visibleCount === 1 ? "" : "s"} matching "${query}".`
         : "Search instantly across tools, project systems, and support contacts.";
 }
+

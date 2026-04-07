@@ -34,6 +34,40 @@
 
 html { scroll-behavior: smooth; }
 
+html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(141, 180, 209, 0.58) rgba(18, 28, 44, 0.72);
+}
+
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+
+::-webkit-scrollbar-track {
+    background: linear-gradient(180deg, rgba(16, 24, 38, 0.88), rgba(28, 42, 64, 0.7));
+    border-left: 1px solid rgba(216, 204, 182, 0.08);
+}
+
+::-webkit-scrollbar-thumb {
+    background:
+        linear-gradient(180deg, rgba(216, 191, 95, 0.72), rgba(141, 180, 209, 0.62));
+    border-radius: 999px;
+    border: 3px solid rgba(18, 28, 44, 0.72);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 4px 12px rgba(4, 8, 18, 0.28);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        linear-gradient(180deg, rgba(230, 191, 95, 0.85), rgba(141, 180, 209, 0.78));
+}
+
+::-webkit-scrollbar-corner {
+    background: rgba(18, 28, 44, 0.72);
+}
+
 body {
     font-family: "Manrope", sans-serif;
     background: #0f1628;
@@ -1559,6 +1593,26 @@ body:not(.admin-mode) #add-quickhelp-card-button {
     line-height: 1.3;
 }
 
+.announcement-body {
+    display: grid;
+    gap: 0.7rem;
+}
+
+.announcement-body p,
+.announcement-body ul {
+    margin: 0;
+}
+
+.announcement-body ul {
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.4rem;
+}
+
+.announcement-body li {
+    line-height: 1.5;
+}
+
 .quick-help-card .btn,
 .service-tile .btn,
 .team-card .btn {
@@ -2602,6 +2656,17 @@ body::after {
 .team-card p,
 .quick-help-card p {
     color: var(--text-muted);
+}
+
+.service-bullet-list {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.45rem;
+}
+
+.service-bullet-list li {
+    line-height: 1.55;
 }
 
 .nav-link,
