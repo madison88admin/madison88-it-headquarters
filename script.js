@@ -1191,18 +1191,46 @@ function setupProjectFilters() {
 }
 
 function setupProjectAdmin() {
-    const loginButton = document.getElementById("admin-login-button");
+    const logoTrigger = document.getElementById("admin-logo-trigger");
     const overviewButton = document.getElementById("edit-overview-button");
     const addProjectButton = document.getElementById("add-project-button");
     const addTeamButton = document.getElementById("add-team-button");
+    let logoClickCount = 0;
+    let logoClickTimer = null;
 
-    if (loginButton) {
-        loginButton.addEventListener("click", () => {
+    const resetLogoClicks = () => {
+        logoClickCount = 0;
+        if (logoClickTimer) {
+            clearTimeout(logoClickTimer);
+            logoClickTimer = null;
+        }
+    };
+
+    const handleLogoAdminTrigger = () => {
+        logoClickCount += 1;
+        if (logoClickTimer) clearTimeout(logoClickTimer);
+
+        if (logoClickCount >= 5) {
+            resetLogoClicks();
             if (APP_STATE.adminLoggedIn) {
                 openManagedModal(buildBulkEditModal());
                 return;
             }
             openManagedModal(buildAdminLoginModal());
+            return;
+        }
+
+        logoClickTimer = setTimeout(() => {
+            resetLogoClicks();
+        }, 1600);
+    };
+
+    if (logoTrigger) {
+        logoTrigger.addEventListener("click", handleLogoAdminTrigger);
+        logoTrigger.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter" && event.key !== " ") return;
+            event.preventDefault();
+            handleLogoAdminTrigger();
         });
     }
 
@@ -2901,18 +2929,24 @@ function buildItsmConnectModal() {
 }
 
 function updateAdminUI() {
-    const loginButton = document.getElementById("admin-login-button");
+    const logoTrigger = document.getElementById("admin-logo-trigger");
     const overviewButton = document.getElementById("edit-overview-button");
     const addProjectButton = document.getElementById("add-project-button");
     const addTeamButton = document.getElementById("add-team-button");
     const addSupportCardButton = document.getElementById("add-support-card-button");
     const addQuickHelpCardButton = document.getElementById("add-quickhelp-card-button");
-    if (!loginButton) return;
 
     document.body.classList.toggle("admin-mode", APP_STATE.adminLoggedIn);
     document.body.classList.toggle("not-admin-mode", !APP_STATE.adminLoggedIn);
-    loginButton.classList.toggle("is-active", APP_STATE.adminLoggedIn);
-    loginButton.querySelector("span:last-child").textContent = APP_STATE.adminLoggedIn ? "IT Team Mode Active" : "IT Team Login";
+    if (logoTrigger) {
+        logoTrigger.classList.toggle("is-admin-active", APP_STATE.adminLoggedIn);
+        logoTrigger.title = APP_STATE.adminLoggedIn
+            ? "Admin mode active"
+            : "Click the Madison88 logo 5 times to open the IT admin login";
+        logoTrigger.setAttribute("aria-label", APP_STATE.adminLoggedIn
+            ? "Madison88 IT Headquarters, admin mode active"
+            : "Madison88 IT Headquarters");
+    }
     if (overviewButton) overviewButton.hidden = !APP_STATE.adminLoggedIn;
     if (addProjectButton) addProjectButton.hidden = !APP_STATE.adminLoggedIn;
     if (addTeamButton) addTeamButton.hidden = !APP_STATE.adminLoggedIn;
