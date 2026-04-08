@@ -318,7 +318,6 @@ const APP_STATE = {
 document.addEventListener("DOMContentLoaded", async () => {
     updateNavigationLabels();
     setupLoader();
-    setupCursorAndSpotlight();
     syncOverviewProjectCount();
     renderStats();
     renderTicker();
@@ -666,36 +665,6 @@ function setupLoader() {
     });
 }
 
-function setupCursorAndSpotlight() {
-    const cursorDot = document.querySelector(".cursor-dot");
-    const cursorOutline = document.querySelector(".cursor-outline");
-    if (!cursorDot || !cursorOutline) return;
-
-    let mouseX = 0, mouseY = 0, outlineX = 0, outlineY = 0;
-    window.addEventListener("mousemove", (event) => {
-        mouseX = event.clientX;
-        mouseY = event.clientY;
-        cursorDot.style.left = `${mouseX}px`;
-        cursorDot.style.top = `${mouseY}px`;
-        document.body.classList.toggle("cursor-active", Boolean(event.target.closest("a, button, input, .glass")));
-
-        document.querySelectorAll(".glass").forEach((card) => {
-            const rect = card.getBoundingClientRect();
-            card.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
-            card.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
-        });
-    });
-
-    const animate = () => {
-        outlineX += (mouseX - outlineX) * 0.14;
-        outlineY += (mouseY - outlineY) * 0.14;
-        cursorOutline.style.left = `${outlineX}px`;
-        cursorOutline.style.top = `${outlineY}px`;
-        requestAnimationFrame(animate);
-    };
-    animate();
-}
-
 function renderStats() {
     const userNameEl = document.getElementById("user-name");
     const heroDescriptionEl = document.getElementById("hero-description");
@@ -736,7 +705,7 @@ function renderAutomationDashboard() {
     const totalProjects = rows.length;
     const overallChart = buildOverallComparisonChart(rows);
     const bestPerformer = rows.reduce((best, item) => item.moneySaved > best.moneySaved ? item : best, rows[0]);
-    const maxMultiplier = Math.max(...rows.map((item) => item.automatedVolume / Math.max(item.manualVolume, 1)), 1);
+    const maxMedian = Math.max(...rows.map((item) => calculateMedian([item.manualVolume, item.automatedVolume])), 1);
     const maxTableSavings = Math.max(...rows.map((item) => item.moneySaved), 1);
     const isHidden = APP_STATE.automationDashboardHidden;
 
@@ -799,18 +768,18 @@ function renderAutomationDashboard() {
                 </div>
                 <div class="automation-multiplier-card">
                     <div class="automation-multiplier-header">
-                        <span class="quick-help-label">Multiplier</span>
-                        <h5>Automation Multiplier Per Solution</h5>
+                        <span class="quick-help-label">Median</span>
+                        <h5>Median Volume Per Solution</h5>
                     </div>
                     <div class="automation-multiplier-list">
                         ${rows.map((item) => {
-                            const multiplier = item.automatedVolume / Math.max(item.manualVolume, 1);
+                            const median = calculateMedian([item.manualVolume, item.automatedVolume]);
                             return `
                                 <div class="automation-multiplier-row" data-automation-key="${escapeHtml(item.projectId)}" tabindex="0">
                                     <span>${escapeHtml(item.label)}</span>
                                     <div class="automation-multiplier-track">
-                                        <div class="automation-multiplier-fill" style="width:${(multiplier / maxMultiplier) * 100}%"></div>
-                                        <strong>${multiplier.toFixed(1)}x</strong>
+                                        <div class="automation-multiplier-fill" style="width:${(median / maxMedian) * 100}%"></div>
+                                        <strong>${formatCompactNumber(median)}</strong>
                                     </div>
                                 </div>
                             `;
@@ -834,21 +803,21 @@ function renderAutomationDashboard() {
                             <th>Solution</th>
                             <th>Manual Input</th>
                             <th>Auto Output</th>
-                            <th>Multiplier</th>
+                            <th>Median</th>
                             <th>Est. Savings</th>
                             <th>Efficiency</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${rows.map((item) => {
-                            const multiplier = item.automatedVolume / Math.max(item.manualVolume, 1);
+                            const median = calculateMedian([item.manualVolume, item.automatedVolume]);
                             const efficiency = Math.round(((item.manualHours - item.automatedHours) / Math.max(item.manualHours, 1)) * 100);
                             return `
                                 <tr data-automation-key="${escapeHtml(item.projectId)}" tabindex="0">
                                     <td data-label="Solution"><strong>${escapeHtml(item.label)}</strong></td>
                                     <td data-label="Manual Input">${formatCompactNumber(item.manualVolume)}</td>
                                     <td data-label="Auto Output">${formatCompactNumber(item.automatedVolume)}</td>
-                                    <td data-label="Multiplier"><span class="automation-chip automation-chip-multiplier">${multiplier.toFixed(1)}x</span></td>
+                                    <td data-label="Median"><span class="automation-chip automation-chip-multiplier">${formatCompactNumber(median)}</span></td>
                                     <td data-label="Est. Savings">
                                         <div class="automation-savings-cell">
                                             <strong>${formatCurrencyCompact(item.moneySaved)}</strong>
@@ -943,6 +912,20 @@ function formatCurrencyCompact(value) {
         notation: "compact",
         maximumFractionDigits: 1
     }).format(value);
+}
+
+function calculateMedian(values) {
+    const sorted = values
+        .map((value) => Number(value))
+        .filter((value) => Number.isFinite(value))
+        .sort((a, b) => a - b);
+
+    if (!sorted.length) return 0;
+
+    const middle = Math.floor(sorted.length / 2);
+    return sorted.length % 2 === 0
+        ? (sorted[middle - 1] + sorted[middle]) / 2
+        : sorted[middle];
 }
 
 function buildOverallComparisonChart(rows) {
@@ -1791,28 +1774,42 @@ function renderMissionVision() {
 
     const mv = APP_CONFIG.missionVision;
     const content = `
-        <article class="mission-vision-card glass searchable-item" data-search="${buildSearchText(["Madison88 IT", "Mission", mv.mission.content, "Vision", mv.vision.content, "Values", mv.values.content])}">
-            <span class="quick-help-label">Madison88 IT</span>
-            <div class="mission-vision-block">
-                <h3>${mv.mission.title}</h3>
-                <p class="mission-subtitle">${mv.mission.subtitle}</p>
-                <p class="announcement-body">${mv.mission.content}</p>
-                <div class="mission-highlights">
-                    ${mv.mission.highlights.map(h => `<span class="highlight-tag">${h}</span>`).join("")}
-                </div>
+        <article class="mission-vision-card glass searchable-item" data-search="${buildSearchText(["Madison88 IT & D", "Mission", mv.mission.content, "Vision", mv.vision.content, "Values", mv.values.content])}">
+            <div class="mission-vision-atmosphere" aria-hidden="true">
+                <span class="mission-leaf mission-leaf-one"></span>
+                <span class="mission-leaf mission-leaf-two"></span>
+                <span class="mission-leaf mission-leaf-three"></span>
+                <span class="mission-pixel-rain mission-pixel-rain-one"></span>
+                <span class="mission-pixel-rain mission-pixel-rain-two"></span>
+                <span class="mission-pixel-rain mission-pixel-rain-three"></span>
+                <span class="mission-data-stream mission-data-stream-one"></span>
+                <span class="mission-data-stream mission-data-stream-two"></span>
             </div>
-            <div class="mission-vision-block">
-                <h3>${mv.vision.title}</h3>
-                <p class="mission-subtitle">${mv.vision.subtitle}</p>
-                <p class="announcement-body">${mv.vision.content}</p>
-                <div class="mission-highlights">
-                    ${mv.vision.highlights.map(h => `<span class="highlight-tag">${h}</span>`).join("")}
-                </div>
+            <div class="mission-vision-card-head">
+                <span class="quick-help-label">Madison88 IT &amp; D</span>
             </div>
-            <div class="mission-vision-block">
-                <h3>${mv.values.title}</h3>
-                <p class="mission-subtitle">${mv.values.subtitle}</p>
-                <p class="announcement-body">${mv.values.content}</p>
+            <div class="mission-vision-grid">
+                <div class="mission-vision-block">
+                    <h3>${mv.mission.title}</h3>
+                    <p class="mission-subtitle">${mv.mission.subtitle}</p>
+                    <p class="announcement-body">${mv.mission.content}</p>
+                    <div class="mission-highlights">
+                        ${mv.mission.highlights.map(h => `<span class="highlight-tag">${h}</span>`).join("")}
+                    </div>
+                </div>
+                <div class="mission-vision-block">
+                    <h3>${mv.vision.title}</h3>
+                    <p class="mission-subtitle">${mv.vision.subtitle}</p>
+                    <p class="announcement-body">${mv.vision.content}</p>
+                    <div class="mission-highlights">
+                        ${mv.vision.highlights.map(h => `<span class="highlight-tag">${h}</span>`).join("")}
+                    </div>
+                </div>
+                <div class="mission-vision-block">
+                    <h3>${mv.values.title}</h3>
+                    <p class="mission-subtitle">${mv.values.subtitle}</p>
+                    <p class="announcement-body">${mv.values.content}</p>
+                </div>
             </div>
         </article>
     `;
@@ -3700,8 +3697,8 @@ function updateAdminUI() {
             ? "Admin mode active"
             : "Click the Madison88 logo 5 times to open the IT admin login";
         logoTrigger.setAttribute("aria-label", APP_STATE.adminLoggedIn
-            ? "Madison88 IT Headquarters, admin mode active"
-            : "Madison88 IT Headquarters");
+            ? "Madison88 IT and Development Headquarters, admin mode active"
+            : "Madison88 IT and Development Headquarters");
     }
     if (overviewButton) overviewButton.hidden = !APP_STATE.adminLoggedIn;
     if (addProjectButton) addProjectButton.hidden = !APP_STATE.adminLoggedIn;
