@@ -2261,6 +2261,49 @@ function setupAdminAutofill() {
             autofillGuideOwnerFields(form, member);
         }
     });
+
+    document.addEventListener("change", (event) => {
+        const statusField = event.target.closest("[data-project-status]");
+        if (!statusField) return;
+
+        const form = statusField.closest("form");
+        if (!form) return;
+
+        const status = String(statusField.value || "Planning");
+        const filterField = form.querySelector("[data-project-filter]");
+        const progressField = form.querySelector("[data-project-progress]");
+        const updatedField = form.querySelector("[data-project-updated]");
+        const systemUrlField = form.querySelector("[data-project-system-url]");
+        const systemUrlHint = systemUrlField?.closest(".field-stack")?.querySelector(".field-hint");
+
+        if (filterField) {
+            filterField.value = getDefaultProjectFilter(status);
+        }
+
+        if (progressField && form.id === "project-create-form") {
+            progressField.value = String(getDefaultProjectProgress(status));
+        }
+
+        if (updatedField && form.id === "project-create-form" && !String(updatedField.value || "").trim()) {
+            updatedField.value = getDefaultProjectUpdatedText();
+        }
+
+        if (systemUrlField) {
+            const allowSystemUrl = projectStatusAllowsSystemUrl(status);
+            systemUrlField.disabled = !allowSystemUrl;
+            if (!allowSystemUrl) {
+                systemUrlField.value = "";
+                systemUrlField.placeholder = "Available when status is Live or Completed";
+            } else {
+                systemUrlField.placeholder = "https://example.com";
+            }
+            if (systemUrlHint) {
+                systemUrlHint.textContent = allowSystemUrl
+                    ? "Add the live project link employees should open."
+                    : "System URL is locked until the project is Live or Completed.";
+            }
+        }
+    });
 }
 
 function ensureTeamAutofillList() {
@@ -3456,6 +3499,146 @@ function buildProjectModal(project) {
     `;
 }
 
+function getDefaultProjectFilter(status = "") {
+    const normalized = String(status || "").toLowerCase();
+    if (normalized === "live") return "active";
+    if (normalized === "completed") return "completed";
+    return "in-progress";
+}
+
+function getDefaultProjectProgress(status = "") {
+    const normalized = String(status || "").toLowerCase();
+    if (normalized === "planning") return 15;
+    if (normalized === "in progress") return 60;
+    if (normalized === "live" || normalized === "completed") return 100;
+    return 0;
+}
+
+function getDefaultProjectUpdatedText() {
+    const formatter = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" });
+    return `Updated ${formatter.format(new Date())}`;
+}
+
+function projectStatusAllowsSystemUrl(status = "") {
+    const normalized = String(status || "").toLowerCase();
+    return normalized === "live" || normalized === "completed";
+}
+
+function buildProjectStatusOptions(selectedStatus = "Planning") {
+    return ["Planning", "In Progress", "Live", "Completed"]
+        .map((status) => `<option value="${status}" ${selectedStatus === status ? "selected" : ""}>${status}</option>`)
+        .join("");
+}
+
+function buildProjectLaneOptions(selectedLane = "in-progress") {
+    return ["in-progress", "active", "completed"]
+        .map((filter) => `<option value="${filter}" ${selectedLane === filter ? "selected" : ""}>${filter}</option>`)
+        .join("");
+}
+
+function buildProjectFormFields(project = {}) {
+    const status = String(project.status || "Planning");
+    const filter = String(project.filter || getDefaultProjectFilter(status));
+    const progress = Number.isFinite(Number(project.progress)) ? Number(project.progress) : getDefaultProjectProgress(status);
+    const updated = String(project.updated || getDefaultProjectUpdatedText());
+    const systemUrlEnabled = projectStatusAllowsSystemUrl(status);
+
+    return `
+        <div class="project-form-section">
+            <div class="project-form-section-head">
+                <h3>Core Details</h3>
+                <p>Start with the basics so the project appears correctly on the dashboard.</p>
+            </div>
+            <div class="project-form-grid project-form-grid-double">
+                <label class="field-stack project-form-span-2">
+                    <span>Project name</span>
+                    <input type="text" name="name" value="${escapeHtml(project.name || "")}" placeholder="Idea Intake Portal" required>
+                    <small class="field-hint">Use the public-facing project name employees will recognize.</small>
+                </label>
+                <label class="field-stack">
+                    <span>Status</span>
+                    <select name="status" data-project-status>
+                        ${buildProjectStatusOptions(status)}
+                    </select>
+                    <small class="field-hint">Sets the project stage shown to employees.</small>
+                </label>
+                <label class="field-stack">
+                    <span>Project lane</span>
+                    <select name="filter" data-project-filter>
+                        ${buildProjectLaneOptions(filter)}
+                    </select>
+                    <small class="field-hint">This controls which tab the project appears in.</small>
+                </label>
+                <label class="field-stack project-form-span-2">
+                    <span>Description</span>
+                    <textarea name="description" rows="4" placeholder="Short summary of what this project does and who it helps.">${escapeHtml(project.description || "")}</textarea>
+                </label>
+            </div>
+        </div>
+
+        <div class="project-form-section">
+            <div class="project-form-section-head">
+                <h3>Ownership</h3>
+                <p>Type a team member name or initials and the form will auto-fill matching details.</p>
+            </div>
+            <div class="project-form-grid project-form-grid-double">
+                <label class="field-stack">
+                    <span>Owner</span>
+                    <input type="text" name="owner" value="${escapeHtml(project.owner || "")}" placeholder="JC or John Carlo Manalo" data-team-autofill="project-owner">
+                </label>
+                <label class="field-stack">
+                    <span>Owner full name</span>
+                    <input type="text" name="ownerName" value="${escapeHtml(project.ownerName || "")}" placeholder="Auto-filled from team directory when available">
+                </label>
+                <label class="field-stack">
+                    <span>Overseen by</span>
+                    <input type="text" name="overseenBy" value="${escapeHtml(project.overseenBy || "")}" placeholder="Usually the same as the owner or lead approver">
+                </label>
+                <label class="field-stack">
+                    <span>Assigned by</span>
+                    <input type="text" name="assignedBy" value="${escapeHtml(project.assignedBy || "")}" placeholder="Defaults to Admin if left blank">
+                </label>
+                <label class="field-stack project-form-span-2">
+                    <span>Developers</span>
+                    <input type="text" name="team" value="${escapeHtml(Array.isArray(project.team) ? project.team.join(", ") : "")}" placeholder="JC, PA, MP">
+                    <small class="field-hint">Separate multiple developer names or initials with commas.</small>
+                </label>
+            </div>
+        </div>
+
+        <div class="project-form-section">
+            <div class="project-form-section-head">
+                <h3>Launch And Access</h3>
+                <p>Set the project link, progress, update label, and whether access is restricted.</p>
+            </div>
+            <div class="project-form-grid project-form-grid-double">
+                <label class="field-stack project-form-span-2">
+                    <span>System URL</span>
+                    <input type="text" name="systemUrl" value="${escapeHtml(systemUrlEnabled ? (project.systemUrl || "") : "")}" placeholder="${systemUrlEnabled ? "https://example.com" : "Available when status is Live or Completed"}" data-project-system-url ${systemUrlEnabled ? "" : "disabled"}>
+                    <small class="field-hint">${systemUrlEnabled ? "Add the live project link employees should open." : "System URL is locked until the project is Live or Completed."}</small>
+                </label>
+                <label class="field-stack">
+                    <span>Progress</span>
+                    <input type="number" name="progress" min="0" max="100" value="${progress}" placeholder="0-100" data-project-progress>
+                    <small class="field-hint">Use a 0 to 100 completion estimate.</small>
+                </label>
+                <label class="field-stack">
+                    <span>Updated label</span>
+                    <input type="text" name="updated" value="${escapeHtml(updated)}" placeholder="Updated today" data-project-updated>
+                    <small class="field-hint">Shown on the project card exactly as entered.</small>
+                </label>
+                <label class="toggle-field project-form-span-2" title="Check this if the project should be treated as access-controlled or private.">
+                    <input type="checkbox" name="restricted" ${project.restricted ? "checked" : ""}>
+                    <span class="toggle-copy">
+                        <strong>Restricted system</strong>
+                        <small>Turn this on if employees should request access before entering the system.</small>
+                    </span>
+                </label>
+            </div>
+        </div>
+    `;
+}
+
 function buildOfflineModal() {
     return `
         <div class="modal-block">
@@ -3561,26 +3744,10 @@ function buildProjectEditModal(project) {
     return `
         <div class="modal-block">
             <h2 id="modal-title">Edit ${project.name}</h2>
-            <p>Update what employees see in the Project Radar panel.</p>
+            <p>Update what employees see in the Project Radar panel with fewer manual steps.</p>
             <form class="form-grid" id="project-edit-form">
                 <input type="hidden" name="projectId" value="${project.id}">
-                <input type="text" name="name" value="${project.name}" placeholder="Project name (e.g. Idea Intake Portal)">
-                <select name="status">
-                    ${["Live", "In Progress", "Planning", "Completed"].map((status) => `<option value="${status}" ${project.status === status ? "selected" : ""}>${status}</option>`).join("")}
-                </select>
-                <select name="filter">
-                    ${["active", "in-progress", "completed"].map((filter) => `<option value="${filter}" ${project.filter === filter ? "selected" : ""}>${filter}</option>`).join("")}
-                </select>
-                <input type="text" name="owner" value="${project.owner}" placeholder="Owner initials or name (e.g. JC)" data-team-autofill="project-owner">
-                <input type="text" name="ownerName" value="${project.ownerName}" placeholder="Owner full name (e.g. John Carlo Manalo)">
-                <input type="text" name="overseenBy" value="${project.overseenBy}" placeholder="Overseen by (name)">
-                <input type="text" name="assignedBy" value="${project.assignedBy}" placeholder="Assigned by (name)">
-                <input type="text" name="updated" value="${project.updated}" placeholder="Updated text (e.g. Updated today)">
-                <input type="number" name="progress" min="0" max="100" value="${project.progress}" placeholder="Progress % (0-100)">
-                <input type="text" name="team" value="${project.team.join(", ")}" placeholder="Team initials/names, comma separated (e.g. JC, PA)">
-                <input type="text" name="systemUrl" value="${project.systemUrl}" placeholder="System URL (https://...)">
-                <label><input type="checkbox" name="restricted" ${project.restricted ? "checked" : ""}> Restricted system</label>
-                <textarea name="description" rows="5" placeholder="Project description">${project.description}</textarea>
+                ${buildProjectFormFields(project)}
                 <button class="btn btn-primary" type="submit">Save Project Changes</button>
             </form>
         </div>
@@ -3591,27 +3758,9 @@ function buildProjectCreateModal() {
     return `
         <div class="modal-block">
             <h2 id="modal-title">Add Project</h2>
-            <p>Create a new project and assign the team right away.</p>
+            <p>Create a new project with smart defaults so setup is faster and less hassle.</p>
             <form class="form-grid" id="project-create-form">
-                <input type="text" name="name" placeholder="Project name (e.g. Idea Intake Portal)">
-                <select name="status">
-                    <option value="" selected disabled>Select status</option>
-                    ${["Planning", "In Progress", "Live", "Completed"].map((status) => `<option value="${status}">${status}</option>`).join("")}
-                </select>
-                <select name="filter">
-                    <option value="" selected disabled>Select project lane</option>
-                    ${["in-progress", "active", "completed"].map((filter) => `<option value="${filter}">${filter}</option>`).join("")}
-                </select>
-                <input type="text" name="owner" placeholder="Owner initials or name (e.g. JC)" data-team-autofill="project-owner">
-                <input type="text" name="ownerName" placeholder="Owner full name (e.g. John Carlo Manalo)">
-                <input type="text" name="overseenBy" placeholder="Overseen by (name)">
-                <input type="text" name="assignedBy" placeholder="Assigned by (name)">
-                <input type="text" name="updated" placeholder="Updated text (e.g. Updated today)">
-                <input type="number" name="progress" min="0" max="100" placeholder="Progress % (0-100)">
-                <input type="text" name="team" placeholder="Team initials/names, comma separated (e.g. JC, PA)">
-                <input type="text" name="systemUrl" placeholder="System URL (https://...)">
-                <label><input type="checkbox" name="restricted"> Restricted system</label>
-                <textarea name="description" rows="5" placeholder="Project description"></textarea>
+                ${buildProjectFormFields()}
                 <button class="btn btn-primary" type="submit">Create Project</button>
             </form>
         </div>
@@ -4418,7 +4567,7 @@ function clampDecimal(value, fallback) {
 function parseTeamList(value) {
     return value
         .split(",")
-        .map((item) => normalizeMemberIdentifier(item))
+        .map((item) => normalizeDeveloperIdentifier(item))
         .filter(Boolean);
 }
 
@@ -4466,6 +4615,25 @@ function normalizeMemberIdentifier(value) {
     if (!raw) return "";
     const member = getMemberByIdentifier(raw);
     return member ? getInitials(member.name) : raw.toUpperCase();
+}
+
+function normalizeDeveloperIdentifier(value) {
+    const raw = String(value || "").trim();
+    if (!raw) return "";
+
+    const member = getMemberByIdentifier(raw);
+    if (member) return getInitials(member.name);
+
+    const parts = raw
+        .split(/\s+/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+    if (parts.length >= 2) {
+        return parts.slice(0, 2).map((part) => part[0]).join("").toUpperCase();
+    }
+
+    return raw.toUpperCase();
 }
 
 function getMemberByIdentifier(identifier) {

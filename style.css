@@ -639,6 +639,104 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
     background: #1a263a;
 }
 
+.project-form-section {
+    display: grid;
+    gap: 14px;
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.project-form-section-head {
+    display: grid;
+    gap: 4px;
+}
+
+.project-form-section-head h3 {
+    font-size: 1.02rem;
+}
+
+.project-form-section-head p,
+.field-hint {
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+.project-form-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.project-form-grid-double {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.project-form-span-2 {
+    grid-column: span 2;
+}
+
+.field-stack {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+}
+
+.field-stack > span {
+    font-size: 0.84rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.field-hint {
+    font-size: 0.84rem;
+    min-height: 2.5em;
+}
+
+@media (max-width: 720px) {
+    .project-form-grid-double {
+        grid-template-columns: 1fr;
+    }
+
+    .project-form-span-2 {
+        grid-column: auto;
+    }
+}
+
+.toggle-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(200, 169, 110, 0.14);
+    cursor: pointer;
+    width: 100%;
+    max-width: 100%;
+}
+
+.toggle-field input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    flex: 0 0 auto;
+    accent-color: var(--accent-gold);
+}
+
+.toggle-copy {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+}
+
+.toggle-copy small {
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
 .team-photo-editor {
     display: grid;
     gap: 12px;
