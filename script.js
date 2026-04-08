@@ -152,7 +152,8 @@ const STORAGE_KEYS = {
     contactGuideData: "madison88-contact-guide-data",
     supportData: "madison88-support-data",
     adminSession: "madison88-admin-session",
-    automationDashboardHidden: "madison88-automation-dashboard-hidden"
+    automationDashboardHidden: "madison88-automation-dashboard-hidden",
+    automationPeriod: "madison88-automation-period"
 };
 
 const SUPABASE_SECTION_KEYS = {
@@ -310,6 +311,7 @@ const APP_STATE = {
     supportCards: loadSupportCards(),
     adminLoggedIn: sessionStorage.getItem(STORAGE_KEYS.adminSession) === "true",
     automationDashboardHidden: localStorage.getItem(STORAGE_KEYS.automationDashboardHidden) === "true",
+    automationPeriod: localStorage.getItem(STORAGE_KEYS.automationPeriod) || "monthly",
     currentProjectFilter: "all",
     currentProjectPage: 1,
     projectsPerPage: 8
@@ -688,20 +690,50 @@ function renderAutomationDashboard() {
     const container = document.getElementById("automation-dashboard");
     if (!container) return;
 
-    const rows = AUTOMATION_COMPARISON.map((entry) => {
-        const project = APP_STATE.projects.find((item) => item.id === entry.projectId);
-        const hoursSaved = Math.max(0, entry.manualHours - entry.automatedHours);
+    const period = getAutomationPeriodConfig(APP_STATE.automationPeriod);
+    const annualPeriod = getAutomationPeriodConfig("annual");
+    const annualRows = AUTOMATION_COMPARISON.map((entry) => {
+        const annualManualVolume = scaleAutomationMetric(entry.manualVolume, annualPeriod.multiplier);
+        const annualAutomatedVolume = scaleAutomationMetric(entry.automatedVolume, annualPeriod.multiplier);
+        const annualManualHours = scaleAutomationMetric(entry.manualHours, annualPeriod.multiplier);
+        const annualAutomatedHours = scaleAutomationMetric(entry.automatedHours, annualPeriod.multiplier);
+        const annualMoneySaved = scaleAutomationMetric(entry.moneySaved, annualPeriod.multiplier);
         return {
             ...entry,
+            manualVolume: annualManualVolume,
+            automatedVolume: annualAutomatedVolume,
+            manualHours: annualManualHours,
+            automatedHours: annualAutomatedHours,
+            moneySaved: annualMoneySaved,
+            hoursSaved: Math.max(0, annualManualHours - annualAutomatedHours)
+        };
+    });
+    const rows = AUTOMATION_COMPARISON.map((entry) => {
+        const project = APP_STATE.projects.find((item) => item.id === entry.projectId);
+        const manualVolume = scaleAutomationMetric(entry.manualVolume, period.multiplier);
+        const automatedVolume = scaleAutomationMetric(entry.automatedVolume, period.multiplier);
+        const manualHours = scaleAutomationMetric(entry.manualHours, period.multiplier);
+        const automatedHours = scaleAutomationMetric(entry.automatedHours, period.multiplier);
+        const moneySaved = scaleAutomationMetric(entry.moneySaved, period.multiplier);
+        const hoursSaved = Math.max(0, manualHours - automatedHours);
+        return {
+            ...entry,
+            manualVolume,
+            automatedVolume,
+            manualHours,
+            automatedHours,
+            moneySaved,
             projectName: project?.name || entry.label,
             hoursSaved
         };
     });
 
+    const annualVolumeManual = annualRows.reduce((sum, item) => sum + item.manualVolume, 0);
+    const annualVolumeAutomated = annualRows.reduce((sum, item) => sum + item.automatedVolume, 0);
+    const annualHoursSaved = annualRows.reduce((sum, item) => sum + item.hoursSaved, 0);
+    const annualMoneySaved = annualRows.reduce((sum, item) => sum + item.moneySaved, 0);
     const totalVolumeManual = rows.reduce((sum, item) => sum + item.manualVolume, 0);
     const totalVolumeAutomated = rows.reduce((sum, item) => sum + item.automatedVolume, 0);
-    const totalHoursSaved = rows.reduce((sum, item) => sum + item.hoursSaved, 0);
-    const totalMoneySaved = rows.reduce((sum, item) => sum + item.moneySaved, 0);
     const totalProjects = rows.length;
     const overallChart = buildOverallComparisonChart(rows);
     const bestPerformer = rows.reduce((best, item) => item.moneySaved > best.moneySaved ? item : best, rows[0]);
@@ -718,24 +750,24 @@ function renderAutomationDashboard() {
             </div>
             <div class="automation-kpi-grid">
                 <article class="automation-kpi-card">
-                    <span>Automations Reviewed</span>
+                    <span>Total Number of Live Projects</span>
                     <strong>${totalProjects}</strong>
-                    <small>included in this view</small>
+                    <small>currently shown in this view</small>
                 </article>
                 <article class="automation-kpi-card">
                     <span>Work Processed</span>
-                    <strong>${formatCompactNumber(totalVolumeAutomated)}</strong>
-                    <small>vs ${formatCompactNumber(totalVolumeManual)} done manually</small>
+                    <strong>${formatCompactNumber(annualVolumeAutomated)}</strong>
+                    <small>vs ${formatCompactNumber(annualVolumeManual)} done manually annually</small>
                 </article>
                 <article class="automation-kpi-card">
                     <span>Time Saved</span>
-                    <strong>${totalHoursSaved}</strong>
-                    <small>hours saved in one cycle</small>
+                    <strong>${formatCompactNumber(annualHoursSaved)}</strong>
+                    <small>hours saved annually</small>
                 </article>
                 <article class="automation-kpi-card">
                     <span>Estimated Savings</span>
-                    <strong>${formatCurrencyCompact(totalMoneySaved)}</strong>
-                    <small>projected business value</small>
+                    <strong>${formatCurrencyCompact(annualMoneySaved)}</strong>
+                    <small>projected annual business value</small>
                 </article>
             </div>
         </div>
@@ -745,12 +777,25 @@ function renderAutomationDashboard() {
                 <div>
                     <span class="quick-help-label">Overall Chart</span>
                     <h4>Overall Comparison of Automation, Manual Input, and Savings</h4>
-                    <p class="automation-chart-intro">Gray bars show manual input, green bars show automation output, and the blue line shows estimated savings in pesos. This gives a clearer side-by-side view of workload and business impact.</p>
+                    <p class="automation-chart-intro">Gray bars show manual input, green bars show automation output, and the blue line shows estimated savings in pesos. This gives a clearer side-by-side view of workload and business impact for the selected period.</p>
+                    <p class="automation-chart-intro"><strong>Viewing:</strong> ${period.label}${period.key === "annual" ? " totals for the full year" : ` estimates based on the monthly dataset`}</p>
                 </div>
-                <div class="automation-chart-legend">
+                <div class="automation-chart-toolbar">
+                    <div class="automation-period-switch" role="tablist" aria-label="Automation timeframe filter">
+                        ${AUTOMATION_PERIODS.map((item) => `
+                            <button
+                                class="automation-period-btn${item.key === period.key ? " is-active" : ""}"
+                                type="button"
+                                data-automation-period="${item.key}"
+                                aria-pressed="${String(item.key === period.key)}"
+                            >${item.label}</button>
+                        `).join("")}
+                    </div>
+                    <div class="automation-chart-legend">
                     <span><i class="legend-swatch legend-swatch-manual"></i>Manual input</span>
                     <span><i class="legend-swatch legend-swatch-auto"></i>Automation output</span>
                     <span><i class="legend-line legend-line-savings"></i>Savings (PHP)</span>
+                    </div>
                 </div>
             </div>
             <div class="automation-panels-grid">
@@ -758,18 +803,18 @@ function renderAutomationDashboard() {
                     <div class="automation-insight-card">
                         <span>Highest Estimated Value</span>
                         <strong>${bestPerformer.projectName}</strong>
-                        <small>${formatCurrencyCompact(bestPerformer.moneySaved)} in estimated savings</small>
+                        <small>${formatCurrencyCompact(bestPerformer.moneySaved)} in estimated ${period.label.toLowerCase()} savings</small>
                     </div>
                     <div class="automation-insight-card">
                         <span>Overall Throughput</span>
                         <strong>${Math.round((totalVolumeAutomated / Math.max(totalVolumeManual, 1)) * 100)}%</strong>
-                        <small>of the manual baseline volume</small>
+                        <small>of the ${period.label.toLowerCase()} manual baseline volume</small>
                     </div>
                 </div>
                 <div class="automation-multiplier-card">
                     <div class="automation-multiplier-header">
                         <span class="quick-help-label">Median</span>
-                        <h5>Median Volume Per Solution</h5>
+                        <h5>${period.label} Median Volume Per Solution</h5>
                     </div>
                     <div class="automation-multiplier-list">
                         ${rows.map((item) => {
@@ -791,11 +836,11 @@ function renderAutomationDashboard() {
                 ${overallChart}
             </div>
         </div>
-        <div class="automation-breakdown-card">
-            <div class="automation-breakdown-header">
-                <span class="quick-help-label">Breakdown</span>
-                <h5>Savings & Efficiency Breakdown</h5>
-            </div>
+            <div class="automation-breakdown-card">
+                <div class="automation-breakdown-header">
+                    <span class="quick-help-label">Breakdown</span>
+                    <h5>${period.label} Savings & Efficiency Breakdown</h5>
+                </div>
             <div class="automation-breakdown-table-wrap">
                 <table class="automation-breakdown-table">
                     <thead>
@@ -880,6 +925,16 @@ function applyAutomationDashboardVisibility(container, isHidden) {
 function setupAutomationDashboardInteractions(container) {
     if (!container) return;
 
+    container.querySelectorAll("[data-automation-period]").forEach((button) => {
+        button.addEventListener("click", () => {
+            const nextPeriod = button.getAttribute("data-automation-period");
+            if (!nextPeriod || nextPeriod === APP_STATE.automationPeriod) return;
+            APP_STATE.automationPeriod = nextPeriod;
+            localStorage.setItem(STORAGE_KEYS.automationPeriod, nextPeriod);
+            renderAutomationDashboard();
+        });
+    });
+
     const clearActive = () => {
         container.classList.remove("has-linked-active");
         container.querySelectorAll(".is-linked-active").forEach((node) => node.classList.remove("is-linked-active"));
@@ -926,6 +981,21 @@ function calculateMedian(values) {
     return sorted.length % 2 === 0
         ? (sorted[middle - 1] + sorted[middle]) / 2
         : sorted[middle];
+}
+
+const AUTOMATION_PERIODS = [
+    { key: "daily", label: "Daily", multiplier: 1 / 22 },
+    { key: "weekly", label: "Weekly", multiplier: 1 / 4.33 },
+    { key: "monthly", label: "Monthly", multiplier: 1 },
+    { key: "annual", label: "Annual", multiplier: 12 }
+];
+
+function getAutomationPeriodConfig(periodKey) {
+    return AUTOMATION_PERIODS.find((item) => item.key === periodKey) || AUTOMATION_PERIODS[AUTOMATION_PERIODS.length - 1];
+}
+
+function scaleAutomationMetric(value, multiplier) {
+    return Number((Number(value) * Number(multiplier || 1)).toFixed(1));
 }
 
 function buildOverallComparisonChart(rows) {
