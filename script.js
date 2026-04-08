@@ -154,7 +154,8 @@ const STORAGE_KEYS = {
     adminSession: "madison88-admin-session",
     themePreference: "madison88-theme-preference",
     automationDashboardHidden: "madison88-automation-dashboard-hidden",
-    automationPeriod: "madison88-automation-period"
+    automationPeriod: "madison88-automation-period",
+    exchangeRateData: "madison88-exchange-rate-data"
 };
 
 const SUPABASE_SECTION_KEYS = {
@@ -173,7 +174,16 @@ const APP_RUNTIME = {
     supabaseConfigured: false,
     supabaseStatus: "local-only",
     supabaseLastError: "",
-    supabaseLastSyncAt: ""
+    supabaseLastSyncAt: "",
+    exchangeRate: {
+        baseCurrency: "PHP",
+        targetCurrency: "USD",
+        rate: null,
+        source: "",
+        fetchedAt: "",
+        status: "idle",
+        error: ""
+    }
 };
 
 const POLICY_DOCUMENTS = [
@@ -348,6 +358,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     setupProjectAdmin();
     setupRevealAnimations();
     setupLenis();
+    initializeExchangeRate();
     await hydrateAppStateFromSupabase();
 });
 
@@ -793,6 +804,8 @@ function renderAutomationDashboard() {
     const maxMedian = Math.max(...rows.map((item) => calculateMedian([item.manualVolume, item.automatedVolume])), 1);
     const maxTableSavings = Math.max(...rows.map((item) => item.moneySaved), 1);
     const isHidden = APP_STATE.automationDashboardHidden;
+    const savingsLabel = getSavingsCurrencyLabel();
+    const exchangeRateNote = getExchangeRateNote();
 
     container.innerHTML = `
         <div class="automation-dashboard-top">
@@ -830,8 +843,9 @@ function renderAutomationDashboard() {
                 <div>
                     <span class="quick-help-label">Overall Chart</span>
                     <h4>Overall Comparison of Automation, Manual Input, and Savings</h4>
-                    <p class="automation-chart-intro">Gray bars show manual input, green bars show automation output, and the blue line shows estimated savings in pesos. This gives a clearer side-by-side view of workload and business impact for the selected period.</p>
+                    <p class="automation-chart-intro">Gray bars show manual input, green bars show automation output, and the blue line shows estimated savings in ${getSavingsNarrativeLabel()}. This gives a clearer side-by-side view of workload and business impact for the selected period.</p>
                     <p class="automation-chart-intro"><strong>Viewing:</strong> ${period.label}${period.key === "annual" ? " totals for the full year" : ` estimates based on the monthly dataset`}</p>
+                    <p class="automation-chart-intro">${exchangeRateNote}</p>
                 </div>
                 <div class="automation-chart-toolbar">
                     <div class="automation-period-switch" role="tablist" aria-label="Automation timeframe filter">
@@ -847,7 +861,7 @@ function renderAutomationDashboard() {
                     <div class="automation-chart-legend">
                     <span><i class="legend-swatch legend-swatch-manual"></i>Manual input</span>
                     <span><i class="legend-swatch legend-swatch-auto"></i>Automation output</span>
-                    <span><i class="legend-line legend-line-savings"></i>Savings (PHP)</span>
+                    <span><i class="legend-line legend-line-savings"></i>Savings (${savingsLabel})</span>
                     </div>
                 </div>
             </div>
@@ -1014,13 +1028,27 @@ function formatCompactNumber(value) {
     return new Intl.NumberFormat("en-PH", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
 
-function formatCurrencyCompact(value) {
+function formatCurrencyCompactPHP(value) {
     return new Intl.NumberFormat("en-PH", {
         style: "currency",
         currency: "PHP",
         notation: "compact",
         maximumFractionDigits: 1
     }).format(value);
+}
+
+function formatCurrencyCompactUSD(value) {
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        notation: "compact",
+        maximumFractionDigits: 1
+    }).format(value);
+}
+
+function formatCurrencyCompact(value) {
+    const converted = convertPhpToUsd(value);
+    return converted === null ? formatCurrencyCompactPHP(value) : formatCurrencyCompactUSD(converted);
 }
 
 function calculateMedian(values) {
@@ -1046,6 +1074,177 @@ const AUTOMATION_PERIODS = [
 
 function getAutomationPeriodConfig(periodKey) {
     return AUTOMATION_PERIODS.find((item) => item.key === periodKey) || AUTOMATION_PERIODS[AUTOMATION_PERIODS.length - 1];
+}
+
+function initializeExchangeRate() {
+    hydrateCachedExchangeRate();
+    if (APP_RUNTIME.exchangeRate.rate) {
+        renderAutomationDashboard();
+    }
+    void fetchLatestExchangeRate();
+    window.setInterval(() => {
+        void fetchLatestExchangeRate();
+    }, 30 * 60 * 1000);
+}
+
+function hydrateCachedExchangeRate() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEYS.exchangeRateData);
+        if (!raw) return;
+
+        const cached = JSON.parse(raw);
+        const rate = Number(cached?.rate);
+        if (!Number.isFinite(rate) || rate <= 0) return;
+
+        APP_RUNTIME.exchangeRate = {
+            ...APP_RUNTIME.exchangeRate,
+            rate,
+            source: String(cached.source || ""),
+            fetchedAt: String(cached.fetchedAt || ""),
+            status: "cached",
+            error: ""
+        };
+    } catch (error) {
+        // Ignore malformed cached rate data.
+    }
+}
+
+async function fetchLatestExchangeRate() {
+    APP_RUNTIME.exchangeRate.status = "loading";
+    APP_RUNTIME.exchangeRate.error = "";
+    renderAutomationDashboard();
+
+    const providers = [
+        {
+            source: "open.er-api.com",
+            url: "https://open.er-api.com/v6/latest/PHP",
+            parse(data) {
+                return {
+                    rate: Number(data?.rates?.USD),
+                    fetchedAt: String(data?.time_last_update_utc || "")
+                };
+            }
+        },
+        {
+            source: "frankfurter.app",
+            url: "https://api.frankfurter.app/latest?from=PHP&to=USD",
+            parse(data) {
+                return {
+                    rate: Number(data?.rates?.USD),
+                    fetchedAt: String(data?.date || "")
+                };
+            }
+        }
+    ];
+
+    for (const provider of providers) {
+        try {
+            const response = await fetch(provider.url, {
+                method: "GET",
+                headers: { Accept: "application/json" }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Rate request failed with status ${response.status}`);
+            }
+
+            const data = await response.json();
+            const parsed = provider.parse(data);
+            if (!Number.isFinite(parsed.rate) || parsed.rate <= 0) {
+                throw new Error("Invalid USD exchange rate received.");
+            }
+
+            APP_RUNTIME.exchangeRate = {
+                ...APP_RUNTIME.exchangeRate,
+                rate: parsed.rate,
+                source: provider.source,
+                fetchedAt: parsed.fetchedAt,
+                status: "ready",
+                error: ""
+            };
+
+            localStorage.setItem(STORAGE_KEYS.exchangeRateData, JSON.stringify({
+                rate: parsed.rate,
+                source: provider.source,
+                fetchedAt: parsed.fetchedAt
+            }));
+
+            renderAutomationDashboard();
+            return;
+        } catch (error) {
+            APP_RUNTIME.exchangeRate.error = error instanceof Error ? error.message : "Unable to fetch exchange rate.";
+        }
+    }
+
+    APP_RUNTIME.exchangeRate.status = APP_RUNTIME.exchangeRate.rate ? "cached" : "error";
+    renderAutomationDashboard();
+}
+
+function convertPhpToUsd(value) {
+    const amount = Number(value);
+    const rate = Number(APP_RUNTIME.exchangeRate.rate);
+    if (!Number.isFinite(amount) || !Number.isFinite(rate) || rate <= 0) return null;
+    return amount * rate;
+}
+
+function getSavingsCurrencyLabel() {
+    return convertPhpToUsd(1) === null ? "PHP" : "USD";
+}
+
+function getSavingsNarrativeLabel() {
+    return convertPhpToUsd(1) === null ? "Philippine pesos" : "U.S. dollars";
+}
+
+function formatExchangeRateTimestamp(value) {
+    const raw = String(value || "").trim();
+    if (!raw) return "";
+
+    const parsed = new Date(raw);
+    if (!Number.isNaN(parsed.getTime())) {
+        return new Intl.DateTimeFormat("en-US", {
+            dateStyle: "medium",
+            timeStyle: "short"
+        }).format(parsed);
+    }
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+        const normalized = new Date(`${raw}T00:00:00`);
+        if (!Number.isNaN(normalized.getTime())) {
+            return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(normalized);
+        }
+    }
+
+    return raw;
+}
+
+function formatExchangeRateValue(value) {
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4
+    }).format(value);
+}
+
+function getExchangeRateNote() {
+    const rate = Number(APP_RUNTIME.exchangeRate.rate);
+    const timestamp = formatExchangeRateTimestamp(APP_RUNTIME.exchangeRate.fetchedAt);
+
+    if (Number.isFinite(rate) && rate > 0) {
+        const freshness = APP_RUNTIME.exchangeRate.status === "ready"
+            ? "Live rate"
+            : APP_RUNTIME.exchangeRate.status === "loading"
+                ? "Refreshing rate"
+                : "Last saved rate";
+        const timeLabel = timestamp ? ` Updated ${timestamp}.` : "";
+        return `${freshness}: 1 PHP = ${formatExchangeRateValue(rate)} from ${APP_RUNTIME.exchangeRate.source || "exchange feed"}.${timeLabel}`;
+    }
+
+    if (APP_RUNTIME.exchangeRate.status === "loading") {
+        return "Loading the latest PHP to USD exchange rate. Savings will switch to dollars as soon as the rate is available.";
+    }
+
+    return "Live USD rate is temporarily unavailable, so savings are still shown in Philippine pesos for now.";
 }
 
 function scaleAutomationMetric(value, multiplier) {
@@ -1118,7 +1317,7 @@ function buildOverallComparisonChart(rows) {
             </defs>
             <rect x="${leftAxisX}" y="${topY}" width="${rightAxisX - leftAxisX}" height="${baseY - topY}" rx="24" class="chart-plot"></rect>
             <text x="28" y="34" class="chart-axis-title">Volume</text>
-            <text x="828" y="34" class="chart-axis-title chart-axis-title-right">Savings (PHP)</text>
+            <text x="828" y="34" class="chart-axis-title chart-axis-title-right">Savings (${getSavingsCurrencyLabel()})</text>
             <line x1="${leftAxisX}" y1="${baseY}" x2="${rightAxisX}" y2="${baseY}" class="chart-axis"></line>
             ${gridValues.map((value, index) => {
                 const y = topY + (index * chartInnerHeight) / (gridValues.length - 1);
