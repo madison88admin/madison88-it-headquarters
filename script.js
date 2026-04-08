@@ -152,6 +152,7 @@ const STORAGE_KEYS = {
     contactGuideData: "madison88-contact-guide-data",
     supportData: "madison88-support-data",
     adminSession: "madison88-admin-session",
+    themePreference: "madison88-theme-preference",
     automationDashboardHidden: "madison88-automation-dashboard-hidden",
     automationPeriod: "madison88-automation-period"
 };
@@ -310,6 +311,7 @@ const APP_STATE = {
     contactGuide: loadContactGuide(),
     supportCards: loadSupportCards(),
     adminLoggedIn: sessionStorage.getItem(STORAGE_KEYS.adminSession) === "true",
+    theme: localStorage.getItem(STORAGE_KEYS.themePreference) === "light" ? "light" : "dark",
     automationDashboardHidden: localStorage.getItem(STORAGE_KEYS.automationDashboardHidden) === "true",
     automationPeriod: localStorage.getItem(STORAGE_KEYS.automationPeriod) || "monthly",
     currentProjectFilter: "all",
@@ -317,7 +319,10 @@ const APP_STATE = {
     projectsPerPage: 8
 };
 
+applyTheme(APP_STATE.theme);
+
 document.addEventListener("DOMContentLoaded", async () => {
+    setupThemeToggle();
     updateNavigationLabels();
     setupLoader();
     syncOverviewProjectCount();
@@ -345,6 +350,43 @@ document.addEventListener("DOMContentLoaded", async () => {
     setupLenis();
     await hydrateAppStateFromSupabase();
 });
+
+function applyTheme(theme) {
+    const nextTheme = theme === "light" ? "light" : "dark";
+    APP_STATE.theme = nextTheme;
+    document.documentElement.setAttribute("data-theme", nextTheme);
+    document.documentElement.style.colorScheme = nextTheme;
+
+    const desktopToggle = document.getElementById("theme-toggle");
+    const mobileToggle = document.getElementById("theme-toggle-mobile");
+    const themeModeLabel = document.getElementById("theme-mode-label");
+    const themeToggleIcon = document.querySelector(".theme-toggle-icon");
+    const isLight = nextTheme === "light";
+
+    if (themeModeLabel) themeModeLabel.textContent = isLight ? "Light" : "Dark";
+    if (themeToggleIcon) themeToggleIcon.textContent = isLight ? "☀" : "☾";
+    if (desktopToggle) {
+        desktopToggle.setAttribute("aria-pressed", String(isLight));
+        desktopToggle.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
+        desktopToggle.title = isLight ? "Switch to dark mode" : "Switch to light mode";
+    }
+    if (mobileToggle) {
+        mobileToggle.setAttribute("aria-pressed", String(isLight));
+        mobileToggle.textContent = isLight ? "Dark Mode" : "Light Mode";
+    }
+}
+
+function toggleTheme() {
+    const nextTheme = APP_STATE.theme === "light" ? "dark" : "light";
+    applyTheme(nextTheme);
+    localStorage.setItem(STORAGE_KEYS.themePreference, nextTheme);
+}
+
+function setupThemeToggle() {
+    document.getElementById("theme-toggle")?.addEventListener("click", toggleTheme);
+    document.getElementById("theme-toggle-mobile")?.addEventListener("click", toggleTheme);
+    applyTheme(APP_STATE.theme);
+}
 
 function updateNavigationLabels() {
     const commandNav = document.querySelectorAll(".sidebar-nav")[0];
@@ -658,13 +700,24 @@ async function uploadTeamPhotoToSupabase(file) {
 function setupLoader() {
     const loader = document.getElementById("loader");
     if (!loader) return;
-    window.addEventListener("load", () => {
+    let loaderHidden = false;
+
+    const hideLoader = () => {
+        if (loaderHidden) return;
+        loaderHidden = true;
+        loader.classList.add("fade-out");
+        animateCounters();
         setTimeout(() => {
-            loader.classList.add("fade-out");
-            animateCounters();
-            setTimeout(() => { loader.style.display = "none"; }, 900);
-        }, 1800);
-    });
+            loader.style.display = "none";
+        }, 900);
+    };
+
+    window.addEventListener("load", () => {
+        setTimeout(hideLoader, 1800);
+    }, { once: true });
+
+    // Fallback: don't let the UI stay blocked if a third-party resource stalls.
+    setTimeout(hideLoader, 3200);
 }
 
 function renderStats() {
@@ -1846,19 +1899,6 @@ function renderMissionVision() {
     const mv = APP_CONFIG.missionVision;
     const content = `
         <article class="mission-vision-card glass searchable-item" data-search="${buildSearchText(["Madison88 IT & D", "Mission", mv.mission.content, "Vision", mv.vision.content, "Values", mv.values.content])}">
-            <div class="mission-vision-atmosphere" aria-hidden="true">
-                <span class="mission-leaf mission-leaf-one"></span>
-                <span class="mission-leaf mission-leaf-two"></span>
-                <span class="mission-leaf mission-leaf-three"></span>
-                <span class="mission-pixel-rain mission-pixel-rain-one"></span>
-                <span class="mission-pixel-rain mission-pixel-rain-two"></span>
-                <span class="mission-pixel-rain mission-pixel-rain-three"></span>
-                <span class="mission-data-stream mission-data-stream-one"></span>
-                <span class="mission-data-stream mission-data-stream-two"></span>
-            </div>
-            <div class="mission-vision-card-head">
-                <span class="quick-help-label">Madison88 IT &amp; D</span>
-            </div>
             <div class="mission-vision-grid">
                 <div class="mission-vision-block">
                     <h3>${mv.mission.title}</h3>
@@ -4295,4 +4335,3 @@ function refreshSearchResults() {
         ? `${visibleCount} result${visibleCount === 1 ? "" : "s"} matching "${query}".`
         : "Search instantly across tools, project systems, and support contacts.";
 }
-
