@@ -840,6 +840,7 @@ function renderAutomationDashboard() {
                 <div class="automation-breakdown-header">
                     <span class="quick-help-label">Breakdown</span>
                     <h5>${period.label} Savings & Efficiency Breakdown</h5>
+                    <p class="automation-breakdown-definition">Manual Input = manual volume or number of items handled by people, Auto Output = automation volume or number of items completed by the system, Median = middle value between manual and auto volume, Est. Savings = estimated money saved, Efficiency = percent of time reduced.</p>
                 </div>
             <div class="automation-breakdown-table-wrap">
                 <table class="automation-breakdown-table">

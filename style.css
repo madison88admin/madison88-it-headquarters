@@ -1209,6 +1209,13 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
     font-size: 1.05rem;
 }
 
+.automation-breakdown-definition {
+    max-width: 920px;
+    color: var(--text-faint);
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
 .automation-multiplier-list {
     display: grid;
     gap: 10px;
