@@ -182,6 +182,7 @@ const APP_RUNTIME = {
         rate: null,
         source: "",
         fetchedAt: "",
+        checkedAt: "",
         status: "idle",
         error: ""
     }
@@ -1631,6 +1632,7 @@ function hydrateCachedExchangeRate() {
             rate,
             source: String(cached.source || ""),
             fetchedAt: String(cached.fetchedAt || ""),
+            checkedAt: String(cached.checkedAt || cached.fetchedAt || ""),
             status: "cached",
             error: ""
         };
@@ -1640,8 +1642,10 @@ function hydrateCachedExchangeRate() {
 }
 
 async function fetchLatestExchangeRate() {
+    const requestStartedAt = new Date().toISOString();
     APP_RUNTIME.exchangeRate.status = "loading";
     APP_RUNTIME.exchangeRate.error = "";
+    APP_RUNTIME.exchangeRate.checkedAt = requestStartedAt;
     renderAutomationDashboard();
 
     const providers = [
@@ -1689,6 +1693,7 @@ async function fetchLatestExchangeRate() {
                 rate: parsed.rate,
                 source: provider.source,
                 fetchedAt: parsed.fetchedAt,
+                checkedAt: new Date().toISOString(),
                 status: "ready",
                 error: ""
             };
@@ -1696,7 +1701,8 @@ async function fetchLatestExchangeRate() {
             localStorage.setItem(STORAGE_KEYS.exchangeRateData, JSON.stringify({
                 rate: parsed.rate,
                 source: provider.source,
-                fetchedAt: parsed.fetchedAt
+                fetchedAt: parsed.fetchedAt,
+                checkedAt: APP_RUNTIME.exchangeRate.checkedAt
             }));
 
             renderAutomationDashboard();
@@ -1758,7 +1764,8 @@ function formatExchangeRateValue(value) {
 
 function getExchangeRateNote() {
     const rate = Number(APP_RUNTIME.exchangeRate.rate);
-    const timestamp = formatExchangeRateTimestamp(APP_RUNTIME.exchangeRate.fetchedAt);
+    const providerTimestamp = formatExchangeRateTimestamp(APP_RUNTIME.exchangeRate.fetchedAt);
+    const checkedTimestamp = formatExchangeRateTimestamp(APP_RUNTIME.exchangeRate.checkedAt);
 
     if (Number.isFinite(rate) && rate > 0) {
         const freshness = APP_RUNTIME.exchangeRate.status === "ready"
@@ -1766,8 +1773,9 @@ function getExchangeRateNote() {
             : APP_RUNTIME.exchangeRate.status === "loading"
                 ? "Refreshing rate"
                 : "Last saved rate";
-        const timeLabel = timestamp ? ` Updated ${timestamp}.` : "";
-        return `${freshness}: 1 PHP = ${formatExchangeRateValue(rate)} from ${APP_RUNTIME.exchangeRate.source || "exchange feed"}.${timeLabel}`;
+        const providerLabel = providerTimestamp ? ` Provider updated ${providerTimestamp}.` : "";
+        const checkedLabel = checkedTimestamp ? ` Dashboard checked ${checkedTimestamp}.` : "";
+        return `${freshness}: 1 PHP = ${formatExchangeRateValue(rate)} from ${APP_RUNTIME.exchangeRate.source || "exchange feed"}.${providerLabel}${checkedLabel}`;
     }
 
     if (APP_RUNTIME.exchangeRate.status === "loading") {
