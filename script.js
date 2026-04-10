@@ -17,19 +17,18 @@ const APP_CONFIG = {
         ]
     },
     projects: [
-        { id: "it-service-management", name: "IT Service Management System", status: "Live", filter: "active", description: "Enterprise IT service desk, incident tracking, and service request management portal.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Updated Mar 18 (19 days ago)", team: ["JC", "MP"], systemUrl: "https://m88itsm.netlify.app", restricted: false },
-        { id: "it-infrastructure-services", name: "IT Infrastructure Services", status: "Live", filter: "active", description: "Centralized infrastructure monitoring, capacity planning, and systems management dashboard.", progress: 100, owner: "SS", ownerName: "John Sedrick Sarol", updated: "Updated Mar 9 (a month ago)", team: ["SS"], systemUrl: "https://m88iis.netlify.app", restricted: false },
-        { id: "po-instructions", name: "PO Instructions Portal", status: "Live", filter: "active", description: "Procurement instruction documentation and purchase order guidance system for authorized personnel.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Updated Jan 6 (3 months ago)", team: [], systemUrl: "https://poinstructions.netlify.app", restricted: true },
-        { id: "account-allocation", name: "Account Allocation System", status: "Live", filter: "active", description: "Cost allocation and account management platform for project billing and resource tracking.", progress: 68, owner: "JC", ownerName: "John Carlo Manalo", updated: "Updated Sep 9 (7 months ago)", team: ["SS"], systemUrl: "https://m88accountallocation.netlify.app", restricted: true },
-        { id: "it-procurement-tool", name: "IT Procurement Tool", status: "Live", filter: "active", description: "Streamlined IT procurement workflow with vendor management and requisition tracking capabilities.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Updated Mar 31 (6 days ago)", team: [], systemUrl: "https://m88ipt.netlify.app", restricted: false },
-        { id: "po-cutting-system", name: "Purchase Order Cutting System", status: "Live", filter: "active", description: "Advanced PO generation and approval workflow with Next.js integration for real-time processing.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Updated Mar 31 (6 days ago)", team: ["JC"], systemUrl: "https://m88-po-cutting.netlify.app", restricted: true },
-        { id: "dev-tracker", name: "Developer Tracker", status: "Live", filter: "active", description: "Project management and development progress tracking tool for IT development teams.", progress: 75, owner: "MP", ownerName: "Mhark Pentinio", updated: "Updated Mar 26 (11 days ago)", team: ["SS"], systemUrl: "https://m88devtracker.netlify.app", restricted: true },
-        { id: "org-chart", name: "Madison88 Organization Chart", status: "Live", filter: "active", description: "Interactive organizational structure, reporting lines, and department hierarchy visualization.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Updated Mar 10 (a month ago)", team: ["JC"], systemUrl: "https://madison88-orgchart.netlify.app", restricted: false },
-        { id: "idea-intake", name: "Idea Intake Portal", status: "Live", filter: "active", description: "Employee innovation submission and idea management system with voting and review workflows.", progress: 55, owner: "MP", ownerName: "Mhark Pentinio", updated: "Updated Mar 5 (a month ago)", team: ["MP", "SS"], systemUrl: "https://m88ideaintake.netlify.app", restricted: false },
-        { id: "costing-automation", name: "Costing Automation Engine", status: "Live", filter: "active", description: "Automated cost calculation and pricing model system with real-time updates and variance analysis.", progress: 72, owner: "JC", ownerName: "John Carlo Manalo", updated: "Updated Feb 27 (a month ago)", team: [], systemUrl: "https://costingautomationm88.netlify.app", restricted: true },
-        { id: "costing-validation", name: "Costing Validation System", status: "Live", filter: "active", description: "Cost verification and audit system ensuring accuracy of pricing and budget allocations.", progress: 68, owner: "MP", ownerName: "Mhark Pentinio", updated: "Updated Feb 6 (2 months ago)", team: ["MP"], systemUrl: "https://costingvalidation.netlify.app", restricted: true },
-        { id: "plan-generation", name: "Plan Generation Module", status: "Live", filter: "active", description: "Strategic planning and report generation system for quarterly and annual business planning cycles.", progress: 48, owner: "MP", ownerName: "Mhark Pentinio", updated: "Updated Jan 7 (3 months ago)", team: [], systemUrl: "https://plgenm88.netlify.app", restricted: true },
-        { id: "brand-analysis-pbi", name: "Brand Analysis Power BI", status: "Live", filter: "active", description: "Brand performance analytics and business intelligence dashboard with real-time metrics and insights.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Updated Apr 6", team: ["JC"], systemUrl: "https://app.powerbi.com/links/VHMsNN8id9?ctid=97906f86-ab71-483e-9436-439f435b98c3&pbi_source=linkShare", restricted: false }
+        { id: "m88-it-headquarters", name: "m88-it-headquarters", status: "Live", filter: "active", description: "IT headquarters dashboard deployed from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 10 at 9:26 AM", team: ["JC"], systemUrl: "", restricted: false },
+        { id: "m88itsm", name: "m88itsm", status: "Live", filter: "active", description: "IT service management deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Mar 18", team: ["JC", "MP"], systemUrl: "https://m88itsm.netlify.app", restricted: false },
+        { id: "m88iis", name: "m88iis", status: "Live", filter: "active", description: "Infrastructure services deployment from GitHub.", progress: 100, owner: "SS", ownerName: "John Sedrick Sarol", updated: "Published Mar 9", team: ["SS"], systemUrl: "https://m88iis.netlify.app", restricted: false },
+        { id: "poinstructions", name: "poinstructions", status: "Live", filter: "active", description: "PO instructions deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Jan 6", team: ["JC"], systemUrl: "https://poinstructions.netlify.app", restricted: false },
+        { id: "m88accountallocation", name: "m88accountallocation", status: "Live", filter: "active", description: "Account allocation deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Sep 9, 2025", team: ["SS"], systemUrl: "https://m88accountallocation.netlify.app", restricted: false },
+        { id: "m88ipt", name: "m88ipt", status: "Live", filter: "active", description: "IT procurement deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 10 at 10:29 AM", team: ["JC"], systemUrl: "https://m88ipt.netlify.app", restricted: false },
+        { id: "m88cashflow", name: "m88cashflow", status: "Live", filter: "active", description: "Cash flow deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 7", team: ["JC"], systemUrl: "https://m88cashflow.netlify.app", restricted: false },
+        { id: "m88-po-cutting", name: "m88-po-cutting", status: "Live", filter: "active", description: "PO cutting deployment from GitHub with Next.js.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Mar 31", team: ["JC"], systemUrl: "https://m88-po-cutting.netlify.app", restricted: false },
+        { id: "m88devtracker", name: "m88devtracker", status: "Live", filter: "active", description: "Developer tracker deployment from GitHub.", progress: 100, owner: "MP", ownerName: "Mhark Pentinio", updated: "Published Mar 26", team: ["SS"], systemUrl: "https://m88devtracker.netlify.app", restricted: false },
+        { id: "madison88-orgchart", name: "madison88-orgchart", status: "Live", filter: "active", description: "Organization chart deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Mar 10", team: ["JC"], systemUrl: "https://madison88-orgchart.netlify.app", restricted: false },
+        { id: "m88ideaintake", name: "m88ideaintake", status: "Live", filter: "active", description: "Idea intake deployment from GitHub.", progress: 100, owner: "MP", ownerName: "Mhark Pentinio", updated: "Published Mar 5", team: ["MP", "SS"], systemUrl: "https://m88ideaintake.netlify.app", restricted: false },
+        { id: "costingautomationm88", name: "costingautomationm88", status: "Live", filter: "active", description: "Costing automation deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Feb 27", team: ["JC"], systemUrl: "https://costingautomationm88.netlify.app", restricted: false }
     ],
     services: [
         { category: "IT Services", items: [
@@ -266,12 +265,181 @@ const POLICY_VISUALS = [
     }
 ];
 
-const AUTOMATION_COMPARISON = [
-    { projectId: "po-cutting-system", label: "PO Cutting", manualVolume: 920, automatedVolume: 3200, manualHours: 184, automatedHours: 41, moneySaved: 132000 },
-    { projectId: "costing-automation", label: "Costing Automation", manualVolume: 540, automatedVolume: 1900, manualHours: 146, automatedHours: 36, moneySaved: 118000 },
-    { projectId: "it-service-management", label: "ITSM Requests", manualVolume: 780, automatedVolume: 2450, manualHours: 132, automatedHours: 48, moneySaved: 91000 },
-    { projectId: "brand-analysis-pbi", label: "BI Reporting", manualVolume: 310, automatedVolume: 1100, manualHours: 88, automatedHours: 22, moneySaved: 76000 }
+const AUTOMATION_SOURCE_DATA = [
+    {
+        sourceKey: "PO_prep",
+        projectId: "m88-po-cutting",
+        label: "PO Preparation Hub",
+        department: "Planning",
+        processName: "Purchase Order Prep (PO-cutting)",
+        automationTool: "PO preparation hub",
+        manualAvgMins: 150,
+        manualVolumeMonth: 2,
+        manualMonthlyMins: 300,
+        autoAvgMins: 60,
+        autoVolumeMonth: 2,
+        autoMonthlyMins: 120,
+        validatedSavedMins: 180,
+        roles: "Planning Associate",
+        hourlyCostPhp: 450
+    },
+    {
+        sourceKey: "Data_bank",
+        projectId: "costingautomationm88",
+        label: "Costing Automation",
+        department: "Costing",
+        processName: "Data Bank",
+        automationTool: "Costing Automation",
+        manualAvgMins: 5,
+        manualVolumeMonth: 140,
+        manualMonthlyMins: 700,
+        autoAvgMins: 2.5,
+        autoVolumeMonth: 140,
+        autoMonthlyMins: 350,
+        validatedSavedMins: 350,
+        roles: "Costing Supervisor/Associate",
+        hourlyCostPhp: 450
+    },
+    {
+        sourceKey: "BCBD",
+        projectId: "costingautomationm88",
+        label: "Costing Automation",
+        department: "Costing",
+        processName: "BCBD Validation",
+        automationTool: "Costing Automation",
+        manualAvgMins: 30,
+        manualVolumeMonth: 140,
+        manualMonthlyMins: 4200,
+        autoAvgMins: 10,
+        autoVolumeMonth: 140,
+        autoMonthlyMins: 1400,
+        validatedSavedMins: 2800,
+        roles: "Costing Supervisor/Associate",
+        hourlyCostPhp: 450
+    },
+    {
+        sourceKey: "ITSM",
+        projectId: "m88itsm",
+        label: "m88itsm",
+        department: "Information Technology",
+        processName: "I.T. Technical Support",
+        automationTool: "I.T. Service Management Tool",
+        manualAvgMins: 120,
+        manualVolumeMonth: 15,
+        manualMonthlyMins: 1800,
+        autoAvgMins: 90,
+        autoVolumeMonth: 15,
+        autoMonthlyMins: 1350,
+        validatedSavedMins: 450,
+        roles: "Systems Admin",
+        hourlyCostPhp: 450
+    },
+    {
+        sourceKey: "IIS",
+        projectId: "m88iis",
+        label: "m88iis",
+        department: "Information Technology",
+        processName: "I.T. Equipment Inventory",
+        automationTool: "I.T. Inventory System",
+        manualAvgMins: 480,
+        manualVolumeMonth: 2,
+        manualMonthlyMins: 960,
+        autoAvgMins: 240,
+        autoVolumeMonth: 2,
+        autoMonthlyMins: 480,
+        validatedSavedMins: 480,
+        roles: "Systems Admin",
+        hourlyCostPhp: 450
+    },
+    {
+        sourceKey: "KPI",
+        projectId: "m88iis",
+        label: "Automated KPI Dash Board (Power Bi)",
+        department: "Logistics",
+        processName: "KPI",
+        automationTool: "Automated KPI Dash Board (Power Bi)",
+        manualAvgMins: 120,
+        manualVolumeMonth: 20,
+        manualMonthlyMins: 2400,
+        autoAvgMins: 20,
+        autoVolumeMonth: 20,
+        autoMonthlyMins: 400,
+        validatedSavedMins: 2000,
+        roles: "Manager & Supervisor",
+        hourlyCostPhp: 450
+    },
+    {
+        sourceKey: "Packing_List",
+        projectId: "m88ipt",
+        label: "Packing List Generator",
+        department: "Logistics",
+        processName: "Packing List",
+        automationTool: "Packing List Generator",
+        manualAvgMins: 90,
+        manualVolumeMonth: 1,
+        manualMonthlyMins: 90,
+        autoAvgMins: 25,
+        autoVolumeMonth: 1,
+        autoMonthlyMins: 25,
+        validatedSavedMins: 65,
+        roles: "Logistics Core",
+        hourlyCostPhp: 450
+    },
+    {
+        sourceKey: "Trim_Summary",
+        projectId: "costingautomationm88",
+        label: "Trim Summary",
+        department: "Costing",
+        processName: "Trim Summary",
+        automationTool: "Costing Automation",
+        manualAvgMins: 480,
+        manualVolumeMonth: 4,
+        manualMonthlyMins: 1920,
+        autoAvgMins: 30,
+        autoVolumeMonth: 4,
+        autoMonthlyMins: 120,
+        validatedSavedMins: 1800,
+        roles: "Costing Supervisor/Associate",
+        hourlyCostPhp: 450
+    },
+    {
+        sourceKey: "IPT",
+        projectId: "",
+        label: "Interns Productivity Tool",
+        department: "Information Technology",
+        processName: "Interns Productivity Tool",
+        automationTool: "Interns Productivity Tool",
+        manualAvgMins: 65,
+        manualVolumeMonth: 12,
+        manualMonthlyMins: 780,
+        autoAvgMins: 0,
+        autoVolumeMonth: 12,
+        autoMonthlyMins: 0,
+        validatedSavedMins: 780,
+        roles: "IT Interns",
+        hourlyCostPhp: 450
+    }
 ];
+
+const AUTOMATION_INTEGRITY_TOLERANCE_MINS = 0.01;
+const AUTOMATION_COMPARISON = buildAutomationComparison(AUTOMATION_SOURCE_DATA);
+const PRODUCTIVE_HOURS_PER_MONTH = 160;
+
+const AUTOMATION_PROJECT_ALIASES = {
+    "po-cutting-system": "m88-po-cutting",
+    "costing-automation": "costingautomationm88",
+    "it-service-management": "m88itsm",
+    "it-infrastructure-services": "m88iis",
+    "account-allocation": "m88iis",
+    "m88-po-cutting": "m88-po-cutting",
+    "costingautomationm88": "costingautomationm88",
+    "m88itsm": "m88itsm",
+    "m88iis": "m88iis"
+};
+
+const SYSTEM_PROJECT_DEFAULTS = Object.fromEntries(
+    APP_CONFIG.projects.map((project) => [project.id, cloneData(project)])
+);
 
 function cloneData(value) {
     if (typeof structuredClone === "function") {
@@ -354,37 +522,66 @@ const APP_STATE = {
     projectsPerPage: 8
 };
 
+let startupLoaderHidden = false;
+
+function hideStartupLoader() {
+    if (startupLoaderHidden) return;
+    const loader = document.getElementById("loader");
+    if (!loader) return;
+
+    startupLoaderHidden = true;
+    loader.classList.add("fade-out");
+    animateCounters();
+
+    window.setTimeout(() => {
+        loader.style.display = "none";
+    }, 900);
+}
+
 applyTheme(APP_STATE.theme);
 
+window.addEventListener("error", () => {
+    hideStartupLoader();
+});
+
+window.addEventListener("unhandledrejection", () => {
+    hideStartupLoader();
+});
+
 document.addEventListener("DOMContentLoaded", async () => {
-    setupThemeToggle();
-    updateNavigationLabels();
-    setupLoader();
-    syncOverviewProjectCount();
-    renderStats();
-    renderTicker();
-    renderAutomationDashboard();
-    renderProjects(APP_STATE.projects);
-    renderServices();
-    renderTeam();
-    renderContactGuide();
-    renderQuickHelp();
-    renderSupportCards();
-    renderMissionVision();
-    setupProjectFilters();
-    setupAutomationDashboardToggle();
-    setupSearch();
-    setupAdminAutofill();
-    setupClock();
-    setupWeatherWidget();
-    setupLiveItsmTicketStat();
-    setupNavigation();
-    setupModalSystem();
-    setupProjectAdmin();
-    setupRevealAnimations();
-    setupLenis();
-    initializeExchangeRate();
-    await hydrateAppStateFromSupabase();
+    try {
+        setupLoader();
+        setupThemeToggle();
+        updateNavigationLabels();
+        syncOverviewProjectCount();
+        renderStats();
+        renderTicker();
+        renderAutomationDashboard();
+        renderProjects(APP_STATE.projects);
+        renderServices();
+        renderTeam();
+        renderContactGuide();
+        renderQuickHelp();
+        renderSupportCards();
+        renderMissionVision();
+        setupProjectFilters();
+        setupAutomationDashboardToggle();
+        setupSearch();
+        setupAdminAutofill();
+        setupClock();
+        setupWeatherWidget();
+        setupLiveItsmTicketStat();
+        setupNavigation();
+        setupModalSystem();
+        setupProjectAdmin();
+        setupRevealAnimations();
+        setupLenis();
+        initializeExchangeRate();
+        await hydrateAppStateFromSupabase();
+    } catch (error) {
+        console.error("Dashboard startup failed:", error);
+        hideStartupLoader();
+    }
 });
 
 function applyTheme(theme) {
@@ -740,24 +937,13 @@ async function uploadTeamPhotoToSupabase(file) {
 function setupLoader() {
     const loader = document.getElementById("loader");
     if (!loader) return;
-    let loaderHidden = false;
-
-    const hideLoader = () => {
-        if (loaderHidden) return;
-        loaderHidden = true;
-        loader.classList.add("fade-out");
-        animateCounters();
-        setTimeout(() => {
-            loader.style.display = "none";
-        }, 900);
-    };
 
     window.addEventListener("load", () => {
-        setTimeout(hideLoader, 1800);
+        setTimeout(hideStartupLoader, 1800);
     }, { once: true });
 
     // Fallback: don't let the UI stay blocked if a third-party resource stalls.
-    setTimeout(hideLoader, 3200);
+    setTimeout(hideStartupLoader, 3200);
 }
 
 function renderStats() {
@@ -785,53 +971,32 @@ function renderAutomationDashboard() {
 
     const period = getAutomationPeriodConfig(APP_STATE.automationPeriod);
     const annualPeriod = getAutomationPeriodConfig("annual");
-    const annualRows = AUTOMATION_COMPARISON.map((entry) => {
-        const annualManualVolume = scaleAutomationMetric(entry.manualVolume, annualPeriod.multiplier);
-        const annualAutomatedVolume = scaleAutomationMetric(entry.automatedVolume, annualPeriod.multiplier);
-        const annualManualHours = scaleAutomationMetric(entry.manualHours, annualPeriod.multiplier);
-        const annualAutomatedHours = scaleAutomationMetric(entry.automatedHours, annualPeriod.multiplier);
-        const annualMoneySaved = scaleAutomationMetric(entry.moneySaved, annualPeriod.multiplier);
-        return {
-            ...entry,
-            manualVolume: annualManualVolume,
-            automatedVolume: annualAutomatedVolume,
-            manualHours: annualManualHours,
-            automatedHours: annualAutomatedHours,
-            moneySaved: annualMoneySaved,
-            hoursSaved: Math.max(0, annualManualHours - annualAutomatedHours)
-        };
-    });
+    const annualRows = AUTOMATION_COMPARISON.map((entry) => computeAutomationBenefits(entry, annualPeriod.multiplier));
     const rows = AUTOMATION_COMPARISON.map((entry) => {
         const project = APP_STATE.projects.find((item) => item.id === entry.projectId);
-        const manualVolume = scaleAutomationMetric(entry.manualVolume, period.multiplier);
-        const automatedVolume = scaleAutomationMetric(entry.automatedVolume, period.multiplier);
-        const manualHours = scaleAutomationMetric(entry.manualHours, period.multiplier);
-        const automatedHours = scaleAutomationMetric(entry.automatedHours, period.multiplier);
-        const moneySaved = scaleAutomationMetric(entry.moneySaved, period.multiplier);
-        const hoursSaved = Math.max(0, manualHours - automatedHours);
         return {
-            ...entry,
-            manualVolume,
-            automatedVolume,
-            manualHours,
-            automatedHours,
-            moneySaved,
-            projectName: project?.name || entry.label,
-            hoursSaved
+            ...computeAutomationBenefits(entry, period.multiplier),
+            projectName: project?.name || entry.label
         };
     });
 
     const annualVolumeManual = annualRows.reduce((sum, item) => sum + item.manualVolume, 0);
     const annualVolumeAutomated = annualRows.reduce((sum, item) => sum + item.automatedVolume, 0);
+    const annualBaselineHours = annualRows.reduce((sum, item) => sum + item.manualHours, 0);
     const annualHoursSaved = annualRows.reduce((sum, item) => sum + item.hoursSaved, 0);
-    const annualMoneySaved = annualRows.reduce((sum, item) => sum + item.moneySaved, 0);
+    const annualCapacityRelease = annualRows.reduce((sum, item) => sum + item.capacityReleaseFte, 0);
+    const annualCostAvoidance = annualRows.reduce((sum, item) => sum + item.costAvoidancePhp, 0);
+    const annualBenefits = annualRows.reduce((sum, item) => sum + item.totalBenefitPhp, 0);
+    const integrityFailures = annualRows.filter((item) => item.integrityCheck === "FAIL").length;
     const totalVolumeManual = rows.reduce((sum, item) => sum + item.manualVolume, 0);
     const totalVolumeAutomated = rows.reduce((sum, item) => sum + item.automatedVolume, 0);
     const totalProjects = rows.length;
+    const statusSummaries = buildAutomationStatusSummaries();
     const overallChart = buildOverallComparisonChart(rows);
-    const bestPerformer = rows.reduce((best, item) => item.moneySaved > best.moneySaved ? item : best, rows[0]);
+    const lifecycleChart = buildAutomationLifecycleChart(statusSummaries);
+    const bestPerformer = rows.reduce((best, item) => item.totalBenefitPhp > best.totalBenefitPhp ? item : best, rows[0]);
     const maxMedian = Math.max(...rows.map((item) => calculateMedian([item.manualVolume, item.automatedVolume])), 1);
-    const maxTableSavings = Math.max(...rows.map((item) => item.moneySaved), 1);
+    const maxTableBenefits = Math.max(...rows.map((item) => item.totalBenefitPhp), 1);
     const isHidden = APP_STATE.automationDashboardHidden;
     const savingsLabel = getSavingsCurrencyLabel();
     const exchangeRateNote = getExchangeRateNote();
@@ -841,29 +1006,47 @@ function renderAutomationDashboard() {
             <div>
                 <span class="quick-help-label">Automation Dashboard</span>
                 <h3>Automation Impact Summary</h3>
-                <p class="service-copy">This view compares manual work and automated work so any stakeholder can quickly understand output, time savings, and estimated business value.</p>
+                <p class="service-copy">This view follows one benefits measurement framework across all solutions: baseline hours, time saved, capacity release, and cost avoidance. Every total is recalculated from average time and monthly volume before reporting.</p>
             </div>
             <div class="automation-kpi-grid">
                 <article class="automation-kpi-card">
-                    <span>Total Number of Live Projects</span>
-                    <strong>${totalProjects}</strong>
-                    <small>currently shown in this view</small>
-                </article>
-                <article class="automation-kpi-card">
-                    <span>Work Processed</span>
-                    <strong>${formatCompactNumber(annualVolumeAutomated)}</strong>
-                    <small>vs ${formatCompactNumber(annualVolumeManual)} done manually annually</small>
+                    <span>Baseline Manual Work</span>
+                    <strong>${formatCompactNumber(annualBaselineHours)}</strong>
+                    <small>hours required annually before automation</small>
                 </article>
                 <article class="automation-kpi-card">
                     <span>Time Saved</span>
                     <strong>${formatCompactNumber(annualHoursSaved)}</strong>
-                    <small>hours saved annually</small>
+                    <small>hours removed from manual work annually</small>
                 </article>
                 <article class="automation-kpi-card">
-                    <span>Estimated Savings</span>
-                    <strong>${formatCurrencyCompact(annualMoneySaved)}</strong>
-                    <small>projected annual business value</small>
+                    <span>Capacity Release</span>
+                    <strong>${formatDecimal(annualCapacityRelease)} FTE</strong>
+                    <small>equivalent annual redeployable capacity</small>
                 </article>
+                <article class="automation-kpi-card">
+                    <span>Total Benefits</span>
+                    <strong>${formatCurrencyCompact(annualBenefits)}</strong>
+                    <small>${formatCurrencyCompact(annualCostAvoidance)} from cost avoidance annually</small>
+                </article>
+                <article class="automation-kpi-card">
+                    <span>Integrity Flags</span>
+                    <strong>${integrityFailures}</strong>
+                    <small>${integrityFailures === 1 ? "solution needs workbook correction" : "solutions need workbook correction"}</small>
+                </article>
+            </div>
+            <div class="automation-status-grid">
+                ${statusSummaries.map((summary) => `
+                    <article class="automation-kpi-card automation-status-card">
+                        <span>${summary.label}</span>
+                        <strong>${summary.projectCount}</strong>
+                        <small>${summary.projectCount === 1 ? "project" : "projects"} in this lifecycle stage</small>
+                        <div class="automation-status-metrics">
+                            <p><strong>${formatCompactNumber(summary.hoursSaved)}</strong> estimated hours saved</p>
+                            <p><strong>${formatCurrencyCompact(summary.totalBenefitPhp)}</strong> estimated total benefits</p>
+                        </div>
+                    </article>
+                `).join("")}
             </div>
         </div>
         <div class="automation-dashboard-body" id="automation-dashboard-body"${isHidden ? " hidden" : ""}>
@@ -871,9 +1054,9 @@ function renderAutomationDashboard() {
             <div class="automation-overall-chart-copy">
                 <div>
                     <span class="quick-help-label">Overall Chart</span>
-                    <h4>Overall Comparison of Automation, Manual Input, and Savings</h4>
-                    <p class="automation-chart-intro">Gray bars show manual input, green bars show automation output, and the blue line shows estimated savings in ${getSavingsNarrativeLabel()}. This gives a clearer side-by-side view of workload and business impact for the selected period.</p>
-                    <p class="automation-chart-intro"><strong>Viewing:</strong> ${period.label}${period.key === "annual" ? " totals for the full year" : ` estimates based on the monthly dataset`}</p>
+                    <h4>Overall Comparison of Baseline Volume, Automated Volume, and Total Benefits</h4>
+                    <p class="automation-chart-intro">Gray bars show the baseline manual transaction volume, green bars show the automated transaction volume, and the blue line shows total computed benefits in ${getSavingsNarrativeLabel()}.</p>
+                    <p class="automation-chart-intro"><strong>Viewing:</strong> ${period.label}${period.key === "annual" ? " totals for the full year" : ` estimates derived from the monthly baseline dataset`}</p>
                     <p class="automation-chart-intro">${exchangeRateNote}</p>
                 </div>
                 <div class="automation-chart-toolbar">
@@ -888,39 +1071,38 @@ function renderAutomationDashboard() {
                         `).join("")}
                     </div>
                     <div class="automation-chart-legend">
-                    <span><i class="legend-swatch legend-swatch-manual"></i>Manual input</span>
-                    <span><i class="legend-swatch legend-swatch-auto"></i>Automation output</span>
-                    <span><i class="legend-line legend-line-savings"></i>Savings (${savingsLabel})</span>
+                    <span><i class="legend-swatch legend-swatch-manual"></i>Baseline manual volume</span>
+                    <span><i class="legend-swatch legend-swatch-auto"></i>Automated volume</span>
+                    <span><i class="legend-line legend-line-savings"></i>Total benefits (${savingsLabel})</span>
                     </div>
                 </div>
             </div>
             <div class="automation-panels-grid">
                 <div class="automation-insight-strip">
                     <div class="automation-insight-card">
-                        <span>Highest Estimated Value</span>
+                        <span>Highest Total Benefit</span>
                         <strong>${bestPerformer.projectName}</strong>
-                        <small>${formatCurrencyCompact(bestPerformer.moneySaved)} in estimated ${period.label.toLowerCase()} savings</small>
+                        <small>${formatCurrencyCompact(bestPerformer.totalBenefitPhp)} in computed ${period.label.toLowerCase()} benefits</small>
                     </div>
                     <div class="automation-insight-card">
                         <span>Overall Throughput</span>
                         <strong>${Math.round((totalVolumeAutomated / Math.max(totalVolumeManual, 1)) * 100)}%</strong>
-                        <small>of the ${period.label.toLowerCase()} manual baseline volume</small>
+                        <small>of the ${period.label.toLowerCase()} baseline volume handled through automation</small>
                     </div>
                 </div>
                 <div class="automation-multiplier-card">
                     <div class="automation-multiplier-header">
-                        <span class="quick-help-label">Median</span>
-                        <h5>${period.label} Median Volume Per Solution</h5>
+                        <span class="quick-help-label">Capacity</span>
+                        <h5>${period.label} Capacity Release Per Solution</h5>
                     </div>
                     <div class="automation-multiplier-list">
                         ${rows.map((item) => {
-                            const median = calculateMedian([item.manualVolume, item.automatedVolume]);
                             return `
                                 <div class="automation-multiplier-row" data-automation-key="${escapeHtml(item.projectId)}" tabindex="0">
                                     <span>${escapeHtml(item.label)}</span>
                                     <div class="automation-multiplier-track">
-                                        <div class="automation-multiplier-fill" style="width:${(median / maxMedian) * 100}%"></div>
-                                        <strong>${formatCompactNumber(median)}</strong>
+                                        <div class="automation-multiplier-fill" style="width:${(item.capacityReleaseFte / Math.max(...rows.map((row) => row.capacityReleaseFte), 1)) * 100}%"></div>
+                                        <strong>${formatDecimal(item.capacityReleaseFte)} FTE</strong>
                                     </div>
                                 </div>
                             `;
@@ -932,41 +1114,64 @@ function renderAutomationDashboard() {
                 ${overallChart}
             </div>
         </div>
+            <div class="automation-overall-chart-card">
+                <div class="automation-overall-chart-copy">
+                    <div>
+                        <span class="quick-help-label">Lifecycle Chart</span>
+                        <h4>Project Status Comparison by Lifecycle Stage</h4>
+                        <p class="automation-chart-intro">Gray bars show how many projects fall under each lifecycle stage, and the blue line shows the estimated total benefits tied to projects in that stage.</p>
+                    </div>
+                    <div class="automation-chart-legend">
+                        <span><i class="legend-swatch legend-swatch-manual"></i>Project count</span>
+                        <span><i class="legend-line legend-line-savings"></i>Total benefits (${savingsLabel})</span>
+                    </div>
+                </div>
+                <div class="automation-chart-shell">
+                    ${lifecycleChart}
+                </div>
+            </div>
             <div class="automation-breakdown-card">
                 <div class="automation-breakdown-header">
                     <span class="quick-help-label">Breakdown</span>
-                    <h5>${period.label} Savings & Efficiency Breakdown</h5>
-                    <p class="automation-breakdown-definition">Manual Input = manual volume or number of items handled by people, Auto Output = automation volume or number of items completed by the system, Median = middle value between manual and auto volume, Est. Savings = estimated money saved, Efficiency = percent of time reduced.</p>
+                    <h5>${period.label} Benefits Breakdown</h5>
+                    <p class="automation-breakdown-definition">Baseline Hours = calculated manual work required before automation using Avg Time × Volume. Time Saved = calculated manual minutes minus calculated automated minutes. Capacity Release = time saved divided by 160 productive hours. Cost Avoidance = released FTE capacity multiplied by annual cost per FTE based on the policy. Total Benefits = policy-based cost avoidance for the selected period. Integrity Check compares workbook-reported totals against the recalculated totals.</p>
                 </div>
             <div class="automation-breakdown-table-wrap">
                 <table class="automation-breakdown-table">
                     <thead>
                         <tr>
                             <th>Solution</th>
-                            <th>Manual Input</th>
-                            <th>Auto Output</th>
-                            <th>Median</th>
-                            <th>Est. Savings</th>
-                            <th>Efficiency</th>
+                            <th>Data Integrity Check</th>
+                            <th>Baseline Hours</th>
+                            <th>Time Saved</th>
+                            <th>Capacity Release</th>
+                            <th>Cost Avoidance</th>
+                            <th>Total Benefits</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${rows.map((item) => {
-                            const median = calculateMedian([item.manualVolume, item.automatedVolume]);
-                            const efficiency = Math.round(((item.manualHours - item.automatedHours) / Math.max(item.manualHours, 1)) * 100);
                             return `
                                 <tr data-automation-key="${escapeHtml(item.projectId)}" tabindex="0">
                                     <td data-label="Solution"><strong>${escapeHtml(item.label)}</strong></td>
-                                    <td data-label="Manual Input">${formatCompactNumber(item.manualVolume)}</td>
-                                    <td data-label="Auto Output">${formatCompactNumber(item.automatedVolume)}</td>
-                                    <td data-label="Median"><span class="automation-chip automation-chip-multiplier">${formatCompactNumber(median)}</span></td>
-                                    <td data-label="Est. Savings">
+                                    <td data-label="Data Integrity Check">
+                                        <span class="automation-chip ${item.integrityCheck === "PASS" ? "automation-chip-pass" : "automation-chip-fail"}" title="${escapeHtml(item.integrityMessage)}">${escapeHtml(item.integrityCheck)}</span>
+                                    </td>
+                                    <td data-label="Baseline Hours">${formatCompactNumber(item.manualHours)}</td>
+                                    <td data-label="Time Saved">${formatCompactNumber(item.hoursSaved)}</td>
+                                    <td data-label="Capacity Release"><span class="automation-chip automation-chip-multiplier">${formatDecimal(item.capacityReleaseFte)} FTE</span></td>
+                                    <td data-label="Cost Avoidance">
                                         <div class="automation-savings-cell">
-                                            <strong>${formatCurrencyCompact(item.moneySaved)}</strong>
-                                            <span class="automation-savings-meter"><span style="width:${(item.moneySaved / maxTableSavings) * 100}%"></span></span>
+                                            <strong>${formatCurrencyCompact(item.costAvoidancePhp)}</strong>
+                                            <span class="automation-savings-meter"><span style="width:${(item.costAvoidancePhp / Math.max(...rows.map((row) => row.costAvoidancePhp), 1)) * 100}%"></span></span>
                                         </div>
                                     </td>
-                                    <td data-label="Efficiency"><span class="automation-chip automation-chip-efficiency">+${efficiency}%</span></td>
+                                    <td data-label="Total Benefits">
+                                        <div class="automation-savings-cell">
+                                            <strong>${formatCurrencyCompact(item.totalBenefitPhp)}</strong>
+                                            <span class="automation-savings-meter"><span style="width:${(item.totalBenefitPhp / maxTableBenefits) * 100}%"></span></span>
+                                        </div>
+                                    </td>
                                 </tr>
                             `;
                         }).join("")}
@@ -1080,6 +1285,166 @@ function formatCurrencyCompact(value) {
     return converted === null ? formatCurrencyCompactPHP(value) : formatCurrencyCompactUSD(converted);
 }
 
+function normalizeAutomationNumber(value) {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) ? numeric : 0;
+}
+
+function hasReportedAutomationValue(value) {
+    return value !== null && value !== undefined && String(value).trim() !== "";
+}
+
+function valuesMatchWithinTolerance(left, right, tolerance = AUTOMATION_INTEGRITY_TOLERANCE_MINS) {
+    return Math.abs(normalizeAutomationNumber(left) - normalizeAutomationNumber(right)) <= tolerance;
+}
+
+function buildAutomationValidation(row = {}) {
+    const manualAvgMins = normalizeAutomationNumber(row.manualAvgMins);
+    const manualVolumeMonth = normalizeAutomationNumber(row.manualVolumeMonth);
+    const autoAvgMins = normalizeAutomationNumber(row.autoAvgMins);
+    const autoVolumeMonth = normalizeAutomationNumber(row.autoVolumeMonth || row.manualVolumeMonth);
+    const calculatedManualMonthlyMins = manualAvgMins * manualVolumeMonth;
+    const calculatedAutoMonthlyMins = autoAvgMins * autoVolumeMonth;
+    const calculatedSavedMins = Math.max(0, calculatedManualMonthlyMins - calculatedAutoMonthlyMins);
+
+    const reportedManualMonthlyMins = hasReportedAutomationValue(row.reportedManualMonthlyMins)
+        ? normalizeAutomationNumber(row.reportedManualMonthlyMins)
+        : normalizeAutomationNumber(row.manualMonthlyMins);
+    const reportedAutoMonthlyMins = hasReportedAutomationValue(row.reportedAutoMonthlyMins)
+        ? normalizeAutomationNumber(row.reportedAutoMonthlyMins)
+        : normalizeAutomationNumber(row.autoMonthlyMins);
+    const reportedSavedMins = hasReportedAutomationValue(row.reportedSavedMins)
+        ? normalizeAutomationNumber(row.reportedSavedMins)
+        : normalizeAutomationNumber(row.validatedSavedMins);
+
+    const checks = [
+        {
+            key: "manual",
+            label: "Manual total",
+            hasReportedValue: hasReportedAutomationValue(row.reportedManualMonthlyMins) || hasReportedAutomationValue(row.manualMonthlyMins),
+            reportedValue: reportedManualMonthlyMins,
+            calculatedValue: calculatedManualMonthlyMins
+        },
+        {
+            key: "auto",
+            label: "Automated total",
+            hasReportedValue: hasReportedAutomationValue(row.reportedAutoMonthlyMins) || hasReportedAutomationValue(row.autoMonthlyMins),
+            reportedValue: reportedAutoMonthlyMins,
+            calculatedValue: calculatedAutoMonthlyMins
+        },
+        {
+            key: "saved",
+            label: "Time saved",
+            hasReportedValue: hasReportedAutomationValue(row.reportedSavedMins) || hasReportedAutomationValue(row.validatedSavedMins),
+            reportedValue: reportedSavedMins,
+            calculatedValue: calculatedSavedMins
+        }
+    ];
+
+    const mismatches = checks.filter((check) => check.hasReportedValue && !valuesMatchWithinTolerance(check.reportedValue, check.calculatedValue));
+    const integrityCheck = mismatches.length ? "FAIL" : "PASS";
+    const integrityMessage = mismatches.length
+        ? mismatches.map((check) => `${check.label}: reported ${formatDecimal(check.reportedValue)} min, calculated ${formatDecimal(check.calculatedValue)} min`).join(" | ")
+        : "Reported totals match calculated totals.";
+
+    return {
+        manualAvgMins,
+        manualVolumeMonth,
+        autoAvgMins,
+        autoVolumeMonth,
+        calculatedManualMonthlyMins,
+        calculatedAutoMonthlyMins,
+        calculatedSavedMins,
+        reportedManualMonthlyMins,
+        reportedAutoMonthlyMins,
+        reportedSavedMins,
+        integrityCheck,
+        integrityMessage,
+        integrityMismatches: mismatches.length,
+        integrityChecks: checks
+    };
+}
+
+function buildAutomationComparison(sourceRows = []) {
+    const grouped = new Map();
+
+    sourceRows.forEach((row) => {
+        const validation = buildAutomationValidation(row);
+        const groupKey = String(row.projectId || row.label || row.sourceKey || "").trim();
+        if (!groupKey) return;
+
+        const current = grouped.get(groupKey);
+        if (!current) {
+            grouped.set(groupKey, {
+                projectId: String(row.projectId || "").trim(),
+                label: String(row.label || row.automationTool || row.processName || "Automation").trim(),
+                department: String(row.department || "").trim(),
+                roles: String(row.roles || "").trim(),
+                monthlyTransactions: validation.manualVolumeMonth,
+                automatedVolume: validation.autoVolumeMonth,
+                manualMonthlyMins: validation.calculatedManualMonthlyMins,
+                autoMonthlyMins: validation.calculatedAutoMonthlyMins,
+                savedMonthlyMins: validation.calculatedSavedMins,
+                manualWeightedMins: validation.calculatedManualMonthlyMins,
+                autoWeightedMins: validation.calculatedAutoMonthlyMins,
+                hourlyCostPhpWeighted: normalizeAutomationNumber(row.hourlyCostPhp || 0) * Math.max(validation.calculatedManualMonthlyMins, 1),
+                sourceCount: 1,
+                integrityChecks: [validation.integrityCheck],
+                integrityMessages: [validation.integrityMessage],
+                integrityMismatches: validation.integrityMismatches
+            });
+            return;
+        }
+
+        current.monthlyTransactions += validation.manualVolumeMonth;
+        current.automatedVolume += validation.autoVolumeMonth;
+        current.manualMonthlyMins += validation.calculatedManualMonthlyMins;
+        current.autoMonthlyMins += validation.calculatedAutoMonthlyMins;
+        current.savedMonthlyMins += validation.calculatedSavedMins;
+        current.manualWeightedMins += validation.calculatedManualMonthlyMins;
+        current.autoWeightedMins += validation.calculatedAutoMonthlyMins;
+        current.hourlyCostPhpWeighted += normalizeAutomationNumber(row.hourlyCostPhp || 0) * Math.max(validation.calculatedManualMonthlyMins, 1);
+        current.sourceCount += 1;
+        current.integrityChecks.push(validation.integrityCheck);
+        current.integrityMessages.push(validation.integrityMessage);
+        current.integrityMismatches += validation.integrityMismatches;
+    });
+
+    return [...grouped.values()].map((entry) => {
+        const manualMonthlyMins = Number(entry.manualMonthlyMins || 0);
+        const autoMonthlyMins = Number(entry.autoMonthlyMins || 0);
+        const manualVolume = Math.max(Number(entry.monthlyTransactions || 0), 1);
+        const autoVolume = Math.max(Number(entry.automatedVolume || 0), 1);
+        const weightBase = Math.max(Number(entry.manualWeightedMins || 0), 1);
+
+        return {
+            projectId: entry.projectId,
+            label: entry.label,
+            department: entry.department,
+            roles: entry.roles,
+            monthlyTransactions: Number(entry.monthlyTransactions || 0),
+            automatedVolume: Number(entry.automatedVolume || 0),
+            manualMonthlyMins,
+            autoMonthlyMins,
+            savedMonthlyMins: Number(entry.savedMonthlyMins || 0),
+            avgHandlingTimeMins: manualMonthlyMins / manualVolume,
+            automatedHandlingTimeMins: autoMonthlyMins / autoVolume,
+            hourlyCostPhp: Number(entry.hourlyCostPhpWeighted || 0) / weightBase,
+            integrityCheck: entry.integrityChecks.every((status) => status === "PASS") ? "PASS" : "FAIL",
+            integrityMessage: entry.integrityMessages.filter(Boolean).join(" || "),
+            integrityMismatches: Number(entry.integrityMismatches || 0),
+            sourceCount: Number(entry.sourceCount || 0)
+        };
+    });
+}
+
+function formatDecimal(value, maximumFractionDigits = 2) {
+    return new Intl.NumberFormat("en-PH", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits
+    }).format(Number(value) || 0);
+}
+
 function calculateMedian(values) {
     const sorted = values
         .map((value) => Number(value))
@@ -1103,6 +1468,142 @@ const AUTOMATION_PERIODS = [
 
 function getAutomationPeriodConfig(periodKey) {
     return AUTOMATION_PERIODS.find((item) => item.key === periodKey) || AUTOMATION_PERIODS[AUTOMATION_PERIODS.length - 1];
+}
+
+function computeAutomationBenefits(entry, multiplier = 1) {
+    const monthlyTransactions = Number(entry.monthlyTransactions || 0);
+    const avgHandlingTimeMins = Number(entry.avgHandlingTimeMins || 0);
+    const automatedHandlingTimeMins = Number(entry.automatedHandlingTimeMins || 0);
+    const productiveHoursForPeriod = Math.max(PRODUCTIVE_HOURS_PER_MONTH * Number(multiplier || 1), 1);
+    const automatedVolume = scaleAutomationMetric(entry.automatedVolume, multiplier);
+    const manualVolume = scaleAutomationMetric(monthlyTransactions, multiplier);
+    const calculatedManualMonthlyMins = Number(entry.manualMonthlyMins || (monthlyTransactions * avgHandlingTimeMins));
+    const calculatedAutoMonthlyMins = Number(entry.autoMonthlyMins || (Number(entry.automatedVolume || monthlyTransactions) * automatedHandlingTimeMins));
+    const calculatedSavedMonthlyMins = Number.isFinite(Number(entry.savedMonthlyMins))
+        ? Number(entry.savedMonthlyMins)
+        : Math.max(0, calculatedManualMonthlyMins - calculatedAutoMonthlyMins);
+    const manualHours = scaleAutomationMetric(calculatedManualMonthlyMins / 60, multiplier);
+    const automatedHours = scaleAutomationMetric(calculatedAutoMonthlyMins / 60, multiplier);
+    const hoursSaved = scaleAutomationMetric(Math.max(0, calculatedSavedMonthlyMins) / 60, multiplier);
+    const hourlyCostPhp = Number(entry.hourlyCostPhp || 450);
+    const timeSavedValuePhp = hoursSaved * hourlyCostPhp;
+    const capacityReleaseFte = hoursSaved / productiveHoursForPeriod;
+    const annualCostPerFte = hourlyCostPhp * PRODUCTIVE_HOURS_PER_MONTH * 12;
+    // Policy-based inference: without separate growth/hiring assumptions,
+    // treat released FTE capacity as the avoided future FTE requirement.
+    const annualCostAvoidancePhp = capacityReleaseFte * annualCostPerFte;
+    const costAvoidancePhp = annualCostAvoidancePhp * (Number(multiplier || 1) / 12);
+
+    return {
+        ...entry,
+        manualVolume,
+        automatedVolume,
+        manualHours,
+        automatedHours,
+        hoursSaved,
+        integrityCheck: entry.integrityCheck || "PASS",
+        integrityMessage: entry.integrityMessage || "Reported totals match calculated totals.",
+        integrityMismatches: Number(entry.integrityMismatches || 0),
+        hourlyCostPhp,
+        timeSavedValuePhp,
+        annualCostPerFte,
+        costAvoidancePhp,
+        capacityReleaseFte,
+        totalBenefitPhp: costAvoidancePhp
+    };
+}
+
+function getProjectLifecycleStatus(project) {
+    const status = String(project?.status || "").trim().toLowerCase();
+    const progress = Number(project?.progress || 0);
+
+    if (status === "planning" || progress <= 0) return "not-started";
+    if (status === "completed" || progress >= 100) return "completed";
+    if (status === "in progress") return "in-progress";
+    if (status === "live") return progress >= 100 ? "completed" : "in-progress";
+    return progress >= 100 ? "completed" : "in-progress";
+}
+
+function normalizeAutomationLookupValue(value) {
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "");
+}
+
+function buildAutomationLookupMap() {
+    const lookup = new Map();
+
+    AUTOMATION_COMPARISON.forEach((entry) => {
+        const benefitEntry = computeAutomationBenefits(entry, 12);
+        const keys = [
+            entry.projectId,
+            AUTOMATION_PROJECT_ALIASES[entry.projectId],
+            entry.label,
+            entry.department
+        ];
+
+        keys.forEach((key) => {
+            const normalized = normalizeAutomationLookupValue(key);
+            if (normalized) lookup.set(normalized, benefitEntry);
+        });
+    });
+
+    Object.entries(AUTOMATION_PROJECT_ALIASES).forEach(([alias, target]) => {
+        const targetEntry = AUTOMATION_COMPARISON.find((entry) => entry.projectId === target);
+        if (!targetEntry) return;
+        const normalizedAlias = normalizeAutomationLookupValue(alias);
+        if (!normalizedAlias) return;
+        lookup.set(normalizedAlias, computeAutomationBenefits(targetEntry, 12));
+    });
+
+    return lookup;
+}
+
+function resolveAutomationBenefitsForProject(project, lookup) {
+    const keys = [
+        project?.id,
+        AUTOMATION_PROJECT_ALIASES[String(project?.id || "").trim()],
+        project?.name
+    ];
+
+    for (const key of keys) {
+        const normalized = normalizeAutomationLookupValue(key);
+        if (!normalized) continue;
+        const matched = lookup.get(normalized);
+        if (matched) return matched;
+    }
+
+    return null;
+}
+
+function buildAutomationStatusSummaries() {
+    const automationLookup = buildAutomationLookupMap();
+
+    const summaryMap = {
+        completed: { key: "completed", label: "Completed", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0 },
+        "in-progress": { key: "in-progress", label: "In Progress", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0 },
+        "not-started": { key: "not-started", label: "Not Started", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0 }
+    };
+
+    APP_STATE.projects.forEach((project) => {
+        const lifecycleStatus = getProjectLifecycleStatus(project);
+        const summary = summaryMap[lifecycleStatus];
+        if (!summary) return;
+
+        summary.projectCount += 1;
+        const automation = resolveAutomationBenefitsForProject(project, automationLookup);
+        if (!automation) return;
+
+        summary.hoursSaved += automation.hoursSaved;
+        summary.totalBenefitPhp += automation.totalBenefitPhp;
+    });
+
+    return [
+        summaryMap.completed,
+        summaryMap["in-progress"],
+        summaryMap["not-started"]
+    ];
 }
 
 function initializeExchangeRate() {
@@ -1280,30 +1781,46 @@ function scaleAutomationMetric(value, multiplier) {
     return Number((Number(value) * Number(multiplier || 1)).toFixed(1));
 }
 
+function getAutomationChartLabel(label = "") {
+    const normalized = String(label || "").trim();
+    const labelMap = {
+        "PO Preparation Hub": "PO Prep Hub",
+        "Costing Automation": "Costing Auto",
+        "Automated KPI Dash Board (Power Bi)": "Automated KPI"
+    };
+
+    return labelMap[normalized] || normalized;
+}
+
 function buildOverallComparisonChart(rows) {
-    const chartWidth = 860;
-    const chartHeight = 360;
-    const leftAxisX = 92;
-    const rightAxisX = 742;
-    const topY = 70;
-    const baseY = 284;
+    const pointCount = Math.max(rows.length, 1);
+    const chartWidth = Math.max(860, 220 + (pointCount * 132));
+    const chartHeight = 386;
+    const leftAxisX = 88;
+    const rightAxisX = chartWidth - 112;
+    const topY = 76;
+    const baseY = 286;
     const chartInnerHeight = baseY - topY;
     const maxVolume = Math.max(...rows.flatMap((item) => [item.manualVolume, item.automatedVolume]), 1);
-    const maxMoneySaved = Math.max(...rows.map((item) => item.moneySaved), 1);
-    const chartStartX = 126;
-    const chartStep = 164;
-    const groupWidth = 108;
-    const barWidth = 52;
-    const barGap = 12;
+    const maxBenefitValue = Math.max(...rows.map((item) => item.totalBenefitPhp), 1);
+    const chartStartX = leftAxisX + 54;
+    const chartUsableWidth = rightAxisX - chartStartX - 18;
+    const chartStep = pointCount === 1 ? 0 : chartUsableWidth / (pointCount - 1);
+    const groupWidth = 88;
+    const barWidth = 34;
+    const barGap = 10;
     const gridValues = [1, 0.833, 0.667, 0.5, 0.333, 0.167, 0];
 
     const points = rows.map((item, index) => {
-        const groupX = chartStartX + index * chartStep;
+        const anchorX = pointCount === 1
+            ? chartStartX + (chartUsableWidth / 2)
+            : chartStartX + index * chartStep;
+        const groupX = anchorX - (groupWidth / 2);
         const centerX = groupX + groupWidth / 2;
         const manualHeight = Math.max(18, (item.manualVolume / maxVolume) * chartInnerHeight);
         const autoHeight = Math.max(18, (item.automatedVolume / maxVolume) * chartInnerHeight);
-        const lineY = baseY - (item.moneySaved / maxMoneySaved) * chartInnerHeight;
-        const labelParts = splitChartLabel(item.label);
+        const lineY = baseY - (item.totalBenefitPhp / maxBenefitValue) * chartInnerHeight;
+        const labelParts = splitChartLabel(getAutomationChartLabel(item.label));
         return {
             ...item,
             groupX,
@@ -1345,16 +1862,16 @@ function buildOverallComparisonChart(rows) {
                 </filter>
             </defs>
             <rect x="${leftAxisX}" y="${topY}" width="${rightAxisX - leftAxisX}" height="${baseY - topY}" rx="24" class="chart-plot"></rect>
-            <text x="28" y="34" class="chart-axis-title">Volume</text>
-            <text x="828" y="34" class="chart-axis-title chart-axis-title-right">Savings (${getSavingsCurrencyLabel()})</text>
+            <text x="28" y="36" class="chart-axis-title">Volume</text>
+            <text x="${chartWidth - 30}" y="36" class="chart-axis-title chart-axis-title-right">Total Benefits (${getSavingsCurrencyLabel()})</text>
             <line x1="${leftAxisX}" y1="${baseY}" x2="${rightAxisX}" y2="${baseY}" class="chart-axis"></line>
             ${gridValues.map((value, index) => {
                 const y = topY + (index * chartInnerHeight) / (gridValues.length - 1);
                 return `
                     <g>
                         <line x1="${leftAxisX}" y1="${y}" x2="${rightAxisX}" y2="${y}" class="chart-grid-line"></line>
-                        <text x="72" y="${y + 4}" class="chart-scale chart-scale-left">${formatCompactNumber(Math.round(maxVolume * value))}</text>
-                        <text x="828" y="${y + 4}" class="chart-scale chart-scale-right">${formatCurrencyCompact(Math.round(maxMoneySaved * value))}</text>
+                        <text x="${leftAxisX - 16}" y="${y + 4}" class="chart-scale chart-scale-left">${formatCompactNumber(Math.round(maxVolume * value))}</text>
+                        <text x="${chartWidth - 30}" y="${y + 4}" class="chart-scale chart-scale-right">${formatCurrencyCompact(Math.round(maxBenefitValue * value))}</text>
                     </g>
                 `;
             }).join("")}
@@ -1374,6 +1891,96 @@ function buildOverallComparisonChart(rows) {
                 <g class="chart-series-group" data-automation-key="${escapeHtml(point.projectId)}">
                     <circle cx="${point.centerX}" cy="${point.lineY}" r="9" class="chart-point-ring chart-point-ring-savings"></circle>
                     <circle cx="${point.centerX}" cy="${point.lineY}" r="5.5" class="chart-point chart-point-savings" filter="url(#automationSoftGlow)"></circle>
+                </g>
+            `).join("")}
+        </svg>
+    `;
+}
+
+function buildAutomationLifecycleChart(statusSummaries) {
+    const rows = Array.isArray(statusSummaries) ? statusSummaries : [];
+    if (!rows.length) return "";
+
+    const chartWidth = 760;
+    const chartHeight = 360;
+    const leftAxisX = 86;
+    const rightAxisX = 700;
+    const topY = 52;
+    const baseY = 300;
+    const chartInnerHeight = baseY - topY;
+    const chartInnerWidth = rightAxisX - leftAxisX;
+    const groupWidth = chartInnerWidth / Math.max(rows.length, 1);
+    const barWidth = 72;
+    const maxProjectCount = Math.max(...rows.map((item) => item.projectCount), 1);
+    const maxBenefitValue = Math.max(...rows.map((item) => item.totalBenefitPhp), 1);
+    const gridValues = [1, 0.75, 0.5, 0.25, 0];
+
+    const points = rows.map((item, index) => {
+        const centerX = leftAxisX + (groupWidth * index) + groupWidth / 2;
+        const countHeight = Math.max(item.projectCount > 0 ? 18 : 0, (item.projectCount / maxProjectCount) * chartInnerHeight);
+        const lineY = baseY - (item.totalBenefitPhp / maxBenefitValue) * chartInnerHeight;
+
+        return {
+            ...item,
+            centerX,
+            barX: centerX - barWidth / 2,
+            barY: baseY - countHeight,
+            countHeight,
+            lineY,
+            labelParts: splitChartLabel(item.label)
+        };
+    });
+
+    const benefitsPath = points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.centerX} ${point.lineY}`).join(" ");
+
+    return `
+        <svg class="automation-overall-chart" viewBox="0 0 ${chartWidth} ${chartHeight}" role="img" aria-label="Project lifecycle status comparison chart">
+            <defs>
+                <linearGradient id="chartLifecycleBar" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#d9e1ea"></stop>
+                    <stop offset="100%" stop-color="#9aa8b8"></stop>
+                </linearGradient>
+                <linearGradient id="chartLifecycleLine" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0%" stop-color="#4798f5"></stop>
+                    <stop offset="100%" stop-color="#2d82e6"></stop>
+                </linearGradient>
+                <filter id="automationLifecycleGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="7" result="blur"></feGaussianBlur>
+                    <feMerge>
+                        <feMergeNode in="blur"></feMergeNode>
+                        <feMergeNode in="SourceGraphic"></feMergeNode>
+                    </feMerge>
+                </filter>
+            </defs>
+            <rect x="${leftAxisX}" y="${topY}" width="${rightAxisX - leftAxisX}" height="${baseY - topY}" rx="24" class="chart-plot"></rect>
+            <text x="28" y="34" class="chart-axis-title">Projects</text>
+            <text x="728" y="34" class="chart-axis-title chart-axis-title-right">Total Benefits (${getSavingsCurrencyLabel()})</text>
+            <line x1="${leftAxisX}" y1="${baseY}" x2="${rightAxisX}" y2="${baseY}" class="chart-axis"></line>
+            ${gridValues.map((value, index) => {
+                const y = topY + (index * chartInnerHeight) / (gridValues.length - 1);
+                return `
+                    <g>
+                        <line x1="${leftAxisX}" y1="${y}" x2="${rightAxisX}" y2="${y}" class="chart-grid-line"></line>
+                        <text x="72" y="${y + 4}" class="chart-scale chart-scale-left">${formatDecimal(maxProjectCount * value, 0)}</text>
+                        <text x="728" y="${y + 4}" class="chart-scale chart-scale-right">${formatCurrencyCompact(Math.round(maxBenefitValue * value))}</text>
+                    </g>
+                `;
+            }).join("")}
+            ${points.map((point) => `
+                <g class="chart-series-group" data-automation-status-key="${escapeHtml(point.key)}">
+                    <rect x="${point.barX}" y="${point.barY}" width="${barWidth}" height="${point.countHeight}" rx="8" fill="url(#chartLifecycleBar)" class="chart-bar"></rect>
+                    <text x="${point.centerX}" y="${baseY + 22}" text-anchor="middle" class="chart-label">
+                        <tspan x="${point.centerX}" dy="0">${escapeHtml(point.labelParts[0])}</tspan>
+                        ${point.labelParts[1] ? `<tspan x="${point.centerX}" dy="14">${escapeHtml(point.labelParts[1])}</tspan>` : ""}
+                    </text>
+                </g>
+            `).join("")}
+            <path d="${benefitsPath}" class="chart-line-glow chart-line-glow-savings"></path>
+            <path d="${benefitsPath}" class="chart-line chart-line-savings"></path>
+            ${points.map((point) => `
+                <g class="chart-series-group" data-automation-status-key="${escapeHtml(point.key)}">
+                    <circle cx="${point.centerX}" cy="${point.lineY}" r="9" class="chart-point-ring chart-point-ring-savings"></circle>
+                    <circle cx="${point.centerX}" cy="${point.lineY}" r="5.5" class="chart-point chart-point-savings" filter="url(#automationLifecycleGlow)"></circle>
                 </g>
             `).join("")}
         </svg>
@@ -2859,6 +3466,26 @@ function setupModalSystem() {
             renderStats();
             renderProjects(APP_STATE.projects);
             renderTeam();
+            renderAutomationDashboard();
+            closeModal();
+            return;
+        }
+
+        const deleteProjectButton = event.target.closest("[data-delete-project]");
+        if (deleteProjectButton) {
+            if (!APP_STATE.adminLoggedIn) return;
+            const form = deleteProjectButton.closest("#project-edit-form");
+            const projectId = String(form?.querySelector("input[name='projectId']")?.value || "").trim();
+            if (!projectId) return;
+            const project = APP_STATE.projects.find((item) => item.id === projectId);
+            if (!project) return;
+            if (!confirm(`Delete "${project.name}" from Projects? This cannot be undone.`)) return;
+            APP_STATE.projects = APP_STATE.projects.filter((item) => item.id !== projectId);
+            saveProjects();
+            renderStats();
+            renderProjects(APP_STATE.projects);
+            renderTeam();
+            renderAutomationDashboard();
             closeModal();
             return;
         }
@@ -2896,6 +3523,7 @@ function setupModalSystem() {
             renderStats();
             renderProjects(APP_STATE.projects);
             renderTeam();
+            renderAutomationDashboard();
             closeModal();
             return;
         }
@@ -3859,7 +4487,10 @@ function buildProjectEditModal(project) {
             <form class="form-grid" id="project-edit-form">
                 <input type="hidden" name="projectId" value="${project.id}">
                 ${buildProjectFormFields(project)}
-                <button class="btn btn-primary" type="submit">Save Project Changes</button>
+                <div class="form-grid-actions">
+                    <button class="btn btn-danger" type="button" data-delete-project="true">Delete Project</button>
+                    <button class="btn btn-primary" type="submit">Save Project Changes</button>
+                </div>
             </form>
         </div>
     `;
@@ -4538,6 +5169,30 @@ function loadSupportCards(source = "default") {
     }
 }
 
+function reconcileSystemProjects(projects = []) {
+    const incoming = Array.isArray(projects) ? projects : [];
+    const incomingById = new Map(incoming.map((project) => [project.id, project]));
+    const canonicalProjects = APP_CONFIG.projects.map((defaultProject) => {
+        const existing = incomingById.get(defaultProject.id) || {};
+        return normalizeProject({
+            ...defaultProject,
+            ...existing,
+            team: Array.isArray(existing.team) && existing.team.length ? existing.team : defaultProject.team,
+            owner: existing.owner || defaultProject.owner,
+            ownerName: existing.ownerName || defaultProject.ownerName,
+            updated: existing.updated || defaultProject.updated,
+            systemUrl: existing.systemUrl || defaultProject.systemUrl || "",
+            restricted: typeof existing.restricted === "boolean" ? existing.restricted : defaultProject.restricted
+        });
+    });
+
+    const extraProjects = incoming
+        .filter((project) => project && !SYSTEM_PROJECT_DEFAULTS[project.id])
+        .map(normalizeProject);
+
+    return [...canonicalProjects, ...extraProjects];
+}
+
 function loadPolicyDocuments(source = "default") {
     if (source !== "legacy") {
         return cloneData(POLICY_DOCUMENTS).map(normalizePolicyDocument);
@@ -4554,16 +5209,23 @@ function loadPolicyDocuments(source = "default") {
 function normalizeProject(project) {
     const normalizedOwner = String(project.owner || "").trim().toUpperCase();
     const normalizedOwnerName = String(project.ownerName || resolveMemberName(normalizedOwner, "Unassigned")).trim();
+    const normalizedId = String(project.id || "").trim();
+    const systemDefaults = SYSTEM_PROJECT_DEFAULTS[normalizedId] || {};
     return {
         ...project,
+        id: normalizedId,
+        name: String(project.name || systemDefaults.name || "").trim() || "Untitled Project",
+        status: String(project.status || systemDefaults.status || "").trim() || "Planning",
+        filter: String(project.filter || systemDefaults.filter || getDefaultProjectFilter(project.status)).trim() || "in-progress",
+        description: String(project.description || systemDefaults.description || "").trim(),
         progress: clampProgress(project.progress, 0),
         owner: normalizedOwner,
         ownerName: normalizedOwnerName,
         overseenBy: String(project.overseenBy || normalizedOwnerName || "Admin").trim(),
         assignedBy: String(project.assignedBy || "Admin").trim(),
         team: Array.isArray(project.team) ? project.team.map((item) => String(item).trim().toUpperCase()).filter(Boolean) : [],
-        systemUrl: String(project.systemUrl || "").trim(),
-        restricted: Boolean(project.restricted)
+        systemUrl: String(project.systemUrl || systemDefaults.systemUrl || "").trim(),
+        restricted: typeof project.restricted === "boolean" ? project.restricted : (typeof systemDefaults.restricted === "boolean" ? systemDefaults.restricted : false)
     };
 }
 

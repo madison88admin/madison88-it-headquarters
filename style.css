@@ -1089,6 +1089,12 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
     gap: 10px;
 }
 
+.automation-status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+}
+
 .automation-kpi-card,
 .automation-multiplier-card,
 .automation-breakdown-card {
@@ -1125,19 +1131,39 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
     color: var(--text-faint);
 }
 
+.automation-status-card {
+    gap: 10px;
+}
+
+.automation-status-metrics {
+    display: grid;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.automation-status-metrics p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+}
+
+.automation-status-metrics strong {
+    font-size: 1rem;
+    margin-right: 6px;
+}
+
 .automation-overall-chart-card {
     display: grid;
-    gap: 12px;
-    padding: 16px 16px 12px;
-    border-radius: 22px;
+    gap: 14px;
+    padding: 18px 18px 16px;
+    border-radius: 26px;
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
-        linear-gradient(135deg, rgba(118, 193, 242, 0.06), rgba(0, 201, 167, 0.04)),
-        rgba(13, 24, 40, 0.2);
-    border: 1px solid rgba(118, 193, 242, 0.14);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.02)),
+        linear-gradient(145deg, rgba(118, 193, 242, 0.05), rgba(0, 201, 167, 0.03)),
+        rgba(12, 24, 39, 0.24);
+    border: 1px solid rgba(118, 193, 242, 0.12);
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.06),
-        0 16px 30px rgba(8, 15, 28, 0.14);
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 18px 34px rgba(8, 15, 28, 0.14);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
 }
@@ -1270,11 +1296,11 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
 
 .automation-chart-shell {
     overflow-x: auto;
-    padding: 10px 10px 12px;
-    border-radius: 24px;
+    padding: 16px 18px 18px;
+    border-radius: 28px;
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)),
-        rgba(10, 22, 38, 0.16);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.01)),
+        rgba(10, 22, 38, 0.2);
     border: 1px solid rgba(118, 193, 242, 0.12);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(16px);
@@ -1323,7 +1349,7 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
 
 .automation-overall-chart {
     width: min(100%, 1080px);
-    min-width: 760px;
+    min-width: 820px;
     height: auto;
 }
 
@@ -1481,6 +1507,18 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
     border: 1px solid rgba(116, 176, 64, 0.2);
 }
 
+.automation-chip-pass {
+    background: rgba(116, 176, 64, 0.16);
+    color: #ddf4be;
+    border: 1px solid rgba(116, 176, 64, 0.2);
+}
+
+.automation-chip-fail {
+    background: rgba(255, 118, 118, 0.14);
+    color: #ffd3d3;
+    border: 1px solid rgba(255, 118, 118, 0.22);
+}
+
 .automation-savings-cell {
     display: grid;
     gap: 6px;
@@ -1568,7 +1606,7 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
 .chart-value {
     fill: var(--text-muted);
     font-family: "Manrope", sans-serif;
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .chart-axis-title,
@@ -1579,11 +1617,11 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
 }
 
 .chart-axis-title {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.04em;
     text-transform: none;
-    fill: rgba(238, 244, 251, 0.72);
+    fill: rgba(238, 244, 251, 0.78);
 }
 
 .chart-axis-title-right {
@@ -1591,8 +1629,8 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
 }
 
 .chart-scale {
-    font-size: 11px;
-    fill: rgba(238, 244, 251, 0.54);
+    font-size: 10px;
+    fill: rgba(238, 244, 251, 0.5);
 }
 
 .chart-scale-left {
@@ -1605,8 +1643,8 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
 }
 
 .chart-label {
-    fill: rgba(238, 244, 251, 0.72);
-    font-size: 10.5px;
+    fill: rgba(238, 244, 251, 0.78);
+    font-size: 9.5px;
     font-weight: 600;
 }
 
@@ -3998,6 +4036,18 @@ body.modal-open { overflow: hidden; }
     background: rgba(116, 176, 64, 0.12);
     color: #5a8d20;
     border: 1px solid rgba(116, 176, 64, 0.16);
+}
+
+:root[data-theme="light"] .automation-chip-pass {
+    background: rgba(116, 176, 64, 0.12);
+    color: #5a8d20;
+    border: 1px solid rgba(116, 176, 64, 0.16);
+}
+
+:root[data-theme="light"] .automation-chip-fail {
+    background: rgba(214, 71, 71, 0.12);
+    color: #b94747;
+    border: 1px solid rgba(214, 71, 71, 0.16);
 }
 
 :root[data-theme="light"] .automation-savings-cell strong {
