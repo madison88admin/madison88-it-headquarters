@@ -3515,25 +3515,6 @@ function setupModalSystem() {
             return;
         }
 
-        const deleteProjectButton = event.target.closest("[data-delete-project]");
-        if (deleteProjectButton) {
-            if (!APP_STATE.adminLoggedIn) return;
-            const form = deleteProjectButton.closest("#project-edit-form");
-            const projectId = String(form?.querySelector("input[name='projectId']")?.value || "").trim();
-            if (!projectId) return;
-            const project = APP_STATE.projects.find((item) => item.id === projectId);
-            if (!project) return;
-            if (!confirm(`Delete "${project.name}" from Projects? This cannot be undone.`)) return;
-            APP_STATE.projects = APP_STATE.projects.filter((item) => item.id !== projectId);
-            saveProjects();
-            renderStats();
-            renderProjects(APP_STATE.projects);
-            renderTeam();
-            renderAutomationDashboard();
-            closeModal();
-            return;
-        }
-
         const createProjectForm = event.target.closest("#project-create-form");
         if (createProjectForm) {
             event.preventDefault();
@@ -3956,6 +3937,25 @@ function setupModalSystem() {
             if (!APP_STATE.adminLoggedIn) return;
             const project = APP_STATE.projects.find((item) => item.id === editProjectButton.dataset.editProject);
             if (project) openModal(buildProjectEditModal(project));
+            return;
+        }
+
+        const deleteProjectButton = event.target.closest("[data-delete-project]");
+        if (deleteProjectButton) {
+            if (!APP_STATE.adminLoggedIn) return;
+            const form = deleteProjectButton.closest("#project-edit-form");
+            const projectId = String(form?.querySelector("input[name='projectId']")?.value || "").trim();
+            if (!projectId) return;
+            const project = APP_STATE.projects.find((item) => item.id === projectId);
+            if (!project) return;
+            if (!confirm(`Delete "${project.name}" from Projects? This cannot be undone.`)) return;
+            APP_STATE.projects = APP_STATE.projects.filter((item) => item.id !== projectId);
+            saveProjects();
+            renderStats();
+            renderProjects(APP_STATE.projects);
+            renderTeam();
+            renderAutomationDashboard();
+            closeModal();
             return;
         }
 
