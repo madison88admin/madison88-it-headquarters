@@ -151,6 +151,7 @@ const STORAGE_KEYS = {
     quickHelpData: "madison88-quickhelp-data",
     contactGuideData: "madison88-contact-guide-data",
     supportData: "madison88-support-data",
+    policyDocumentsData: "madison88-policy-documents-data",
     adminSession: "madison88-admin-session",
     themePreference: "madison88-theme-preference",
     automationDashboardHidden: "madison88-automation-dashboard-hidden",
@@ -166,6 +167,7 @@ const SUPABASE_SECTION_KEYS = {
     quickHelp: "quick_help",
     contactGuide: "contact_guide",
     supportCards: "support_cards",
+    policyDocuments: "policy_documents",
     missionVision: "mission_vision"
 };
 
@@ -190,26 +192,46 @@ const POLICY_DOCUMENTS = [
     {
         id: "policy-pdf-1",
         label: "PDF 01",
+        typeLabel: "Policy PDF",
+        iconLabel: "PDF",
         title: "Madison88 IT Framework Charter",
         description: "Open the official Madison88 IT Framework Charter PDF.",
+        actionLabel: "Open PDF",
         sectionIndexes: [0, 1],
         url: "/policies/madison88-it-framework-charter.pdf"
     },
     {
         id: "policy-pdf-2",
         label: "PDF 02",
+        typeLabel: "Policy PDF",
+        iconLabel: "PDF",
         title: "MADISON88 CHANGE MANAGEMENT POLICY",
         description: "Open the official Madison88 Change Management Policy PDF.",
+        actionLabel: "Open PDF",
         sectionIndexes: [2, 3],
         url: "/policies/madison88-change-management-policy.pdf"
     },
     {
         id: "policy-pdf-3",
         label: "PDF 03",
+        typeLabel: "Policy PDF",
+        iconLabel: "PDF",
         title: "Madison88 Incident Management Policy",
         description: "Open the official Madison88 Incident Management Policy PDF.",
+        actionLabel: "Open PDF",
         sectionIndexes: [4, 5, 6],
         url: "/policies/madison88-incident-management-policy.pdf"
+    },
+    {
+        id: "policy-pdf-4",
+        label: "PDF 04",
+        typeLabel: "Policy PDF",
+        iconLabel: "PDF",
+        title: "Automation Life Cycle",
+        description: "Open the official Automation Life Cycle PDF.",
+        actionLabel: "Open PDF",
+        sectionIndexes: [],
+        url: "/policies/automation-life-cycle.pdf"
     }
 ];
 
@@ -275,7 +297,8 @@ function clearLegacyContentStorage() {
         STORAGE_KEYS.teamData,
         STORAGE_KEYS.quickHelpData,
         STORAGE_KEYS.contactGuideData,
-        STORAGE_KEYS.supportData
+        STORAGE_KEYS.supportData,
+        STORAGE_KEYS.policyDocumentsData
     ].forEach((key) => localStorage.removeItem(key));
 }
 
@@ -287,7 +310,8 @@ function hasLegacyContentStorage() {
         STORAGE_KEYS.teamData,
         STORAGE_KEYS.quickHelpData,
         STORAGE_KEYS.contactGuideData,
-        STORAGE_KEYS.supportData
+        STORAGE_KEYS.supportData,
+        STORAGE_KEYS.policyDocumentsData
     ].some((key) => {
         try {
             return localStorage.getItem(key) !== null;
@@ -320,6 +344,7 @@ const APP_STATE = {
     quickHelp: loadQuickHelp(),
     contactGuide: loadContactGuide(),
     supportCards: loadSupportCards(),
+    policyDocuments: loadPolicyDocuments(),
     adminLoggedIn: sessionStorage.getItem(STORAGE_KEYS.adminSession) === "true",
     theme: localStorage.getItem(STORAGE_KEYS.themePreference) === "light" ? "light" : "dark",
     automationDashboardHidden: localStorage.getItem(STORAGE_KEYS.automationDashboardHidden) === "true",
@@ -605,6 +630,9 @@ async function hydrateAppStateFromSupabase() {
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.supportCards])) {
             APP_STATE.supportCards = snapshot[SUPABASE_SECTION_KEYS.supportCards];
         }
+        if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.policyDocuments])) {
+            APP_STATE.policyDocuments = snapshot[SUPABASE_SECTION_KEYS.policyDocuments].map(normalizePolicyDocument);
+        }
         if (snapshot[SUPABASE_SECTION_KEYS.missionVision]) {
             APP_CONFIG.missionVision = {
                 ...APP_CONFIG.missionVision,
@@ -662,6 +690,7 @@ async function migrateLegacyContentToSupabase() {
         [SUPABASE_SECTION_KEYS.quickHelp, loadQuickHelp("legacy")],
         [SUPABASE_SECTION_KEYS.contactGuide, loadContactGuide("legacy")],
         [SUPABASE_SECTION_KEYS.supportCards, loadSupportCards("legacy")],
+        [SUPABASE_SECTION_KEYS.policyDocuments, loadPolicyDocuments("legacy")],
         [SUPABASE_SECTION_KEYS.missionVision, cloneData(APP_CONFIG.missionVision)]
     ];
 
@@ -2001,8 +2030,9 @@ function renderQuickHelp() {
 function renderPolicyDocuments() {
     const container = document.getElementById("policy-library-grid");
     if (!container) return;
+    const isAdmin = APP_STATE.adminLoggedIn;
 
-    container.innerHTML = POLICY_DOCUMENTS.map((document) => {
+    container.innerHTML = APP_STATE.policyDocuments.map((document, index) => {
         const sections = document.sectionIndexes
             .map((index) => APP_STATE.quickHelp[index])
             .filter(Boolean);
@@ -2012,9 +2042,9 @@ function renderPolicyDocuments() {
             <article class="policy-document-card glass searchable-item" role="link" tabindex="0" data-open-url="${document.url}" data-search="${buildSearchText([document.title, document.description, sectionTitles, "pdf", "policy"])}">
                 <div class="policy-document-top">
                     <span class="policy-document-badge">${document.label}</span>
-                    <span class="policy-document-type">Policy PDF</span>
+                    <span class="policy-document-type">${document.typeLabel}</span>
                 </div>
-                <div class="policy-document-icon" aria-hidden="true">PDF</div>
+                <div class="policy-document-icon" aria-hidden="true">${document.iconLabel}</div>
                 <div>
                     <h3>${document.title}</h3>
                     <p>${document.description}</p>
@@ -2022,7 +2052,8 @@ function renderPolicyDocuments() {
                 <div class="policy-document-list">
                     ${sections.map((section) => `<span>${section.title}</span>`).join("")}
                 </div>
-                <button class="btn btn-secondary" type="button" data-open-url="${document.url}">Open PDF</button>
+                <button class="btn btn-secondary" type="button" data-open-url="${document.url}">${document.actionLabel}</button>
+                ${isAdmin ? `<button class="btn btn-secondary" type="button" data-edit-policy-document="${index}">Edit Document</button>` : ""}
             </article>
         `;
     }).join("");
@@ -3066,6 +3097,53 @@ function setupModalSystem() {
             return;
         }
 
+        const policyDocumentForm = event.target.closest("#policy-document-edit-form");
+        if (policyDocumentForm) {
+            event.preventDefault();
+            if (!requireAdminAccess()) return;
+            const formData = new FormData(policyDocumentForm);
+            const index = Number(formData.get("policyDocumentIndex"));
+            APP_STATE.policyDocuments = APP_STATE.policyDocuments.map((item, itemIndex) => itemIndex === index
+                ? normalizePolicyDocument({
+                    ...item,
+                    label: String(formData.get("label") || item.label),
+                    typeLabel: String(formData.get("typeLabel") || item.typeLabel),
+                    iconLabel: String(formData.get("iconLabel") || item.iconLabel),
+                    title: String(formData.get("title") || item.title),
+                    description: String(formData.get("description") || item.description),
+                    actionLabel: String(formData.get("actionLabel") || item.actionLabel),
+                    url: String(formData.get("url") || item.url),
+                    sectionIndexes: parseIndexList(String(formData.get("sectionIndexes") || ""))
+                })
+                : item);
+            savePolicyDocuments();
+            renderPolicyDocuments();
+            openModal(buildOtherPoliciesModal());
+            return;
+        }
+
+        const createPolicyDocumentForm = event.target.closest("#policy-document-create-form");
+        if (createPolicyDocumentForm) {
+            event.preventDefault();
+            if (!requireAdminAccess()) return;
+            const formData = new FormData(createPolicyDocumentForm);
+            APP_STATE.policyDocuments = [...APP_STATE.policyDocuments, normalizePolicyDocument({
+                id: createPolicyDocumentId(String(formData.get("title") || "")),
+                label: String(formData.get("label") || "").trim() || `PDF ${String(APP_STATE.policyDocuments.length + 1).padStart(2, "0")}`,
+                typeLabel: String(formData.get("typeLabel") || "").trim() || "Policy PDF",
+                iconLabel: String(formData.get("iconLabel") || "").trim() || "PDF",
+                title: String(formData.get("title") || "").trim() || "New policy document",
+                description: String(formData.get("description") || "").trim() || "Open the policy document PDF.",
+                actionLabel: String(formData.get("actionLabel") || "").trim() || "Open PDF",
+                url: String(formData.get("url") || "").trim(),
+                sectionIndexes: parseIndexList(String(formData.get("sectionIndexes") || ""))
+            })];
+            savePolicyDocuments();
+            renderPolicyDocuments();
+            openModal(buildOtherPoliciesModal());
+            return;
+        }
+
         const guideForm = event.target.closest("#contact-guide-edit-form");
         if (guideForm) {
             event.preventDefault();
@@ -3118,6 +3196,36 @@ function setupModalSystem() {
     });
 
     document.addEventListener("click", (event) => {
+        const editPolicyDocumentButton = event.target.closest("[data-edit-policy-document]");
+        if (editPolicyDocumentButton) {
+            if (!APP_STATE.adminLoggedIn) return;
+            const index = Number(editPolicyDocumentButton.dataset.editPolicyDocument);
+            const item = APP_STATE.policyDocuments[index];
+            if (item) openModal(buildPolicyDocumentEditModal(index, item));
+            return;
+        }
+
+        const addPolicyDocumentButton = event.target.closest("#add-policy-document-button");
+        if (addPolicyDocumentButton) {
+            if (!APP_STATE.adminLoggedIn) return;
+            openModal(buildPolicyDocumentCreateModal());
+            return;
+        }
+
+        const deletePolicyDocumentButton = event.target.closest("[data-delete-policy-document]");
+        if (deletePolicyDocumentButton) {
+            if (!APP_STATE.adminLoggedIn) return;
+            const index = Number(deletePolicyDocumentButton.dataset.deletePolicyDocument);
+            const item = APP_STATE.policyDocuments[index];
+            if (!item) return;
+            if (!confirm(`Delete "${item.title}" from Policies and Other Documents?`)) return;
+            APP_STATE.policyDocuments.splice(index, 1);
+            savePolicyDocuments();
+            renderPolicyDocuments();
+            openModal(buildOtherPoliciesModal());
+            return;
+        }
+
         const openUrlButton = event.target.closest("[data-open-url]");
         if (openUrlButton) {
             const url = openUrlButton.dataset.openUrl;
@@ -3653,18 +3761,20 @@ function buildOfflineModal() {
 }
 
 function buildOtherPoliciesModal() {
-    const documentCards = POLICY_DOCUMENTS.map((document) => `
+    const isAdmin = APP_STATE.adminLoggedIn;
+    const documentCards = APP_STATE.policyDocuments.map((document, index) => `
         <article class="policy-document-card glass searchable-item" role="link" tabindex="0" data-open-url="${document.url}">
             <div class="policy-document-top">
                 <span class="policy-document-badge">${document.label}</span>
-                <span class="policy-document-type">Policy PDF</span>
+                <span class="policy-document-type">${document.typeLabel}</span>
             </div>
-            <div class="policy-document-icon" aria-hidden="true">PDF</div>
+            <div class="policy-document-icon" aria-hidden="true">${document.iconLabel}</div>
             <div>
                 <h3>${document.title}</h3>
                 <p>${document.description}</p>
             </div>
-            <button class="btn btn-secondary" type="button" data-open-url="${document.url}">Open PDF</button>
+            <button class="btn btn-secondary" type="button" data-open-url="${document.url}">${document.actionLabel}</button>
+            ${isAdmin ? `<button class="btn btn-secondary" type="button" data-edit-policy-document="${index}">Edit Document</button>` : ""}
         </article>
     `).join("");
 
@@ -3673,6 +3783,7 @@ function buildOtherPoliciesModal() {
             <span class="quick-help-label">Policies</span>
             <h2 id="modal-title">Policies and Other Documents</h2>
             <p>Open the PDF files below, then click a policy item to show the correct policy image and content preview.</p>
+            ${isAdmin ? `<button class="btn btn-secondary" type="button" id="add-policy-document-button">Add Document</button>` : ""}
             <div class="policy-library-grid modal-policy-library-grid">${documentCards}</div>
             ${buildPolicyPreviewBrowser()}
         </div>
@@ -3933,6 +4044,78 @@ function buildSupportCreateModal() {
                 <input type="text" name="person" placeholder="Person name for message action" data-team-autofill="card-person">
                 <textarea name="body" rows="4" placeholder="Support description"></textarea>
                 <button class="btn btn-primary" type="submit">Create Support Card</button>
+            </form>
+        </div>
+    `;
+}
+
+function buildPolicyDocumentSectionHint(selectedIndexes = []) {
+    const selected = Array.isArray(selectedIndexes) ? selectedIndexes : [];
+    if (!APP_STATE.quickHelp.length) {
+        return '<small class="field-hint">No linked policy preview sections are available yet.</small>';
+    }
+
+    const sectionSummary = APP_STATE.quickHelp
+        .map((item, index) => `${index}: ${item.title}${selected.includes(index) ? " (selected)" : ""}`)
+        .join(" | ");
+
+    return `
+        <small class="field-hint">
+            Link preview sections by index, separated with commas.
+            Available:
+            ${escapeHtml(sectionSummary)}
+        </small>
+    `;
+}
+
+function buildPolicyDocumentFormFields(item = {}) {
+    const sectionIndexes = Array.isArray(item.sectionIndexes) ? item.sectionIndexes.join(", ") : "";
+    return `
+        <input type="text" name="label" value="${escapeHtml(item.label || "")}" placeholder="Badge label (e.g. PDF 05)" required>
+        <input type="text" name="typeLabel" value="${escapeHtml(item.typeLabel || "Policy PDF")}" placeholder="Type label">
+        <input type="text" name="iconLabel" value="${escapeHtml(item.iconLabel || "PDF")}" placeholder="Icon label">
+        <input type="text" name="title" value="${escapeHtml(item.title || "")}" placeholder="Document title" required>
+        <input type="text" name="actionLabel" value="${escapeHtml(item.actionLabel || "Open PDF")}" placeholder="Button text">
+        <input type="text" name="url" value="${escapeHtml(item.url || "")}" placeholder="/policies/your-file.pdf or https://..." required>
+        <textarea name="description" rows="4" placeholder="Short description shown on the card">${escapeHtml(item.description || "")}</textarea>
+        <label class="field-stack">
+            <span>Linked preview section indexes</span>
+            <input type="text" name="sectionIndexes" value="${escapeHtml(sectionIndexes)}" placeholder="0, 1, 2">
+            ${buildPolicyDocumentSectionHint(item.sectionIndexes)}
+        </label>
+    `;
+}
+
+function buildPolicyDocumentEditModal(index, item) {
+    return `
+        <div class="modal-block">
+            <h2 id="modal-title">Edit Policy Document</h2>
+            <p>Update the content, labels, PDF link, and linked preview sections for this card.</p>
+            <form class="form-grid" id="policy-document-edit-form">
+                <input type="hidden" name="policyDocumentIndex" value="${index}">
+                ${buildPolicyDocumentFormFields(item)}
+                <div class="form-grid-actions">
+                    <button class="btn btn-danger" type="button" data-delete-policy-document="${index}">Delete Document</button>
+                    <button class="btn btn-primary" type="submit">Save Document</button>
+                </div>
+            </form>
+        </div>
+    `;
+}
+
+function buildPolicyDocumentCreateModal() {
+    return `
+        <div class="modal-block">
+            <h2 id="modal-title">Add Policy Document</h2>
+            <p>Create a new card for the Policies and Other Documents library.</p>
+            <form class="form-grid" id="policy-document-create-form">
+                ${buildPolicyDocumentFormFields({
+                    label: `PDF ${String(APP_STATE.policyDocuments.length + 1).padStart(2, "0")}`,
+                    typeLabel: "Policy PDF",
+                    iconLabel: "PDF",
+                    actionLabel: "Open PDF"
+                })}
+                <button class="btn btn-primary" type="submit">Create Document</button>
             </form>
         </div>
     `;
@@ -4211,6 +4394,11 @@ function saveSupportCards() {
     void persistSupabaseSection(SUPABASE_SECTION_KEYS.supportCards, APP_STATE.supportCards);
 }
 
+function savePolicyDocuments() {
+    APP_STATE.policyDocuments = APP_STATE.policyDocuments.map(normalizePolicyDocument);
+    void persistSupabaseSection(SUPABASE_SECTION_KEYS.policyDocuments, APP_STATE.policyDocuments);
+}
+
 function loadProjects(source = "default") {
     if (source !== "legacy") {
         return cloneData(APP_CONFIG.projects).map(normalizeProject);
@@ -4350,6 +4538,19 @@ function loadSupportCards(source = "default") {
     }
 }
 
+function loadPolicyDocuments(source = "default") {
+    if (source !== "legacy") {
+        return cloneData(POLICY_DOCUMENTS).map(normalizePolicyDocument);
+    }
+    try {
+        const raw = localStorage.getItem(STORAGE_KEYS.policyDocumentsData);
+        const saved = raw ? JSON.parse(raw) : POLICY_DOCUMENTS;
+        return Array.isArray(saved) ? saved.map(normalizePolicyDocument) : POLICY_DOCUMENTS.map(normalizePolicyDocument);
+    } catch (error) {
+        return POLICY_DOCUMENTS.map(normalizePolicyDocument);
+    }
+}
+
 function normalizeProject(project) {
     const normalizedOwner = String(project.owner || "").trim().toUpperCase();
     const normalizedOwnerName = String(project.ownerName || resolveMemberName(normalizedOwner, "Unassigned")).trim();
@@ -4385,6 +4586,36 @@ function normalizeTeamMember(member) {
         linkedin: normalizeLinkedInUrl(String(member.linkedin || "").trim()),
         image: String(member.image || "").trim() || getDefaultTeamImage(member.level || "intern")
     };
+}
+
+function parseIndexList(value) {
+    return String(value || "")
+        .split(",")
+        .map((item) => Number(item.trim()))
+        .filter((item, index, array) => Number.isInteger(item) && item >= 0 && array.indexOf(item) === index);
+}
+
+function normalizePolicyDocument(document) {
+    return {
+        id: String(document?.id || createPolicyDocumentId(String(document?.title || "policy-document"))).trim(),
+        label: String(document?.label || "PDF").trim() || "PDF",
+        typeLabel: String(document?.typeLabel || "Policy PDF").trim() || "Policy PDF",
+        iconLabel: String(document?.iconLabel || "PDF").trim() || "PDF",
+        title: String(document?.title || "Policy document").trim() || "Policy document",
+        description: String(document?.description || "Open the policy document PDF.").trim() || "Open the policy document PDF.",
+        actionLabel: String(document?.actionLabel || "Open PDF").trim() || "Open PDF",
+        url: String(document?.url || "").trim(),
+        sectionIndexes: Array.isArray(document?.sectionIndexes) ? parseIndexList(document.sectionIndexes.join(",")) : parseIndexList(document?.sectionIndexes)
+    };
+}
+
+function createPolicyDocumentId(title = "") {
+    const slug = String(title || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+    return slug ? `policy-${slug}` : `policy-document-${Date.now()}`;
 }
 
 function findTeamMemberMatch(query) {
