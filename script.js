@@ -1561,6 +1561,41 @@ function buildAutomationLookupMap() {
     return lookup;
 }
 
+function getAutomationPortfolioBenchmarks() {
+    const annualEntries = AUTOMATION_COMPARISON.map((entry) => computeAutomationBenefits(entry, 12));
+    if (!annualEntries.length) {
+        return {
+            avgHoursSaved: 0,
+            avgTotalBenefitPhp: 0
+        };
+    }
+
+    const totalHoursSaved = annualEntries.reduce((sum, entry) => sum + Number(entry.hoursSaved || 0), 0);
+    const totalBenefits = annualEntries.reduce((sum, entry) => sum + Number(entry.totalBenefitPhp || 0), 0);
+
+    return {
+        avgHoursSaved: totalHoursSaved / annualEntries.length,
+        avgTotalBenefitPhp: totalBenefits / annualEntries.length
+    };
+}
+
+function getLifecycleEstimationWeight(project, lifecycleStatus) {
+    const progress = Math.max(0, Math.min(100, Number(project?.progress || 0))) / 100;
+
+    if (lifecycleStatus === "completed") return 1;
+    if (lifecycleStatus === "in-progress") return Math.max(progress, 0.45);
+    if (lifecycleStatus === "not-started") return Math.max(progress, 0.18);
+    return Math.max(progress, 0.25);
+}
+
+function estimateAutomationBenefitsForProject(project, lifecycleStatus, benchmarks) {
+    const weight = getLifecycleEstimationWeight(project, lifecycleStatus);
+    return {
+        hoursSaved: Number(benchmarks?.avgHoursSaved || 0) * weight,
+        totalBenefitPhp: Number(benchmarks?.avgTotalBenefitPhp || 0) * weight
+    };
+}
+
 function resolveAutomationBenefitsForProject(project, lookup) {
     const keys = [
         project?.id,
@@ -1580,6 +1615,7 @@ function resolveAutomationBenefitsForProject(project, lookup) {
 
 function buildAutomationStatusSummaries() {
     const automationLookup = buildAutomationLookupMap();
+    const benchmarks = getAutomationPortfolioBenchmarks();
 
     const summaryMap = {
         completed: { key: "completed", label: "Completed", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0 },
@@ -1594,10 +1630,10 @@ function buildAutomationStatusSummaries() {
 
         summary.projectCount += 1;
         const automation = resolveAutomationBenefitsForProject(project, automationLookup);
-        if (!automation) return;
+        const benefitSource = automation || estimateAutomationBenefitsForProject(project, lifecycleStatus, benchmarks);
 
-        summary.hoursSaved += automation.hoursSaved;
-        summary.totalBenefitPhp += automation.totalBenefitPhp;
+        summary.hoursSaved += Number(benefitSource.hoursSaved || 0);
+        summary.totalBenefitPhp += Number(benefitSource.totalBenefitPhp || 0);
     });
 
     return [
