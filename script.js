@@ -3624,7 +3624,6 @@ function setupModalSystem() {
                     contactFor: String(formData.get("contactFor") || member.contactFor),
                     message: String(formData.get("email") || formData.get("message") || member.message),
                     email: String(formData.get("email") || member.email || member.message),
-                    number: String(formData.get("number") || member.number || ""),
                     school: String(formData.get("school") || member.school || ""),
                     linkedin: String(formData.get("linkedin") || member.linkedin || ""),
                     image: String(formData.get("photoData") || formData.get("image") || member.image),
@@ -3656,7 +3655,6 @@ function setupModalSystem() {
                     contactFor: String(formData.get("contactFor") || "").trim() || "Internal IT support and coordination",
                     email: String(formData.get("email") || "").trim(),
                     message: String(formData.get("email") || "").trim(),
-                    number: String(formData.get("number") || "").trim(),
                     school: String(formData.get("school") || "").trim(),
                     linkedin: String(formData.get("linkedin") || "").trim(),
                     image: String(formData.get("photoData") || formData.get("image") || "").trim() || getDefaultTeamImage(String(formData.get("level") || "intern")),
@@ -4235,6 +4233,9 @@ function buildProfileModal(memberName) {
     const member = APP_STATE.team.find((item) => item.name === memberName);
     if (!member) return "";
     const assignments = getProjectsForMember(member);
+    const shouldShowAssignments = assignments.length > 0 || (member.level !== "executive" && member.level !== "senior");
+    const shouldShowSchool = member.level !== "executive" && Boolean(member.school);
+    const shouldShowLinkedIn = member.level !== "executive" && Boolean(member.linkedin);
     return `
         <div class="modal-block">
             <h2 id="modal-title">${member.name}</h2>
@@ -4242,13 +4243,12 @@ function buildProfileModal(memberName) {
             <ul class="modal-list">
                 <li>Name: ${member.name}</li>
                 <li>Status: ${member.status}</li>
-                <li>Mobile Number: ${member.number}</li>
-                <li>School: ${member.school}</li>
+                ${shouldShowSchool ? `<li>School: ${member.school}</li>` : ""}
                 <li>Email Address: ${member.email}</li>
-                <li>LinkedIn: <a href="${member.linkedin}" target="_blank" rel="noopener noreferrer">${member.linkedin}</a></li>
+                ${shouldShowLinkedIn ? `<li>LinkedIn: <a href="${member.linkedin}" target="_blank" rel="noopener noreferrer">${member.linkedin}</a></li>` : ""}
                 <li>Primary support area: ${member.contactFor}</li>
                 <li>Skills: ${member.skills.join(", ")}</li>
-                <li>Assigned projects: ${assignments.length ? assignments.map((project) => project.name).join(", ") : "No active assignments yet"}</li>
+                ${shouldShowAssignments ? `<li>Assigned projects: ${assignments.length ? assignments.map((project) => project.name).join(", ") : "No active assignments yet"}</li>` : ""}
             </ul>
         </div>
     `;
@@ -4597,7 +4597,6 @@ function buildTeamEditModal(index, member) {
                 <select name="status">
                     ${["Online", "In a Meeting", "Away"].map((status) => `<option value="${status}" ${member.status === status ? "selected" : ""}>${status}</option>`).join("")}
                 </select>
-                <input type="text" name="number" value="${member.number || ""}" placeholder="Mobile number (+63 ...)">
                 <input type="text" name="school" value="${member.school || ""}" placeholder="School or university">
                 <input type="email" name="email" value="${member.email || member.message || ""}" placeholder="Email address (e.g. name@company.com)">
                 <input type="text" name="linkedin" value="${member.linkedin || ""}" placeholder="LinkedIn URL (www.linkedin.com/in/...)">
@@ -4627,7 +4626,6 @@ function buildTeamCreateModal() {
                 <select name="status">
                     ${["Online", "In a Meeting", "Away"].map((status) => `<option value="${status}">${status}</option>`).join("")}
                 </select>
-                <input type="text" name="number" placeholder="Mobile number (+63 ...)">
                 <input type="text" name="school" placeholder="School or university">
                 <input type="email" name="email" placeholder="Email address (e.g. name@company.com)">
                 <input type="text" name="linkedin" placeholder="LinkedIn URL (www.linkedin.com/in/...)">
