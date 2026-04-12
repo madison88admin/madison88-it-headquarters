@@ -1054,7 +1054,7 @@ function renderAutomationDashboard() {
             <div>
                 <span class="quick-help-label">Automation Dashboard</span>
                 <h3>Automation Impact Summary</h3>
-                <p class="service-copy">This view follows one benefits measurement framework across all solutions: baseline hours, time saved, capacity release, and cost avoidance. Every total is recalculated from the workbook template using average time multiplied by daily, weekly, and monthly volume before reporting.</p>
+                <p class="service-copy">This view follows the benefits policy framework across all solutions: baseline hours, time saved, capacity release, and cost avoidance. Every total is recalculated using average handling time and one monthly transaction volume baseline before reporting.</p>
             </div>
             <div class="automation-kpi-grid">
                 <article class="automation-kpi-card">
@@ -1182,7 +1182,7 @@ function renderAutomationDashboard() {
                 <div class="automation-breakdown-header">
                     <span class="quick-help-label">Breakdown</span>
                     <h5>${period.label} Benefits Breakdown</h5>
-                    <p class="automation-breakdown-definition">Baseline Hours = calculated manual work required before automation using Avg Time x Volume per Day x Volume per Week x Volume per Month. Time Saved = calculated manual minutes minus calculated automated minutes using the same workbook formula. Capacity Release = time saved divided by 160 productive hours. Cost Avoidance = released FTE capacity multiplied by annual cost per FTE based on the policy. Total Benefits = policy-based cost avoidance for the selected period. Integrity Check compares workbook-reported totals against the recalculated totals.</p>
+                    <p class="automation-breakdown-definition">Baseline Hours = calculated manual work required before automation using average handling time and monthly transaction volume. Time Saved = calculated manual minutes minus calculated automated minutes using the same policy baseline. Capacity Release = time saved divided by 160 productive hours. Cost Avoidance = released FTE capacity multiplied by annual cost per FTE based on the policy. Total Benefits = policy-based cost avoidance for the selected period. Integrity Check compares workbook-reported totals against the policy-based recalculated totals.</p>
                 </div>
             <div class="automation-breakdown-table-wrap">
                 <table class="automation-breakdown-table">
@@ -1346,17 +1346,30 @@ function valuesMatchWithinTolerance(left, right, tolerance = AUTOMATION_INTEGRIT
     return Math.abs(normalizeAutomationNumber(left) - normalizeAutomationNumber(right)) <= tolerance;
 }
 
+function resolveMonthlyAutomationVolume(monthlyValue, weeklyValue, dailyValue) {
+    const monthly = normalizeAutomationNumber(monthlyValue);
+    if (monthly > 0) return monthly;
+
+    const weekly = normalizeAutomationNumber(weeklyValue);
+    if (weekly > 0) return weekly * 4.33;
+
+    const daily = normalizeAutomationNumber(dailyValue);
+    if (daily > 0) return daily * 22;
+
+    return 0;
+}
+
 function buildAutomationValidation(row = {}) {
     const manualAvgMins = normalizeAutomationNumber(row.manualAvgMins);
     const manualVolumeDay = normalizeAutomationNumber(row.manualVolumeDay || 1);
     const manualVolumeWeek = normalizeAutomationNumber(row.manualVolumeWeek || 1);
-    const manualVolumeMonth = normalizeAutomationNumber(row.manualVolumeMonth);
+    const manualVolumeMonth = resolveMonthlyAutomationVolume(row.manualVolumeMonth, row.manualVolumeWeek, row.manualVolumeDay);
     const autoAvgMins = normalizeAutomationNumber(row.autoAvgMins);
     const autoVolumeDay = normalizeAutomationNumber(row.autoVolumeDay || row.manualVolumeDay || 1);
     const autoVolumeWeek = normalizeAutomationNumber(row.autoVolumeWeek || row.manualVolumeWeek || 1);
-    const autoVolumeMonth = normalizeAutomationNumber(row.autoVolumeMonth || row.manualVolumeMonth);
-    const calculatedManualMonthlyMins = manualAvgMins * manualVolumeDay * manualVolumeWeek * manualVolumeMonth;
-    const calculatedAutoMonthlyMins = autoAvgMins * autoVolumeDay * autoVolumeWeek * autoVolumeMonth;
+    const autoVolumeMonth = resolveMonthlyAutomationVolume(row.autoVolumeMonth || row.manualVolumeMonth, row.autoVolumeWeek || row.manualVolumeWeek, row.autoVolumeDay || row.manualVolumeDay);
+    const calculatedManualMonthlyMins = manualAvgMins * manualVolumeMonth;
+    const calculatedAutoMonthlyMins = autoAvgMins * autoVolumeMonth;
     const calculatedSavedMins = Math.max(0, calculatedManualMonthlyMins - calculatedAutoMonthlyMins);
 
     const reportedManualMonthlyMins = hasReportedAutomationValue(row.reportedManualMonthlyMins)
