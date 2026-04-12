@@ -275,8 +275,12 @@ const AUTOMATION_SOURCE_DATA = [
         processName: "Purchase Order Prep (PO-cutting)",
         automationTool: "PO preparation hub",
         manualAvgMins: 150,
+        manualVolumeDay: 1,
+        manualVolumeWeek: 1,
         manualVolumeMonth: 2,
         autoAvgMins: 60,
+        autoVolumeDay: 1,
+        autoVolumeWeek: 1,
         autoVolumeMonth: 2,
         reportedManualMonthlyMins: 300,
         reportedSavedMins: 180,
@@ -291,8 +295,12 @@ const AUTOMATION_SOURCE_DATA = [
         processName: "Trim Summary",
         automationTool: "Costing Automation",
         manualAvgMins: 480,
+        manualVolumeDay: 2,
+        manualVolumeWeek: 2,
         manualVolumeMonth: 4,
         autoAvgMins: 30,
+        autoVolumeDay: 2,
+        autoVolumeWeek: 2,
         autoVolumeMonth: 4,
         reportedManualMonthlyMins: 7680,
         reportedSavedMins: 7200,
@@ -307,8 +315,12 @@ const AUTOMATION_SOURCE_DATA = [
         processName: "I.T. Technical Support",
         automationTool: "I.T. Service Management Tool",
         manualAvgMins: 120,
+        manualVolumeDay: 2,
+        manualVolumeWeek: 8,
         manualVolumeMonth: 15,
         autoAvgMins: 90,
+        autoVolumeDay: 2,
+        autoVolumeWeek: 8,
         autoVolumeMonth: 15,
         reportedManualMonthlyMins: 28800,
         reportedSavedMins: 7200,
@@ -323,8 +335,12 @@ const AUTOMATION_SOURCE_DATA = [
         processName: "Development Tracker File",
         automationTool: "Development Tracker File",
         manualAvgMins: 120,
+        manualVolumeDay: 4,
+        manualVolumeWeek: 6,
         manualVolumeMonth: 12,
         autoAvgMins: 20,
+        autoVolumeDay: 4,
+        autoVolumeWeek: 6,
         autoVolumeMonth: 12,
         reportedManualMonthlyMins: 34560,
         reportedSavedMins: 28800,
@@ -339,8 +355,12 @@ const AUTOMATION_SOURCE_DATA = [
         processName: "Cash Flow",
         automationTool: "Cash Flow",
         manualAvgMins: 180,
+        manualVolumeDay: 1,
+        manualVolumeWeek: 1,
         manualVolumeMonth: 1,
         autoAvgMins: 20,
+        autoVolumeDay: 1,
+        autoVolumeWeek: 1,
         autoVolumeMonth: 1,
         reportedManualMonthlyMins: 180,
         reportedSavedMins: 160,
@@ -355,8 +375,12 @@ const AUTOMATION_SOURCE_DATA = [
         processName: "Performance Evaluation",
         automationTool: "Performance Evaluation",
         manualAvgMins: 28800,
+        manualVolumeDay: 480,
+        manualVolumeWeek: 1,
         manualVolumeMonth: 1,
         autoAvgMins: 0,
+        autoVolumeDay: 480,
+        autoVolumeWeek: 1,
         autoVolumeMonth: 1,
         reportedManualMonthlyMins: 13824000,
         reportedSavedMins: 13824000,
@@ -371,8 +395,12 @@ const AUTOMATION_SOURCE_DATA = [
         processName: "Interns Daily Time Logs and Task",
         automationTool: "Interns Productivity Tool",
         manualAvgMins: 60,
+        manualVolumeDay: 1,
+        manualVolumeWeek: 5,
         manualVolumeMonth: 26,
         autoAvgMins: 30,
+        autoVolumeDay: 1,
+        autoVolumeWeek: 5,
         autoVolumeMonth: 26,
         reportedManualMonthlyMins: 7800,
         reportedSavedMins: 3900,
@@ -387,8 +415,12 @@ const AUTOMATION_SOURCE_DATA = [
         processName: "I.T. Equipment Inventory",
         automationTool: "I.T. Inventory System",
         manualAvgMins: 480,
+        manualVolumeDay: 1,
+        manualVolumeWeek: 1,
         manualVolumeMonth: 2,
         autoAvgMins: 240,
+        autoVolumeDay: 1,
+        autoVolumeWeek: 1,
         autoVolumeMonth: 2,
         reportedManualMonthlyMins: 960,
         reportedSavedMins: 480,
@@ -403,8 +435,12 @@ const AUTOMATION_SOURCE_DATA = [
         processName: "KPI",
         automationTool: "Automated KPI Dashboard (Power BI)",
         manualAvgMins: 120,
+        manualVolumeDay: 1,
+        manualVolumeWeek: 5,
         manualVolumeMonth: 20,
         autoAvgMins: 20,
+        autoVolumeDay: 1,
+        autoVolumeWeek: 5,
         autoVolumeMonth: 20,
         reportedManualMonthlyMins: 12000,
         reportedSavedMins: 10000,
@@ -419,8 +455,12 @@ const AUTOMATION_SOURCE_DATA = [
         processName: "Packing List",
         automationTool: "Packing List Generator",
         manualAvgMins: 90,
+        manualVolumeDay: 1,
+        manualVolumeWeek: 1,
         manualVolumeMonth: 1,
         autoAvgMins: 25,
+        autoVolumeDay: 1,
+        autoVolumeWeek: 1,
         autoVolumeMonth: 1,
         reportedManualMonthlyMins: 90,
         reportedSavedMins: 65,
@@ -1014,7 +1054,7 @@ function renderAutomationDashboard() {
             <div>
                 <span class="quick-help-label">Automation Dashboard</span>
                 <h3>Automation Impact Summary</h3>
-                <p class="service-copy">This view follows one benefits measurement framework across all solutions: baseline hours, time saved, capacity release, and cost avoidance. Every total is recalculated from average time and monthly volume before reporting.</p>
+                <p class="service-copy">This view follows one benefits measurement framework across all solutions: baseline hours, time saved, capacity release, and cost avoidance. Every total is recalculated from the workbook template using average time multiplied by daily, weekly, and monthly volume before reporting.</p>
             </div>
             <div class="automation-kpi-grid">
                 <article class="automation-kpi-card">
@@ -1142,7 +1182,7 @@ function renderAutomationDashboard() {
                 <div class="automation-breakdown-header">
                     <span class="quick-help-label">Breakdown</span>
                     <h5>${period.label} Benefits Breakdown</h5>
-                    <p class="automation-breakdown-definition">Baseline Hours = calculated manual work required before automation using Avg Time × Volume. Time Saved = calculated manual minutes minus calculated automated minutes. Capacity Release = time saved divided by 160 productive hours. Cost Avoidance = released FTE capacity multiplied by annual cost per FTE based on the policy. Total Benefits = policy-based cost avoidance for the selected period. Integrity Check compares workbook-reported totals against the recalculated totals.</p>
+                    <p class="automation-breakdown-definition">Baseline Hours = calculated manual work required before automation using Avg Time x Volume per Day x Volume per Week x Volume per Month. Time Saved = calculated manual minutes minus calculated automated minutes using the same workbook formula. Capacity Release = time saved divided by 160 productive hours. Cost Avoidance = released FTE capacity multiplied by annual cost per FTE based on the policy. Total Benefits = policy-based cost avoidance for the selected period. Integrity Check compares workbook-reported totals against the recalculated totals.</p>
                 </div>
             <div class="automation-breakdown-table-wrap">
                 <table class="automation-breakdown-table">
@@ -1308,11 +1348,15 @@ function valuesMatchWithinTolerance(left, right, tolerance = AUTOMATION_INTEGRIT
 
 function buildAutomationValidation(row = {}) {
     const manualAvgMins = normalizeAutomationNumber(row.manualAvgMins);
+    const manualVolumeDay = normalizeAutomationNumber(row.manualVolumeDay || 1);
+    const manualVolumeWeek = normalizeAutomationNumber(row.manualVolumeWeek || 1);
     const manualVolumeMonth = normalizeAutomationNumber(row.manualVolumeMonth);
     const autoAvgMins = normalizeAutomationNumber(row.autoAvgMins);
+    const autoVolumeDay = normalizeAutomationNumber(row.autoVolumeDay || row.manualVolumeDay || 1);
+    const autoVolumeWeek = normalizeAutomationNumber(row.autoVolumeWeek || row.manualVolumeWeek || 1);
     const autoVolumeMonth = normalizeAutomationNumber(row.autoVolumeMonth || row.manualVolumeMonth);
-    const calculatedManualMonthlyMins = manualAvgMins * manualVolumeMonth;
-    const calculatedAutoMonthlyMins = autoAvgMins * autoVolumeMonth;
+    const calculatedManualMonthlyMins = manualAvgMins * manualVolumeDay * manualVolumeWeek * manualVolumeMonth;
+    const calculatedAutoMonthlyMins = autoAvgMins * autoVolumeDay * autoVolumeWeek * autoVolumeMonth;
     const calculatedSavedMins = Math.max(0, calculatedManualMonthlyMins - calculatedAutoMonthlyMins);
 
     const reportedManualMonthlyMins = hasReportedAutomationValue(row.reportedManualMonthlyMins)
@@ -1357,8 +1401,12 @@ function buildAutomationValidation(row = {}) {
 
     return {
         manualAvgMins,
+        manualVolumeDay,
+        manualVolumeWeek,
         manualVolumeMonth,
         autoAvgMins,
+        autoVolumeDay,
+        autoVolumeWeek,
         autoVolumeMonth,
         calculatedManualMonthlyMins,
         calculatedAutoMonthlyMins,
