@@ -1097,8 +1097,8 @@ function renderAutomationDashboard() {
             <div class="automation-overall-chart-copy">
                 <div>
                     <span class="quick-help-label">Overall Chart</span>
-                    <h4>Overall Comparison of Baseline Volume, Automated Volume, and Total Benefits</h4>
-                    <p class="automation-chart-intro">Gray bars show the baseline manual transaction volume, green bars show the automated transaction volume, and the blue line shows total computed benefits in ${getSavingsNarrativeLabel()}.</p>
+                    <h4>Effort Reduction and Total Benefits by Solution</h4>
+                    <p class="automation-chart-intro">Gray bars show estimated manual effort hours, green bars show estimated automation effort hours, and the blue line shows total computed benefits in ${getSavingsNarrativeLabel()}.</p>
                     <p class="automation-chart-intro"><strong>Viewing:</strong> ${period.label}${period.key === "annual" ? " totals for the full year" : ` estimates derived from the monthly baseline dataset`}</p>
                     <p class="automation-chart-intro">${exchangeRateNote}</p>
                 </div>
@@ -1114,8 +1114,8 @@ function renderAutomationDashboard() {
                         `).join("")}
                     </div>
                     <div class="automation-chart-legend">
-                    <span><i class="legend-swatch legend-swatch-manual"></i>Baseline manual volume</span>
-                    <span><i class="legend-swatch legend-swatch-auto"></i>Automated volume</span>
+                    <span><i class="legend-swatch legend-swatch-manual"></i>Manual effort hours</span>
+                    <span><i class="legend-swatch legend-swatch-auto"></i>Automation effort hours</span>
                     <span><i class="legend-line legend-line-savings"></i>Total benefits (${savingsLabel})</span>
                     </div>
                 </div>
@@ -1141,7 +1141,7 @@ function renderAutomationDashboard() {
                     <div class="automation-multiplier-list">
                         ${rows.map((item) => {
                             return `
-                                <div class="automation-multiplier-row" data-automation-key="${escapeHtml(item.projectId)}" tabindex="0">
+                                <div class="automation-multiplier-row" data-automation-key="${escapeHtml(item.automationKey)}" tabindex="0">
                                     <span>${escapeHtml(item.label)}</span>
                                     <div class="automation-multiplier-track">
                                         <div class="automation-multiplier-fill" style="width:${(item.capacityReleaseFte / Math.max(...rows.map((row) => row.capacityReleaseFte), 1)) * 100}%"></div>
@@ -1153,8 +1153,9 @@ function renderAutomationDashboard() {
                     </div>
                 </div>
             </div>
-            <div class="automation-chart-shell">
+            <div class="automation-chart-shell automation-chart-shell-interactive" data-automation-tooltip-shell>
                 ${overallChart}
+                <div class="automation-chart-tooltip" data-automation-tooltip hidden></div>
             </div>
         </div>
             <div class="automation-overall-chart-card">
@@ -1194,7 +1195,7 @@ function renderAutomationDashboard() {
                     <tbody>
                         ${rows.map((item) => {
                             return `
-                                <tr data-automation-key="${escapeHtml(item.projectId)}" tabindex="0">
+                                <tr data-automation-key="${escapeHtml(item.automationKey)}" tabindex="0">
                                     <td data-label="Solution"><strong>${escapeHtml(item.label)}</strong></td>
                                     <td data-label="Baseline Hours">${formatCompactNumber(item.manualHours)}</td>
                                     <td data-label="Time Saved">${formatCompactNumber(item.hoursSaved)}</td>
@@ -1265,6 +1266,8 @@ function applyAutomationDashboardVisibility(container, isHidden) {
 
 function setupAutomationDashboardInteractions(container) {
     if (!container) return;
+    const tooltipShell = container.querySelector("[data-automation-tooltip-shell]");
+    const tooltip = container.querySelector("[data-automation-tooltip]");
 
     container.querySelectorAll("[data-automation-period]").forEach((button) => {
         button.addEventListener("click", () => {
@@ -1279,19 +1282,52 @@ function setupAutomationDashboardInteractions(container) {
     const clearActive = () => {
         container.classList.remove("has-linked-active");
         container.querySelectorAll(".is-linked-active").forEach((node) => node.classList.remove("is-linked-active"));
+        if (tooltip) {
+            tooltip.hidden = true;
+            tooltip.innerHTML = "";
+        }
     };
 
-    const setActive = (key) => {
+    const updateTooltipPosition = (event) => {
+        if (!tooltipShell || !tooltip || tooltip.hidden) return;
+        const shellRect = tooltipShell.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+        const nextLeft = Math.min(
+            Math.max(14, event.clientX - shellRect.left + 16),
+            Math.max(14, shellRect.width - tooltipRect.width - 14)
+        );
+        const nextTop = Math.min(
+            Math.max(14, event.clientY - shellRect.top - tooltipRect.height - 16),
+            Math.max(14, shellRect.height - tooltipRect.height - 14)
+        );
+        tooltip.style.left = `${nextLeft}px`;
+        tooltip.style.top = `${nextTop}px`;
+    };
+
+    const setActive = (key, node, event) => {
         clearActive();
         if (!key) return;
         container.classList.add("has-linked-active");
         container.querySelectorAll(`[data-automation-key="${key}"]`).forEach((node) => node.classList.add("is-linked-active"));
+        if (tooltip && node?.dataset?.tooltipLabel) {
+            tooltip.innerHTML = `
+                <strong>${escapeHtml(node.dataset.tooltipLabel)}</strong>
+                <span>Manual time/task: ${escapeHtml(node.dataset.tooltipManualTime || "0")} mins</span>
+                <span>Automation time/task: ${escapeHtml(node.dataset.tooltipAutoTime || "0")} mins</span>
+                <span>Hours saved: ${escapeHtml(node.dataset.tooltipHoursSaved || "0")}</span>
+                <span>Reduction %: ${escapeHtml(node.dataset.tooltipReduction || "0")}%</span>
+                <span>Total benefits: ${escapeHtml(node.dataset.tooltipBenefit || "$0")}</span>
+            `;
+            tooltip.hidden = false;
+            if (event) updateTooltipPosition(event);
+        }
     };
 
     container.querySelectorAll("[data-automation-key]").forEach((node) => {
         const key = node.getAttribute("data-automation-key");
-        node.addEventListener("mouseenter", () => setActive(key));
-        node.addEventListener("focus", () => setActive(key));
+        node.addEventListener("mouseenter", (event) => setActive(key, node, event));
+        node.addEventListener("mousemove", updateTooltipPosition);
+        node.addEventListener("focus", () => setActive(key, node));
         node.addEventListener("mouseleave", clearActive);
         node.addEventListener("blur", clearActive);
     });
@@ -1436,6 +1472,7 @@ function buildAutomationComparison(sourceRows = []) {
         const current = grouped.get(groupKey);
         if (!current) {
             grouped.set(groupKey, {
+                automationKey: groupKey,
                 projectId: String(row.projectId || "").trim(),
                 label: String(row.label || row.automationTool || row.processName || "Automation").trim(),
                 department: String(row.department || "").trim(),
@@ -1478,6 +1515,7 @@ function buildAutomationComparison(sourceRows = []) {
         const weightBase = Math.max(Number(entry.manualWeightedMins || 0), 1);
 
         return {
+            automationKey: entry.automationKey,
             projectId: entry.projectId,
             label: entry.label,
             department: entry.department,
@@ -1884,6 +1922,16 @@ function scaleAutomationMetric(value, multiplier) {
     return Number((Number(value) * Number(multiplier || 1)).toFixed(1));
 }
 
+function getScaledChartBarHeight(value, maxValue, chartInnerHeight, minNonZeroHeight = 10) {
+    const numericValue = Number(value || 0);
+    const numericMax = Math.max(Number(maxValue || 0), 1);
+    const normalizedValue = Math.max(0, numericValue / numericMax);
+    const rawHeight = Math.sqrt(normalizedValue) * chartInnerHeight;
+
+    if (numericValue <= 0) return 0;
+    return Math.max(minNonZeroHeight, rawHeight);
+}
+
 function getAutomationChartLabel(label = "") {
     const normalized = String(label || "").trim();
     const labelMap = {
@@ -1904,14 +1952,14 @@ function buildOverallComparisonChart(rows) {
     const topY = 76;
     const baseY = 286;
     const chartInnerHeight = baseY - topY;
-    const maxVolume = Math.max(...rows.flatMap((item) => [item.manualVolume, item.automatedVolume]), 1);
+    const maxEffortHours = Math.max(...rows.flatMap((item) => [item.manualHours, item.automatedHours]), 1);
     const maxBenefitValue = Math.max(...rows.map((item) => item.totalBenefitPhp), 1);
     const chartStartX = leftAxisX + 54;
     const chartUsableWidth = rightAxisX - chartStartX - 18;
     const chartStep = pointCount === 1 ? 0 : chartUsableWidth / (pointCount - 1);
-    const groupWidth = 88;
-    const barWidth = 34;
-    const barGap = 10;
+    const groupWidth = 96;
+    const barWidth = 32;
+    const barGap = 14;
     const gridValues = [1, 0.833, 0.667, 0.5, 0.333, 0.167, 0];
 
     const points = rows.map((item, index) => {
@@ -1920,8 +1968,8 @@ function buildOverallComparisonChart(rows) {
             : chartStartX + index * chartStep;
         const groupX = anchorX - (groupWidth / 2);
         const centerX = groupX + groupWidth / 2;
-        const manualHeight = Math.max(18, (item.manualVolume / maxVolume) * chartInnerHeight);
-        const autoHeight = Math.max(18, (item.automatedVolume / maxVolume) * chartInnerHeight);
+        const manualHeight = getScaledChartBarHeight(item.manualHours, maxEffortHours, chartInnerHeight);
+        const autoHeight = getScaledChartBarHeight(item.automatedHours, maxEffortHours, chartInnerHeight);
         const lineY = baseY - (item.totalBenefitPhp / maxBenefitValue) * chartInnerHeight;
         const labelParts = splitChartLabel(getAutomationChartLabel(item.label));
         return {
@@ -1965,7 +2013,7 @@ function buildOverallComparisonChart(rows) {
                 </filter>
             </defs>
             <rect x="${leftAxisX}" y="${topY}" width="${rightAxisX - leftAxisX}" height="${baseY - topY}" rx="24" class="chart-plot"></rect>
-            <text x="28" y="36" class="chart-axis-title">Volume</text>
+            <text x="28" y="36" class="chart-axis-title">Hours</text>
             <text x="${chartWidth - 30}" y="36" class="chart-axis-title chart-axis-title-right">Total Benefits (${getSavingsCurrencyLabel()})</text>
             <line x1="${leftAxisX}" y1="${baseY}" x2="${rightAxisX}" y2="${baseY}" class="chart-axis"></line>
             ${gridValues.map((value, index) => {
@@ -1973,13 +2021,22 @@ function buildOverallComparisonChart(rows) {
                 return `
                     <g>
                         <line x1="${leftAxisX}" y1="${y}" x2="${rightAxisX}" y2="${y}" class="chart-grid-line"></line>
-                        <text x="${leftAxisX - 16}" y="${y + 4}" class="chart-scale chart-scale-left">${formatCompactNumber(Math.round(maxVolume * value))}</text>
+                        <text x="${leftAxisX - 16}" y="${y + 4}" class="chart-scale chart-scale-left">${formatCompactNumber(Math.round(maxEffortHours * value))}</text>
                         <text x="${chartWidth - 30}" y="${y + 4}" class="chart-scale chart-scale-right">${formatCurrencyCompact(Math.round(maxBenefitValue * value))}</text>
                     </g>
                 `;
             }).join("")}
             ${points.map((point) => `
-                <g class="chart-series-group" data-automation-key="${escapeHtml(point.projectId)}">
+                <g
+                    class="chart-series-group"
+                    data-automation-key="${escapeHtml(point.automationKey)}"
+                    data-tooltip-label="${escapeHtml(point.label)}"
+                    data-tooltip-manual-time="${escapeHtml(formatDecimal(point.avgHandlingTimeMins))}"
+                    data-tooltip-auto-time="${escapeHtml(formatDecimal(point.automatedHandlingTimeMins))}"
+                    data-tooltip-hours-saved="${escapeHtml(formatCompactNumber(point.hoursSaved))}"
+                    data-tooltip-reduction="${escapeHtml(formatDecimal(point.manualHours > 0 ? (point.hoursSaved / point.manualHours) * 100 : 0))}"
+                    data-tooltip-benefit="${escapeHtml(formatCurrencyCompact(point.totalBenefitPhp))}"
+                >
                     <rect x="${point.manualX}" y="${point.manualY}" width="${barWidth}" height="${point.manualHeight}" rx="4" class="chart-bar chart-bar-manual"></rect>
                     <rect x="${point.autoX}" y="${point.autoY}" width="${barWidth}" height="${point.autoHeight}" rx="4" class="chart-bar chart-bar-auto"></rect>
                     <text x="${point.centerX}" y="${baseY + 22}" text-anchor="middle" class="chart-label">
@@ -1991,7 +2048,16 @@ function buildOverallComparisonChart(rows) {
             <path d="${savingsPath}" class="chart-line-glow chart-line-glow-savings"></path>
             <path d="${savingsPath}" class="chart-line chart-line-savings"></path>
             ${points.map((point) => `
-                <g class="chart-series-group" data-automation-key="${escapeHtml(point.projectId)}">
+                <g
+                    class="chart-series-group"
+                    data-automation-key="${escapeHtml(point.automationKey)}"
+                    data-tooltip-label="${escapeHtml(point.label)}"
+                    data-tooltip-manual-time="${escapeHtml(formatDecimal(point.avgHandlingTimeMins))}"
+                    data-tooltip-auto-time="${escapeHtml(formatDecimal(point.automatedHandlingTimeMins))}"
+                    data-tooltip-hours-saved="${escapeHtml(formatCompactNumber(point.hoursSaved))}"
+                    data-tooltip-reduction="${escapeHtml(formatDecimal(point.manualHours > 0 ? (point.hoursSaved / point.manualHours) * 100 : 0))}"
+                    data-tooltip-benefit="${escapeHtml(formatCurrencyCompact(point.totalBenefitPhp))}"
+                >
                     <circle cx="${point.centerX}" cy="${point.lineY}" r="9" class="chart-point-ring chart-point-ring-savings"></circle>
                     <circle cx="${point.centerX}" cy="${point.lineY}" r="5.5" class="chart-point chart-point-savings" filter="url(#automationSoftGlow)"></circle>
                 </g>
@@ -2020,7 +2086,7 @@ function buildAutomationLifecycleChart(statusSummaries) {
 
     const points = rows.map((item, index) => {
         const centerX = leftAxisX + (groupWidth * index) + groupWidth / 2;
-        const countHeight = Math.max(item.projectCount > 0 ? 18 : 0, (item.projectCount / maxProjectCount) * chartInnerHeight);
+        const countHeight = getScaledChartBarHeight(item.projectCount, maxProjectCount, chartInnerHeight);
         const lineY = baseY - (item.totalBenefitPhp / maxBenefitValue) * chartInnerHeight;
 
         return {
