@@ -1035,7 +1035,6 @@ function renderAutomationDashboard() {
     const annualCapacityRelease = annualRows.reduce((sum, item) => sum + item.capacityReleaseFte, 0);
     const annualCostAvoidance = annualRows.reduce((sum, item) => sum + item.costAvoidancePhp, 0);
     const annualBenefits = annualRows.reduce((sum, item) => sum + item.totalBenefitPhp, 0);
-    const integrityFailures = annualRows.filter((item) => item.integrityCheck === "FAIL").length;
     const totalVolumeManual = rows.reduce((sum, item) => sum + item.manualVolume, 0);
     const totalVolumeAutomated = rows.reduce((sum, item) => sum + item.automatedVolume, 0);
     const totalProjects = rows.length;
@@ -1058,29 +1057,24 @@ function renderAutomationDashboard() {
             </div>
             <div class="automation-kpi-grid">
                 <article class="automation-kpi-card">
-                    <span>Baseline Manual Work</span>
+                    <span>Estimated Baseline Work</span>
                     <strong>${formatCompactNumber(annualBaselineHours)}</strong>
-                    <small>hours required annually before automation</small>
+                    <small>estimated hours required annually before automation</small>
                 </article>
                 <article class="automation-kpi-card">
-                    <span>Time Saved</span>
+                    <span>Estimated Time Saved</span>
                     <strong>${formatCompactNumber(annualHoursSaved)}</strong>
-                    <small>hours removed from manual work annually</small>
+                    <small>estimated hours removed from manual work annually</small>
                 </article>
                 <article class="automation-kpi-card">
-                    <span>Capacity Release</span>
+                    <span>Estimated Capacity Release</span>
                     <strong>${formatDecimal(annualCapacityRelease)} FTE</strong>
-                    <small>equivalent annual redeployable capacity</small>
+                    <small>estimated annual redeployable capacity</small>
                 </article>
                 <article class="automation-kpi-card">
-                    <span>Total Benefits</span>
+                    <span>Estimated Total Benefits</span>
                     <strong>${formatCurrencyCompact(annualBenefits)}</strong>
-                    <small>${formatCurrencyCompact(annualCostAvoidance)} from cost avoidance annually</small>
-                </article>
-                <article class="automation-kpi-card">
-                    <span>Integrity Flags</span>
-                    <strong>${integrityFailures}</strong>
-                    <small>${integrityFailures === 1 ? "solution needs workbook correction" : "solutions need workbook correction"}</small>
+                    <small>${formatCurrencyCompact(annualCostAvoidance)} estimated from cost avoidance annually</small>
                 </article>
             </div>
             <div class="automation-status-grid">
@@ -1182,14 +1176,13 @@ function renderAutomationDashboard() {
                 <div class="automation-breakdown-header">
                     <span class="quick-help-label">Breakdown</span>
                     <h5>${period.label} Benefits Breakdown</h5>
-                    <p class="automation-breakdown-definition">Baseline Hours = calculated manual work required before automation using average handling time and monthly transaction volume. Time Saved = calculated manual minutes minus calculated automated minutes using the same policy baseline. Capacity Release = time saved divided by 160 productive hours. Cost Avoidance = released FTE capacity multiplied by annual cost per FTE based on the policy. Total Benefits = policy-based cost avoidance for the selected period. Integrity Check compares workbook-reported totals against the policy-based recalculated totals.</p>
+                    <p class="automation-breakdown-definition">Baseline Hours = calculated manual work required before automation using average handling time and monthly transaction volume. Time Saved = calculated manual minutes minus calculated automated minutes using the same policy baseline. Capacity Release = time saved divided by 160 productive hours. Cost Avoidance = released FTE capacity multiplied by annual cost per FTE based on the policy. Total Benefits = policy-based cost avoidance for the selected period.</p>
                 </div>
             <div class="automation-breakdown-table-wrap">
                 <table class="automation-breakdown-table">
                     <thead>
                         <tr>
                             <th>Solution</th>
-                            <th>Data Integrity Check</th>
                             <th>Baseline Hours</th>
                             <th>Time Saved</th>
                             <th>Capacity Release</th>
@@ -1202,9 +1195,6 @@ function renderAutomationDashboard() {
                             return `
                                 <tr data-automation-key="${escapeHtml(item.projectId)}" tabindex="0">
                                     <td data-label="Solution"><strong>${escapeHtml(item.label)}</strong></td>
-                                    <td data-label="Data Integrity Check">
-                                        <span class="automation-chip ${item.integrityCheck === "PASS" ? "automation-chip-pass" : "automation-chip-fail"}" title="${escapeHtml(item.integrityMessage)}">${escapeHtml(item.integrityCheck)}</span>
-                                    </td>
                                     <td data-label="Baseline Hours">${formatCompactNumber(item.manualHours)}</td>
                                     <td data-label="Time Saved">${formatCompactNumber(item.hoursSaved)}</td>
                                     <td data-label="Capacity Release"><span class="automation-chip automation-chip-multiplier">${formatDecimal(item.capacityReleaseFte)} FTE</span></td>
