@@ -996,18 +996,36 @@ async function uploadTeamPhotoToSupabase(file) {
     return String(data?.publicUrl || "").trim() || null;
 }
 
-function getTeamMemberImageUrl(imagePath) {
-    if (!imagePath) return getDefaultTeamImage("intern");
+function getTeamMemberImageUrl(imagePath, memberName = "") {
+    if (!imagePath) {
+        // Generate placeholder avatar if no image
+        const name = encodeURIComponent(String(memberName || "User").trim());
+        return `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&rounded=true`;
+    }
+    
     const imageStr = String(imagePath).trim();
-    if (!imageStr) return getDefaultTeamImage("intern");
+    if (!imageStr) {
+        const name = encodeURIComponent(String(memberName || "User").trim());
+        return `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&rounded=true`;
+    }
+    
     // If already a full URL (http, https, or data), return as-is
     if (/^(https?:\/\/|data:)/.test(imageStr)) return imageStr;
+    
     // If it's just a filename, construct the full Supabase URL
     const { url: supabaseUrl, photoBucket } = getSupabaseSettings();
     if (supabaseUrl && photoBucket) {
         return `${supabaseUrl}/storage/v1/object/public/${photoBucket}/team-members/${imageStr}`;
     }
-    // Fallback: return the path as-is (might be relative)
+    
+    // Fallback: if it looks like a filename but no Supabase, try public folder
+    if (!/[\/\\]/.test(imageStr) && !imageStr.includes(".")) {
+        // Likely a filename without extension, use placeholder
+        const name = encodeURIComponent(String(memberName || imageStr).trim());
+        return `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&rounded=true`;
+    }
+    
+    // Return as-is if it might be a relative path or other format
     return imageStr;
 }
 
@@ -2510,7 +2528,7 @@ function renderTeam() {
         return `
         <article class="team-card glass reveal searchable-item ${member.level}" draggable="${isAdmin ? "true" : "false"}" data-team-index="${index}" data-search="${buildSearchText([member.name, member.role, member.contactFor, ...member.skills])}">
             <div class="team-photo-wrap">
-                <img class="team-photo" src="${getTeamMemberImageUrl(member.image)}" alt="${member.name}">
+                <img class="team-photo" src="${getTeamMemberImageUrl(member.image, member.name)}" alt="${member.name}">
                 <div class="team-photo-overlay"></div>
             </div>
             <div class="team-card-body">
@@ -4932,7 +4950,7 @@ function buildTeamEditModal(index, member) {
             <p>Update the team card and full profile details shown to staff.</p>
             <form class="form-grid" id="team-edit-form">
                 <input type="hidden" name="teamIndex" value="${index}">
-                ${buildTeamPhotoFields(member.image)}
+                ${buildTeamPhotoFields(member.image, member.name)}
                 <input type="text" name="name" value="${member.name}" placeholder="Full name (e.g. John Carlo Manalo)">
                 <input type="text" name="role" value="${member.role}" placeholder="Role (e.g. IT Intern)">
                 <select name="level">
@@ -5777,9 +5795,9 @@ function normalizeContactGuideRow(row) {
     };
 }
 
-function buildTeamPhotoFields(image = "") {
+function buildTeamPhotoFields(image = "", memberName = "") {
     const previewImage = String(image || "").trim() || getDefaultTeamImage("intern");
-    const imageUrl = getTeamMemberImageUrl(previewImage);
+    const imageUrl = getTeamMemberImageUrl(previewImage, memberName);
     return `
         <div class="team-photo-editor">
             <img src="${imageUrl}" alt="Team member preview" class="team-photo-upload-preview" data-team-photo-preview>
