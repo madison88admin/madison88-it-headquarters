@@ -996,6 +996,21 @@ async function uploadTeamPhotoToSupabase(file) {
     return String(data?.publicUrl || "").trim() || null;
 }
 
+function getTeamMemberImageUrl(imagePath) {
+    if (!imagePath) return getDefaultTeamImage("intern");
+    const imageStr = String(imagePath).trim();
+    if (!imageStr) return getDefaultTeamImage("intern");
+    // If already a full URL (http, https, or data), return as-is
+    if (/^(https?:\/\/|data:)/.test(imageStr)) return imageStr;
+    // If it's just a filename, construct the full Supabase URL
+    const { url: supabaseUrl, photoBucket } = getSupabaseSettings();
+    if (supabaseUrl && photoBucket) {
+        return `${supabaseUrl}/storage/v1/object/public/${photoBucket}/team-members/${imageStr}`;
+    }
+    // Fallback: return the path as-is (might be relative)
+    return imageStr;
+}
+
 function setupLoader() {
     const loader = document.getElementById("loader");
     if (!loader) return;
@@ -2495,7 +2510,7 @@ function renderTeam() {
         return `
         <article class="team-card glass reveal searchable-item ${member.level}" draggable="${isAdmin ? "true" : "false"}" data-team-index="${index}" data-search="${buildSearchText([member.name, member.role, member.contactFor, ...member.skills])}">
             <div class="team-photo-wrap">
-                <img class="team-photo" src="${member.image}" alt="${member.name}">
+                <img class="team-photo" src="${getTeamMemberImageUrl(member.image)}" alt="${member.name}">
                 <div class="team-photo-overlay"></div>
             </div>
             <div class="team-card-body">
@@ -5764,9 +5779,10 @@ function normalizeContactGuideRow(row) {
 
 function buildTeamPhotoFields(image = "") {
     const previewImage = String(image || "").trim() || getDefaultTeamImage("intern");
+    const imageUrl = getTeamMemberImageUrl(previewImage);
     return `
         <div class="team-photo-editor">
-            <img src="${previewImage}" alt="Team member preview" class="team-photo-upload-preview" data-team-photo-preview>
+            <img src="${imageUrl}" alt="Team member preview" class="team-photo-upload-preview" data-team-photo-preview>
             <input type="hidden" name="photoData" value="${previewImage}">
             <input type="text" name="image" value="${previewImage}" placeholder="Image URL or saved photo data">
             <label class="photo-upload-label">
