@@ -43,16 +43,16 @@ const APP_CONFIG = {
         ] }
     ],
     team: [
-        { name: "James Bienen", role: "CEO", level: "executive", status: "Online", skills: ["Executive Leadership", "Vision", "Board Management"], message: "james@madison88.com", email: "james@madison88.com", number: "+63 917 800 1100", school: "", linkedin: "", contactFor: "Company-wide strategic direction and board matters", image: "lester_sysadmin_portrait_1774849673559.png", manager: null, hierarchy: 0 },
-        { name: "Polly Bienen", role: "President", level: "executive", status: "Online", skills: ["Executive Leadership", "Strategy", "Governance"], message: "polly.bienen@madison88.com", email: "polly.bienen@madison88.com", number: "+63 917 800 1107", school: "", linkedin: "", contactFor: "Executive leadership and strategic direction", image: "lester_sysadmin_portrait_1774849673559.png", manager: "James Bienen", hierarchy: 1 },
-        { name: "Chris Cantasano", role: "Chief Financial Officer", level: "executive", status: "Online", skills: ["Financial Management", "Operations", "Growth"], message: "chris.cantasano@madison88.com", email: "chris.cantasano@madison88.com", number: "+63 917 800 1108", school: "", linkedin: "", contactFor: "Financial oversight and IT budget management", image: "intern_stephanie_portrait_1774849903805.png", manager: "Polly Bienen", hierarchy: 2 },
-        { name: "Chris Ascaño", role: "Vice President - Operations Manila", level: "executive", status: "Online", skills: ["Operations", "Process Improvement", "Delivery"], message: "chris.ascano@madison88.com", email: "chris.ascano@madison88.com", number: "+63 917 800 1109", school: "", linkedin: "", contactFor: "Operational leadership and delivery management", image: "intern_carlo_portrait_1774849747248.png", manager: "Polly Bienen", hierarchy: 2 },
-        { name: "Paul Avendaño", role: "IT Global Systems Manager", level: "senior", status: "Online", skills: ["Systems Management", "IT Operations", "Planning"], message: "paul.avendano@madison88.com", email: "paul.avendano@madison88.com", number: "+63 917 800 1101", school: "Polytechnic University of the Philippines", linkedin: "https://www.linkedin.com/in/paul-avendano", contactFor: "IT systems management and administration oversight", image: "paul_pm_portrait_1774849659547.png", manager: "Chris Cantasano", hierarchy: 3 },
-        { name: "Lester Mendoza", role: "System Administrator", level: "senior", status: "In a Meeting", skills: ["Infrastructure", "Network", "Identity"], message: "lester.mendoza@madison88.com", email: "lester.mendoza@madison88.com", number: "+63 917 800 1102", school: "Technological Institute of the Philippines", linkedin: "https://www.linkedin.com/in/lester-mendoza", contactFor: "Account, server, network, and access administration", image: "lester_sysadmin_portrait_1774849673559.png", manager: "Paul Avendaño", hierarchy: 4 },
-        { name: "John Carlo M. Manalo", role: "IT Intern", level: "intern", status: "Online", skills: ["Support", "Documentation", "UI/UX"], message: "johncarlo.manalo@madison88.com", email: "johncarlo.manalo@madison88.com", number: "+63 917 800 1103", school: "National University", linkedin: "www.linkedin.com/in/john-carlo-manalo-54582b171", contactFor: "Portal updates, user guides, and basic support", image: "intern_carlo_portrait_1774849747248.png", manager: "Paul Avendaño", hierarchy: 4 },
-        { name: "John Sedrick N. Sarol", role: "IT Intern", level: "intern", status: "Away", skills: ["Hardware", "Troubleshooting", "Deployment"], message: "johnsedrick.sarol@madison88.com", email: "johnsedrick.sarol@madison88.com", number: "+63 917 800 1104", school: "STI College", linkedin: "https://www.linkedin.com/in/john-sedrick-sarol", contactFor: "Device setup, peripherals, and workstation issues", image: "intern_sedrick_portrait_1774849784438.png", manager: "Paul Avendaño", hierarchy: 4 },
-        { name: "Stephanie Joyce A. Guce", role: "IT Intern", level: "intern", status: "Online", skills: ["UI/UX", "Content", "Training"], message: "stephanie.guce@madison88.com", email: "stephanie.guce@madison88.com", number: "+63 917 800 1105", school: "Far Eastern University", linkedin: "https://www.linkedin.com/in/stephanie-guce", contactFor: "Interface guidance and process walkthroughs", image: "intern_stephanie_portrait_1774849903805.png", manager: "Paul Avendaño", hierarchy: 4 },
-        { name: "Mhark Anthony Pentinio", role: "IT Intern", level: "intern", status: "Online", skills: ["Cybersecurity", "Monitoring", "Endpoint Care"], message: "mhark.pentinio@madison88.com", email: "mhark.pentinio@madison88.com", number: "+63 917 800 1106", school: "AMA Computer College", linkedin: "https://www.linkedin.com/in/mhark-pentinio", contactFor: "Security concerns and suspicious activity reports", image: "intern_mhark_portrait_1774849921272.png", manager: "Paul Avendaño", hierarchy: 4 }
+        { name: "James Bienen", role: "CEO", level: "executive", status: "Online", skills: ["Executive Leadership", "Vision", "Board Management"], message: "james@madison88.com", email: "james@madison88.com", number: "+63 917 800 1100", school: "", linkedin: "", contactFor: "Company-wide strategic direction and board matters", image: "1776297287359-james-bienen.jpg", manager: null, hierarchy: 0 },
+        { name: "Polly Bienen", role: "President", level: "executive", status: "Online", skills: ["Executive Leadership", "Strategy", "Governance"], message: "polly.bienen@madison88.com", email: "polly.bienen@madison88.com", number: "+63 917 800 1107", school: "", linkedin: "", contactFor: "Executive leadership and strategic direction", image: "1775459184909-polly-bienen-3.jpg", manager: "James Bienen", hierarchy: 1 },
+        { name: "Chris Cantasano", role: "Chief Financial Officer", level: "executive", status: "Online", skills: ["Financial Management", "Operations", "Growth"], message: "chris.cantasano@madison88.com", email: "chris.cantasano@madison88.com", number: "+63 917 800 1108", school: "", linkedin: "", contactFor: "Financial oversight and IT budget management", image: "1775459476820-chris-cantasano.jpg", manager: "Polly Bienen", hierarchy: 2 },
+        { name: "Chris Ascaño", role: "Vice President - Operations Manila", level: "executive", status: "Online", skills: ["Operations", "Process Improvement", "Delivery"], message: "chris.ascano@madison88.com", email: "chris.ascano@madison88.com", number: "+63 917 800 1109", school: "", linkedin: "", contactFor: "Operational leadership and delivery management", image: "1775459500436-gemini_generated_image_nk8bzgnk8bzgnk8b-1.png", manager: "Polly Bienen", hierarchy: 2 },
+        { name: "Paul Avendaño", role: "IT Global Systems Manager", level: "senior", status: "Online", skills: ["Systems Management", "IT Operations", "Planning"], message: "paul.avendano@madison88.com", email: "paul.avendano@madison88.com", number: "+63 917 800 1101", school: "Polytechnic University of the Philippines", linkedin: "https://www.linkedin.com/in/paul-avendano", contactFor: "IT systems management and administration oversight", image: "1775459518364-gemini_generated_image_vlsyw4vlsyw4vlsy1.png", manager: "Chris Cantasano", hierarchy: 3 },
+        { name: "Lester Mendoza", role: "System Administrator", level: "senior", status: "In a Meeting", skills: ["Infrastructure", "Network", "Identity"], message: "lester.mendoza@madison88.com", email: "lester.mendoza@madison88.com", number: "+63 917 800 1102", school: "Technological Institute of the Philippines", linkedin: "https://www.linkedin.com/in/lester-mendoza", contactFor: "Account, server, network, and access administration", image: "1775459535019-gemini_generated_image_k7ruxbk7ruxbk7ru1.png", manager: "Paul Avendaño", hierarchy: 4 },
+        { name: "John Carlo M. Manalo", role: "IT Intern", level: "intern", status: "Online", skills: ["Support", "Documentation", "UI/UX"], message: "johncarlo.manalo@madison88.com", email: "johncarlo.manalo@madison88.com", number: "+63 917 800 1103", school: "National University", linkedin: "www.linkedin.com/in/john-carlo-manalo-54582b171", contactFor: "Portal updates, user guides, and basic support", image: "1775459550191-gemini_generated_image_uqjmmwuqjmmwuqjm.png", manager: "Paul Avendaño", hierarchy: 4 },
+        { name: "John Sedrick N. Sarol", role: "IT Intern", level: "intern", status: "Away", skills: ["Hardware", "Troubleshooting", "Deployment"], message: "johnsedrick.sarol@madison88.com", email: "johnsedrick.sarol@madison88.com", number: "+63 917 800 1104", school: "STI College", linkedin: "https://www.linkedin.com/in/john-sedrick-sarol", contactFor: "Device setup, peripherals, and workstation issues", image: "1775459560688-gemini_generated_image_sr1p0tsr1p0tsr1p.png", manager: "Paul Avendaño", hierarchy: 4 },
+        { name: "Stephanie Joyce A. Guce", role: "IT Intern", level: "intern", status: "Online", skills: ["UI/UX", "Content", "Training"], message: "stephanie.guce@madison88.com", email: "stephanie.guce@madison88.com", number: "+63 917 800 1105", school: "Far Eastern University", linkedin: "https://www.linkedin.com/in/stephanie-guce", contactFor: "Interface guidance and process walkthroughs", image: "1775460116077-gemini_generated_image_ei1744ei1744ei17.png", manager: "Paul Avendaño", hierarchy: 4 },
+        { name: "Mhark Anthony Pentinio", role: "IT Intern", level: "intern", status: "Online", skills: ["Cybersecurity", "Monitoring", "Endpoint Care"], message: "mhark.pentinio@madison88.com", email: "mhark.pentinio@madison88.com", number: "+63 917 800 1106", school: "AMA Computer College", linkedin: "https://www.linkedin.com/in/mhark-pentinio", contactFor: "Security concerns and suspicious activity reports", image: "1775483369735-gemini_generated_image_4c2z094c2z094c2z.png", manager: "Paul Avendaño", hierarchy: 4 }
     ],
     quickHelp: [
         { label: "Team Coverage", title: "Project approvals and cross-team coordination", body: "Route rollout approvals, timelines, and cross-department planning to Paul Avendaño.", action: "Message Paul", actionType: "message", value: "paul.avendano@madison88.com", person: "Paul Avendaño" },
@@ -599,11 +599,6 @@ window.addEventListener("unhandledrejection", () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
     try {
-        // Clear old team data from localStorage to force fresh load with manager field
-        localStorage.removeItem(STORAGE_KEYS.teamData);
-        // Reload team data from APP_CONFIG
-        APP_STATE.team = loadTeam();
-        
         setupLoader();
         setupThemeToggle();
         updateNavigationLabels();
@@ -870,16 +865,16 @@ async function hydrateAppStateFromSupabase() {
             APP_STATE.services = snapshot[SUPABASE_SECTION_KEYS.services];
         }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.team])) {
-            // Load from Supabase and merge with APP_CONFIG manager relationships
-            const configTeam = APP_CONFIG.team;
-            APP_STATE.team = snapshot[SUPABASE_SECTION_KEYS.team].map((member) => {
-                const configMember = configTeam.find((cm) => cm.name === member.name);
-                return normalizeTeamMember({
-                    ...member,
-                    manager: configMember?.manager || member.manager || null
-                });
-            }).sort((a, b) => a.hierarchy - b.hierarchy);
-        }
+                const configTeam = APP_CONFIG.team;
+                APP_STATE.team = snapshot[SUPABASE_SECTION_KEYS.team].map((member) => {
+                    const configMember = configTeam.find((cm) => cm.name === member.name);
+                    return normalizeTeamMember({
+                        ...member,
+                        image: configMember?.image || member.image,  // ← ADD THIS LINE
+                        manager: configMember?.manager || member.manager || null
+                    });
+                }).sort((a, b) => a.hierarchy - b.hierarchy);
+            }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.quickHelp])) {
             APP_STATE.quickHelp = normalizeQuickHelpItems(snapshot[SUPABASE_SECTION_KEYS.quickHelp]);
         }
@@ -996,17 +991,53 @@ async function uploadTeamPhotoToSupabase(file) {
     return String(data?.publicUrl || "").trim() || null;
 }
 
+function generateAvatarSvg(name, size = 200) {
+    try {
+        // Generate a consistent color based on the name
+        let hash = 0;
+        const nameStr = String(name || "User").trim();
+        for (let i = 0; i < nameStr.length; i++) {
+            hash = nameStr.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const hue = (hash % 360);
+        
+        // Get initials
+        const initials = nameStr
+            .split(" ")
+            .map(n => n[0])
+            .join("")
+            .toUpperCase()
+            .slice(0, 2);
+        
+        // Create SVG
+        const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <style>
+                    .avatar-bg { fill: hsl(${hue}, 70%, 60%); }
+                    .avatar-text { fill: white; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: ${size * 0.4}px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+                </style>
+            </defs>
+            <rect class="avatar-bg" width="${size}" height="${size}" rx="${size * 0.1}"/>
+            <text class="avatar-text" x="${size / 2}" y="${size / 2}">${initials}</text>
+        </svg>`;
+        
+        const dataUrl = `data:image/svg+xml;base64,${btoa(svg)}`;
+        return dataUrl;
+    } catch (e) {
+        console.error("Avatar generation failed:", e);
+        // Return a simple SVG as fallback
+        return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23888' width='200' height='200'/%3E%3Ctext fill='white' font-size='80' x='50%' y='50%' text-anchor='middle' dominant-baseline='central'%3E%3F%3C/text%3E%3C/svg%3E";
+    }
+}
+
 function getTeamMemberImageUrl(imagePath, memberName = "") {
     if (!imagePath) {
-        // Generate placeholder avatar if no image
-        const name = encodeURIComponent(String(memberName || "User").trim());
-        return `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&rounded=true`;
+        return generateAvatarSvg(String(memberName || "User").trim());
     }
     
     const imageStr = String(imagePath).trim();
     if (!imageStr) {
-        const name = encodeURIComponent(String(memberName || "User").trim());
-        return `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&rounded=true`;
+        return generateAvatarSvg(String(memberName || "User").trim());
     }
     
     // If already a full URL (http, https, or data), return as-is
@@ -1015,18 +1046,14 @@ function getTeamMemberImageUrl(imagePath, memberName = "") {
     // If it's just a filename, construct the full Supabase URL
     const { url: supabaseUrl, photoBucket } = getSupabaseSettings();
     if (supabaseUrl && photoBucket) {
-        return `${supabaseUrl}/storage/v1/object/public/${photoBucket}/team-members/${imageStr}`;
+        const fullUrl = `${supabaseUrl}/storage/v1/object/public/${photoBucket}/team-members/${imageStr}`;
+        console.log(`Image URL for ${memberName}: ${fullUrl}`);
+        return fullUrl;
     }
     
-    // Fallback: if it looks like a filename but no Supabase, try public folder
-    if (!/[\/\\]/.test(imageStr) && !imageStr.includes(".")) {
-        // Likely a filename without extension, use placeholder
-        const name = encodeURIComponent(String(memberName || imageStr).trim());
-        return `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&rounded=true`;
-    }
-    
-    // Return as-is if it might be a relative path or other format
-    return imageStr;
+    // Fallback: generate SVG avatar
+    console.log(`No Supabase config, using SVG avatar for ${memberName}`);
+    return generateAvatarSvg(String(memberName || imageStr).trim());
 }
 
 function setupLoader() {
@@ -1040,36 +1067,8 @@ function setupLoader() {
     // Fallback: don't let the UI stay blocked if a third-party resource stalls.
     setTimeout(hideStartupLoader, 3200);
     
-    // Sync organization structure to Supabase on page load
-    window.addEventListener("load", () => {
-        setTimeout(async () => {
-            // Merge team data with APP_CONFIG to include manager field
-            const configTeam = APP_CONFIG.team;
-            const updatedTeam = APP_STATE.team.map((member) => {
-                // Find matching member in config by full name
-                const configMember = configTeam.find((cm) => cm.name === member.name);
-                
-                // If config has manager and current member doesn't, add it
-                if (configMember && configMember.manager && !member.manager) {
-                    return { ...member, manager: configMember.manager };
-                }
-                
-                // If config has manager, always use it (ensure consistency)
-                if (configMember && configMember.manager) {
-                    return { ...member, manager: configMember.manager };
-                }
-                
-                return member;
-            });
-            
-            // Save the updated team to Supabase
-            APP_STATE.team = updatedTeam;
-            saveTeam();
-            
-            // Re-render the team UI to reflect changes
-            renderTeam();
-        }, 2000);
-    }, { once: true });
+    // Don't sync/overwrite team data - preserve Supabase data as-is
+    // Commenting out the old sync that was overwriting image fields
 }
 
 function renderStats() {
@@ -2528,7 +2527,7 @@ function renderTeam() {
         return `
         <article class="team-card glass reveal searchable-item ${member.level}" draggable="${isAdmin ? "true" : "false"}" data-team-index="${index}" data-search="${buildSearchText([member.name, member.role, member.contactFor, ...member.skills])}">
             <div class="team-photo-wrap">
-                <img class="team-photo" src="${getTeamMemberImageUrl(member.image, member.name)}" alt="${member.name}">
+                <img class="team-photo" src="${getTeamMemberImageUrl(member.image, member.name)}" alt="${member.name}" data-member="${member.name}">
                 <div class="team-photo-overlay"></div>
             </div>
             <div class="team-card-body">
@@ -5544,22 +5543,7 @@ function loadServices(source = "default") {
 }
 
 function loadTeam(source = "default") {
-    if (source !== "legacy") {
-        return cloneData(APP_CONFIG.team).map(normalizeTeamMember).sort((a, b) => a.hierarchy - b.hierarchy);
-    }
-    try {
-        const raw = localStorage.getItem(STORAGE_KEYS.teamData);
-        if (!raw) {
-            return APP_CONFIG.team.map(normalizeTeamMember).sort((a, b) => a.hierarchy - b.hierarchy);
-        }
-        const saved = JSON.parse(raw);
-        if (!Array.isArray(saved)) {
-            return APP_CONFIG.team.map(normalizeTeamMember).sort((a, b) => a.hierarchy - b.hierarchy);
-        }
-        return saved.map(normalizeTeamMember).sort((a, b) => a.hierarchy - b.hierarchy);
-    } catch (error) {
-        return APP_CONFIG.team.map(normalizeTeamMember).sort((a, b) => a.hierarchy - b.hierarchy);
-    }
+    return cloneData(APP_CONFIG.team).map(normalizeTeamMember).sort((a, b) => a.hierarchy - b.hierarchy);
 }
 
 function loadQuickHelp(source = "default") {
@@ -5800,7 +5784,7 @@ function buildTeamPhotoFields(image = "", memberName = "") {
     const imageUrl = getTeamMemberImageUrl(previewImage, memberName);
     return `
         <div class="team-photo-editor">
-            <img src="${imageUrl}" alt="Team member preview" class="team-photo-upload-preview" data-team-photo-preview>
+            <img src="${imageUrl}" alt="Team member preview" class="team-photo-upload-preview" data-team-photo-preview data-member="${memberName}">
             <input type="hidden" name="photoData" value="${previewImage}">
             <input type="text" name="image" value="${previewImage}" placeholder="Image URL or saved photo data">
             <label class="photo-upload-label">
