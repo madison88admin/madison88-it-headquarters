@@ -43,15 +43,16 @@ const APP_CONFIG = {
         ] }
     ],
     team: [
-        { name: "Polly Bienen", role: "President", level: "executive", status: "Online", skills: ["Executive Leadership", "Strategy", "Governance"], message: "polly.bienen@madison88.com", email: "polly.bienen@madison88.com", number: "+63 917 800 1107", school: "", linkedin: "", contactFor: "Executive leadership and strategic direction", image: "lester_sysadmin_portrait_1774849673559.png", hierarchy: 2 },
-        { name: "Chris Cantasano", role: "Manila: President", level: "executive", status: "Online", skills: ["Regional Leadership", "Operations", "Growth"], message: "chris.cantasano@madison88.com", email: "chris.cantasano@madison88.com", number: "+63 917 800 1108", school: "", linkedin: "", contactFor: "Regional executive leadership for Manila operations", image: "intern_stephanie_portrait_1774849903805.png", hierarchy: 2 },
-        { name: "Chris Ascaño", role: "Vice President - Operations", level: "executive", status: "Online", skills: ["Operations", "Process Improvement", "Delivery"], message: "chris.ascano@madison88.com", email: "chris.ascano@madison88.com", number: "+63 917 800 1109", school: "", linkedin: "", contactFor: "Operational leadership and delivery management", image: "intern_carlo_portrait_1774849747248.png", hierarchy: 2 },
-        { name: "Paul Avendaño", role: "IT Admin Lead", level: "senior", status: "Online", skills: ["Delivery", "Stakeholder Ops", "Planning"], message: "paul.avendano@madison88.com", email: "paul.avendano@madison88.com", number: "+63 917 800 1101", school: "Polytechnic University of the Philippines", linkedin: "https://www.linkedin.com/in/paul-avendano", contactFor: "IT administration, approvals, and cross-team coordination", image: "paul_pm_portrait_1774849659547.png", hierarchy: 0 },
-        { name: "Lester Mendoza", role: "IT Admin", level: "senior", status: "In a Meeting", skills: ["Infrastructure", "Network", "Identity"], message: "lester.mendoza@madison88.com", email: "lester.mendoza@madison88.com", number: "+63 917 800 1102", school: "Technological Institute of the Philippines", linkedin: "https://www.linkedin.com/in/lester-mendoza", contactFor: "Account, server, network, and access administration", image: "lester_sysadmin_portrait_1774849673559.png", hierarchy: 1 },
-        { name: "John Carlo Manalo", role: "IT Intern", level: "intern", status: "Online", skills: ["Support", "Documentation", "UI/UX"], message: "johncarlo.manalo@madison88.com", email: "johncarlo.manalo@madison88.com", number: "+63 917 800 1103", school: "National University", linkedin: "www.linkedin.com/in/john-carlo-manalo-54582b171", contactFor: "Portal updates, user guides, and basic support", image: "intern_carlo_portrait_1774849747248.png", hierarchy: 3 },
-        { name: "John Sedrick Sarol", role: "IT Intern", level: "intern", status: "Away", skills: ["Hardware", "Troubleshooting", "Deployment"], message: "johnsedrick.sarol@madison88.com", email: "johnsedrick.sarol@madison88.com", number: "+63 917 800 1104", school: "STI College", linkedin: "https://www.linkedin.com/in/john-sedrick-sarol", contactFor: "Device setup, peripherals, and workstation issues", image: "intern_sedrick_portrait_1774849784438.png", hierarchy: 3 },
-        { name: "Stephanie Guce", role: "IT Intern", level: "intern", status: "Online", skills: ["UI/UX", "Content", "Training"], message: "stephanie.guce@madison88.com", email: "stephanie.guce@madison88.com", number: "+63 917 800 1105", school: "Far Eastern University", linkedin: "https://www.linkedin.com/in/stephanie-guce", contactFor: "Interface guidance and process walkthroughs", image: "intern_stephanie_portrait_1774849903805.png", hierarchy: 3 },
-        { name: "Mhark Pentinio", role: "IT Intern", level: "intern", status: "Online", skills: ["Cybersecurity", "Monitoring", "Endpoint Care"], message: "mhark.pentinio@madison88.com", email: "mhark.pentinio@madison88.com", number: "+63 917 800 1106", school: "AMA Computer College", linkedin: "https://www.linkedin.com/in/mhark-pentinio", contactFor: "Security concerns and suspicious activity reports", image: "intern_mhark_portrait_1774849921272.png", hierarchy: 3 }
+        { name: "James Bienen", role: "CEO", level: "executive", status: "Online", skills: ["Executive Leadership", "Vision", "Board Management"], message: "james@madison88.com", email: "james@madison88.com", number: "+63 917 800 1100", school: "", linkedin: "", contactFor: "Company-wide strategic direction and board matters", image: "lester_sysadmin_portrait_1774849673559.png", manager: null, hierarchy: 0 },
+        { name: "Polly Bienen", role: "President", level: "executive", status: "Online", skills: ["Executive Leadership", "Strategy", "Governance"], message: "polly.bienen@madison88.com", email: "polly.bienen@madison88.com", number: "+63 917 800 1107", school: "", linkedin: "", contactFor: "Executive leadership and strategic direction", image: "lester_sysadmin_portrait_1774849673559.png", manager: "James Bienen", hierarchy: 1 },
+        { name: "Chris Cantasano", role: "Chief Financial Officer", level: "executive", status: "Online", skills: ["Financial Management", "Operations", "Growth"], message: "chris.cantasano@madison88.com", email: "chris.cantasano@madison88.com", number: "+63 917 800 1108", school: "", linkedin: "", contactFor: "Financial oversight and IT budget management", image: "intern_stephanie_portrait_1774849903805.png", manager: "Polly Bienen", hierarchy: 2 },
+        { name: "Chris Ascaño", role: "Vice President - Operations Manila", level: "executive", status: "Online", skills: ["Operations", "Process Improvement", "Delivery"], message: "chris.ascano@madison88.com", email: "chris.ascano@madison88.com", number: "+63 917 800 1109", school: "", linkedin: "", contactFor: "Operational leadership and delivery management", image: "intern_carlo_portrait_1774849747248.png", manager: "Polly Bienen", hierarchy: 2 },
+        { name: "Paul Avendaño", role: "IT Global Systems Manager", level: "senior", status: "Online", skills: ["Systems Management", "IT Operations", "Planning"], message: "paul.avendano@madison88.com", email: "paul.avendano@madison88.com", number: "+63 917 800 1101", school: "Polytechnic University of the Philippines", linkedin: "https://www.linkedin.com/in/paul-avendano", contactFor: "IT systems management and administration oversight", image: "paul_pm_portrait_1774849659547.png", manager: "Chris Cantasano", hierarchy: 3 },
+        { name: "Lester Mendoza", role: "System Administrator", level: "senior", status: "In a Meeting", skills: ["Infrastructure", "Network", "Identity"], message: "lester.mendoza@madison88.com", email: "lester.mendoza@madison88.com", number: "+63 917 800 1102", school: "Technological Institute of the Philippines", linkedin: "https://www.linkedin.com/in/lester-mendoza", contactFor: "Account, server, network, and access administration", image: "lester_sysadmin_portrait_1774849673559.png", manager: "Paul Avendaño", hierarchy: 4 },
+        { name: "John Carlo M. Manalo", role: "IT Intern", level: "intern", status: "Online", skills: ["Support", "Documentation", "UI/UX"], message: "johncarlo.manalo@madison88.com", email: "johncarlo.manalo@madison88.com", number: "+63 917 800 1103", school: "National University", linkedin: "www.linkedin.com/in/john-carlo-manalo-54582b171", contactFor: "Portal updates, user guides, and basic support", image: "intern_carlo_portrait_1774849747248.png", manager: "Paul Avendaño", hierarchy: 4 },
+        { name: "John Sedrick N. Sarol", role: "IT Intern", level: "intern", status: "Away", skills: ["Hardware", "Troubleshooting", "Deployment"], message: "johnsedrick.sarol@madison88.com", email: "johnsedrick.sarol@madison88.com", number: "+63 917 800 1104", school: "STI College", linkedin: "https://www.linkedin.com/in/john-sedrick-sarol", contactFor: "Device setup, peripherals, and workstation issues", image: "intern_sedrick_portrait_1774849784438.png", manager: "Paul Avendaño", hierarchy: 4 },
+        { name: "Stephanie Joyce A. Guce", role: "IT Intern", level: "intern", status: "Online", skills: ["UI/UX", "Content", "Training"], message: "stephanie.guce@madison88.com", email: "stephanie.guce@madison88.com", number: "+63 917 800 1105", school: "Far Eastern University", linkedin: "https://www.linkedin.com/in/stephanie-guce", contactFor: "Interface guidance and process walkthroughs", image: "intern_stephanie_portrait_1774849903805.png", manager: "Paul Avendaño", hierarchy: 4 },
+        { name: "Mhark Anthony Pentinio", role: "IT Intern", level: "intern", status: "Online", skills: ["Cybersecurity", "Monitoring", "Endpoint Care"], message: "mhark.pentinio@madison88.com", email: "mhark.pentinio@madison88.com", number: "+63 917 800 1106", school: "AMA Computer College", linkedin: "https://www.linkedin.com/in/mhark-pentinio", contactFor: "Security concerns and suspicious activity reports", image: "intern_mhark_portrait_1774849921272.png", manager: "Paul Avendaño", hierarchy: 4 }
     ],
     quickHelp: [
         { label: "Team Coverage", title: "Project approvals and cross-team coordination", body: "Route rollout approvals, timelines, and cross-department planning to Paul Avendaño.", action: "Message Paul", actionType: "message", value: "paul.avendano@madison88.com", person: "Paul Avendaño" },
@@ -598,6 +599,11 @@ window.addEventListener("unhandledrejection", () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
     try {
+        // Clear old team data from localStorage to force fresh load with manager field
+        localStorage.removeItem(STORAGE_KEYS.teamData);
+        // Reload team data from APP_CONFIG
+        APP_STATE.team = loadTeam();
+        
         setupLoader();
         setupThemeToggle();
         updateNavigationLabels();
@@ -864,7 +870,15 @@ async function hydrateAppStateFromSupabase() {
             APP_STATE.services = snapshot[SUPABASE_SECTION_KEYS.services];
         }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.team])) {
-            APP_STATE.team = snapshot[SUPABASE_SECTION_KEYS.team].map(normalizeTeamMember).sort((a, b) => a.hierarchy - b.hierarchy);
+            // Load from Supabase and merge with APP_CONFIG manager relationships
+            const configTeam = APP_CONFIG.team;
+            APP_STATE.team = snapshot[SUPABASE_SECTION_KEYS.team].map((member) => {
+                const configMember = configTeam.find((cm) => cm.name === member.name);
+                return normalizeTeamMember({
+                    ...member,
+                    manager: configMember?.manager || member.manager || null
+                });
+            }).sort((a, b) => a.hierarchy - b.hierarchy);
         }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.quickHelp])) {
             APP_STATE.quickHelp = normalizeQuickHelpItems(snapshot[SUPABASE_SECTION_KEYS.quickHelp]);
@@ -992,6 +1006,37 @@ function setupLoader() {
 
     // Fallback: don't let the UI stay blocked if a third-party resource stalls.
     setTimeout(hideStartupLoader, 3200);
+    
+    // Sync organization structure to Supabase on page load
+    window.addEventListener("load", () => {
+        setTimeout(async () => {
+            // Merge team data with APP_CONFIG to include manager field
+            const configTeam = APP_CONFIG.team;
+            const updatedTeam = APP_STATE.team.map((member) => {
+                // Find matching member in config by full name
+                const configMember = configTeam.find((cm) => cm.name === member.name);
+                
+                // If config has manager and current member doesn't, add it
+                if (configMember && configMember.manager && !member.manager) {
+                    return { ...member, manager: configMember.manager };
+                }
+                
+                // If config has manager, always use it (ensure consistency)
+                if (configMember && configMember.manager) {
+                    return { ...member, manager: configMember.manager };
+                }
+                
+                return member;
+            });
+            
+            // Save the updated team to Supabase
+            APP_STATE.team = updatedTeam;
+            saveTeam();
+            
+            // Re-render the team UI to reflect changes
+            renderTeam();
+        }, 2000);
+    }, { once: true });
 }
 
 function renderStats() {
@@ -3732,10 +3777,14 @@ function setupModalSystem() {
             const formData = new FormData(teamForm);
             const index = Number(formData.get("teamIndex"));
             const previousMember = APP_STATE.team[index];
+            const editedMemberName = String(formData.get("name") || previousMember.name);
+            const selectedReports = formData.getAll("directReports");
+            
             try {
+                // Update the edited member
                 APP_STATE.team = APP_STATE.team.map((member, memberIndex) => memberIndex === index ? {
                     ...member,
-                    name: String(formData.get("name") || member.name),
+                    name: editedMemberName,
                     role: String(formData.get("role") || member.role),
                     level: String(formData.get("level") || member.level),
                     status: String(formData.get("status") || member.status),
@@ -3745,8 +3794,25 @@ function setupModalSystem() {
                     school: String(formData.get("school") || member.school || ""),
                     linkedin: String(formData.get("linkedin") || member.linkedin || ""),
                     image: String(formData.get("photoData") || formData.get("image") || member.image),
-                    skills: parseCommaList(String(formData.get("skills") || member.skills.join(",")))
+                    skills: parseCommaList(String(formData.get("skills") || member.skills.join(","))),
+                    manager: String(formData.get("manager") || "").trim() || null
                 } : member);
+                
+                // Update direct reports: set manager for selected reports
+                APP_STATE.team = APP_STATE.team.map((member) => {
+                    if (member.name === previousMember.name) return member; // Don't change the member being edited
+                    
+                    const isSelected = selectedReports.includes(member.name);
+                    if (isSelected) {
+                        // Set manager to the edited member's new name
+                        return { ...member, manager: editedMemberName };
+                    } else if (member.manager === previousMember.name) {
+                        // If previously reported to this person and is now unchecked, remove manager
+                        return { ...member, manager: null };
+                    }
+                    return member;
+                });
+                
                 APP_STATE.projects = syncProjectsWithTeamMember(previousMember, APP_STATE.team[index]);
                 saveTeam();
                 saveProjects();
@@ -3776,7 +3842,8 @@ function setupModalSystem() {
                     school: String(formData.get("school") || "").trim(),
                     linkedin: String(formData.get("linkedin") || "").trim(),
                     image: String(formData.get("photoData") || formData.get("image") || "").trim() || getDefaultTeamImage(String(formData.get("level") || "intern")),
-                    skills: parseCommaList(String(formData.get("skills") || "Support, Coordination"))
+                    skills: parseCommaList(String(formData.get("skills") || "Support, Coordination")),
+                    manager: String(formData.get("manager") || "").trim() || null
                 });
                 APP_STATE.team = [newMember, ...APP_STATE.team];
                 saveTeam();
@@ -4052,6 +4119,13 @@ function setupModalSystem() {
         const messageButton = event.target.closest("[data-message]");
         if (messageButton) {
             openModal(buildMessageModal(messageButton.dataset.member, messageButton.dataset.message));
+            return;
+        }
+
+        const viewProfileButton = event.target.closest("[data-view-profile]");
+        if (viewProfileButton) {
+            const memberName = viewProfileButton.dataset.viewProfile;
+            if (memberName) openModal(buildProfileModal(memberName));
             return;
         }
 
@@ -4347,6 +4421,91 @@ function buildAccessModal(projectName = "restricted systems") {
     `;
 }
 
+function buildOrgChartHTML(memberName) {
+    const member = APP_STATE.team.find((item) => item.name === memberName);
+    if (!member) return "";
+    
+    // Find manager
+    const manager = member.manager ? APP_STATE.team.find((item) => item.name === member.manager) : null;
+    
+    // Find direct reports
+    const directReports = APP_STATE.team.filter((item) => item.manager === member.name);
+    
+    let html = `<div class="org-chart-container">`;
+    
+    // Manager section
+    if (manager) {
+        html += `
+            <div class="org-chart-section">
+                <div class="org-chart-hierarchy-line"></div>
+                <div class="org-chart-label">Manager</div>
+                <button type="button" class="org-chart-node manager-node" data-view-profile="${manager.name}" style="border: none; background: none; cursor: pointer; width: 100%;">
+                    <div class="org-chart-node-header">
+                        <div class="org-chart-name">${manager.name}</div>
+                        <span class="org-chart-level">${manager.level}</span>
+                    </div>
+                    <div class="org-chart-role">${manager.role}</div>
+                    <div class="org-chart-meta">${manager.status}</div>
+                </button>
+            </div>
+        `;
+    }
+    
+    // Current person
+    html += `
+        <div class="org-chart-section">
+            <div class="org-chart-hierarchy-line"></div>
+            <div class="org-chart-label">Current</div>
+            <div class="org-chart-node current-node">
+                <div class="org-chart-node-header">
+                    <div class="org-chart-name">${member.name}</div>
+                    <span class="org-chart-level">${member.level}</span>
+                </div>
+                <div class="org-chart-role">${member.role}</div>
+                <div class="org-chart-meta">${member.status}</div>
+            </div>
+        </div>
+    `;
+    
+    // Direct reports section
+    if (directReports.length > 0) {
+        html += `
+            <div class="org-chart-section">
+                <div class="org-chart-hierarchy-line"></div>
+                <div class="org-chart-label">Direct Report</div>
+                <div class="org-chart-reports">
+                    ${directReports.map((report) => `
+                        <button type="button" class="org-chart-node report-node" data-view-profile="${report.name}" style="border: none; background: none; cursor: pointer; width: 100%;">
+                            <div class="org-chart-node-header">
+                                <div class="org-chart-name">${report.name}</div>
+                                <span class="org-chart-level">${report.level}</span>
+                            </div>
+                            <div class="org-chart-role">${report.role}</div>
+                            <div class="org-chart-meta">${report.status}</div>
+                        </button>
+                    `).join("")}
+                </div>
+            </div>
+        `;
+    } else {
+        html += `
+            <div class="org-chart-section">
+                <div class="org-chart-hierarchy-line"></div>
+                <div class="org-chart-label">Direct Report</div>
+                <div class="org-chart-empty">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span>No direct reports</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    html += `</div>`;
+    return html;
+}
+
 function buildProfileModal(memberName) {
     const member = APP_STATE.team.find((item) => item.name === memberName);
     if (!member) return "";
@@ -4354,6 +4513,7 @@ function buildProfileModal(memberName) {
     const shouldShowAssignments = assignments.length > 0 || (member.level !== "executive" && member.level !== "senior");
     const shouldShowSchool = member.level !== "executive" && Boolean(member.school);
     const shouldShowLinkedIn = member.level !== "executive" && Boolean(member.linkedin);
+    const orgChart = buildOrgChartHTML(memberName);
     return `
         <div class="modal-block">
             <h2 id="modal-title">${member.name}</h2>
@@ -4368,6 +4528,10 @@ function buildProfileModal(memberName) {
                 <li>Skills: ${member.skills.join(", ")}</li>
                 ${shouldShowAssignments ? `<li>Assigned projects: ${assignments.length ? assignments.map((project) => project.name).join(", ") : "No active assignments yet"}</li>` : ""}
             </ul>
+            <div class="org-chart-section-header">
+                <h3>Organization Structure</h3>
+            </div>
+            ${orgChart}
         </div>
     `;
 }
@@ -4700,6 +4864,25 @@ function buildServiceEditModal(category, index, service) {
 }
 
 function buildTeamEditModal(index, member) {
+    const managerOptions = APP_STATE.team
+        .filter(m => m.name !== member.name)
+        .map(m => `<option value="${m.name}" ${member.manager === m.name ? "selected" : ""}>${m.name}</option>`)
+        .join("");
+    
+    const directReports = APP_STATE.team.filter((item) => item.manager === member.name);
+    const reportCheckboxes = APP_STATE.team
+        .filter(m => m.name !== member.name)
+        .map(m => `
+            <div class="checkbox-field">
+                <label>
+                    <input type="checkbox" name="directReports" value="${m.name}" ${directReports.some(r => r.name === m.name) ? "checked" : ""}>
+                    <span>${m.name}</span>
+                    <small>${m.role}</small>
+                </label>
+            </div>
+        `)
+        .join("");
+    
     return `
         <div class="modal-block">
             <h2 id="modal-title">Edit ${member.name}</h2>
@@ -4715,6 +4898,19 @@ function buildTeamEditModal(index, member) {
                 <select name="status">
                     ${["Online", "In a Meeting", "Away"].map((status) => `<option value="${status}" ${member.status === status ? "selected" : ""}>${status}</option>`).join("")}
                 </select>
+                <select name="manager">
+                    <option value="">No manager (top level)</option>
+                    ${managerOptions}
+                </select>
+                <div class="form-section-divider"></div>
+                <div class="form-section-header">
+                    <h3>Direct Reports</h3>
+                    <p class="field-hint">Select who reports directly to ${member.name}</p>
+                </div>
+                <div class="checkboxes-grid">
+                    ${reportCheckboxes}
+                </div>
+                <div class="form-section-divider"></div>
                 <input type="text" name="school" value="${member.school || ""}" placeholder="School or university">
                 <input type="email" name="email" value="${member.email || member.message || ""}" placeholder="Email address (e.g. name@company.com)">
                 <input type="text" name="linkedin" value="${member.linkedin || ""}" placeholder="LinkedIn URL (www.linkedin.com/in/...)">
@@ -4730,6 +4926,10 @@ function buildTeamEditModal(index, member) {
 }
 
 function buildTeamCreateModal() {
+    const managerOptions = APP_STATE.team
+        .map(m => `<option value="${m.name}">${m.name}</option>`)
+        .join("");
+    
     return `
         <div class="modal-block">
             <h2 id="modal-title">Add Team Member</h2>
@@ -4743,6 +4943,10 @@ function buildTeamCreateModal() {
                 </select>
                 <select name="status">
                     ${["Online", "In a Meeting", "Away"].map((status) => `<option value="${status}">${status}</option>`).join("")}
+                </select>
+                <select name="manager">
+                    <option value="">No manager (top level)</option>
+                    ${managerOptions}
                 </select>
                 <input type="text" name="school" placeholder="School or university">
                 <input type="email" name="email" placeholder="Email address (e.g. name@company.com)">
@@ -5413,7 +5617,8 @@ function normalizeTeamMember(member) {
         number: String(member.number || "").trim(),
         school: String(member.school || "").trim(),
         linkedin: normalizeLinkedInUrl(String(member.linkedin || "").trim()),
-        image: String(member.image || "").trim() || getDefaultTeamImage(member.level || "intern")
+        image: String(member.image || "").trim() || getDefaultTeamImage(member.level || "intern"),
+        manager: member.manager || null
     };
 }
 
