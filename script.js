@@ -3779,6 +3779,7 @@ function setupModalSystem() {
             const previousMember = APP_STATE.team[index];
             const editedMemberName = String(formData.get("name") || previousMember.name);
             const selectedReports = formData.getAll("directReports");
+            const selectedManagers = formData.getAll("managers");
             
             try {
                 // Update the edited member
@@ -3795,7 +3796,7 @@ function setupModalSystem() {
                     linkedin: String(formData.get("linkedin") || member.linkedin || ""),
                     image: String(formData.get("photoData") || formData.get("image") || member.image),
                     skills: parseCommaList(String(formData.get("skills") || member.skills.join(","))),
-                    manager: String(formData.get("manager") || "").trim() || null
+                    manager: selectedManagers.length > 0 ? selectedManagers : null
                 } : member);
                 
                 // Update direct reports: set manager for selected reports
@@ -3803,12 +3804,18 @@ function setupModalSystem() {
                     if (member.name === previousMember.name) return member; // Don't change the member being edited
                     
                     const isSelected = selectedReports.includes(member.name);
+                    const currentManagers = Array.isArray(member.manager) ? member.manager : (member.manager ? [member.manager] : []);
+                    
                     if (isSelected) {
-                        // Set manager to the edited member's new name
-                        return { ...member, manager: editedMemberName };
-                    } else if (member.manager === previousMember.name) {
-                        // If previously reported to this person and is now unchecked, remove manager
-                        return { ...member, manager: null };
+                        // Add this member to the direct reports (add editedMemberName to managers)
+                        if (!currentManagers.includes(editedMemberName)) {
+                            return { ...member, manager: [...currentManagers, editedMemberName] };
+                        }
+                        return member;
+                    } else if (currentManagers.includes(previousMember.name)) {
+                        // If previously reported to this person and is now unchecked, remove from managers
+                        const newManagers = currentManagers.filter(m => m !== previousMember.name);
+                        return { ...member, manager: newManagers.length > 0 ? newManagers : null };
                     }
                     return member;
                 });
@@ -3830,6 +3837,7 @@ function setupModalSystem() {
             event.preventDefault();
             if (!requireAdminAccess()) return;
             const formData = new FormData(createTeamForm);
+            const selectedManagers = formData.getAll("managers");
             try {
                 const newMember = normalizeTeamMember({
                     name: String(formData.get("name") || "").trim() || "New Team Member",
@@ -3843,7 +3851,7 @@ function setupModalSystem() {
                     linkedin: String(formData.get("linkedin") || "").trim(),
                     image: String(formData.get("photoData") || formData.get("image") || "").trim() || getDefaultTeamImage(String(formData.get("level") || "intern")),
                     skills: parseCommaList(String(formData.get("skills") || "Support, Coordination")),
-                    manager: String(formData.get("manager") || "").trim() || null
+                    manager: selectedManagers.length > 0 ? selectedManagers : null
                 });
                 APP_STATE.team = [newMember, ...APP_STATE.team];
                 saveTeam();
@@ -4425,28 +4433,36 @@ function buildOrgChartHTML(memberName) {
     const member = APP_STATE.team.find((item) => item.name === memberName);
     if (!member) return "";
     
-    // Find manager
-    const manager = member.manager ? APP_STATE.team.find((item) => item.name === member.manager) : null;
+    // Find managers (support both old string format and new array format)
+    const memberManagers = Array.isArray(member.manager) ? member.manager : (member.manager ? [member.manager] : []);
+    const managers = memberManagers.map(managerName => APP_STATE.team.find((item) => item.name === managerName)).filter(Boolean);
     
     // Find direct reports
-    const directReports = APP_STATE.team.filter((item) => item.manager === member.name);
+    const directReports = APP_STATE.team.filter((item) => {
+        const itemManagers = Array.isArray(item.manager) ? item.manager : (item.manager ? [item.manager] : []);
+        return itemManagers.includes(member.name);
+    });
     
     let html = `<div class="org-chart-container">`;
     
     // Manager section
-    if (manager) {
+    if (managers.length > 0) {
         html += `
             <div class="org-chart-section">
                 <div class="org-chart-hierarchy-line"></div>
-                <div class="org-chart-label">Manager</div>
-                <button type="button" class="org-chart-node manager-node" data-view-profile="${manager.name}" style="border: none; background: none; cursor: pointer; width: 100%;">
-                    <div class="org-chart-node-header">
-                        <div class="org-chart-name">${manager.name}</div>
-                        <span class="org-chart-level" data-level="${manager.level}">${manager.level}</span>
-                    </div>
-                    <div class="org-chart-role">${manager.role}</div>
-                    <div class="org-chart-meta">${manager.status}</div>
-                </button>
+                <div class="org-chart-label">Manager${managers.length > 1 ? 's' : ''}</div>
+                <div class="org-chart-reports">
+                    ${managers.map((manager) => `
+                        <button type="button" class="org-chart-node manager-node" data-view-profile="${manager.name}" style="border: none; background: none; cursor: pointer; width: 100%;">
+                            <div class="org-chart-node-header">
+                                <div class="org-chart-name">${manager.name}</div>
+                                <span class="org-chart-level" data-level="${manager.level}">${manager.level}</span>
+                            </div>
+                            <div class="org-chart-role">${manager.role}</div>
+                            <div class="org-chart-meta">${manager.status}</div>
+                        </button>
+                    `).join("")}
+                </div>
             </div>
         `;
     }
@@ -4864,12 +4880,24 @@ function buildServiceEditModal(category, index, service) {
 }
 
 function buildTeamEditModal(index, member) {
-    const managerOptions = APP_STATE.team
+    const memberManagers = Array.isArray(member.manager) ? member.manager : (member.manager ? [member.manager] : []);
+    const managerCheckboxes = APP_STATE.team
         .filter(m => m.name !== member.name)
-        .map(m => `<option value="${m.name}" ${member.manager === m.name ? "selected" : ""}>${m.name}</option>`)
+        .map(m => `
+            <div class="checkbox-field">
+                <label>
+                    <input type="checkbox" name="managers" value="${m.name}" ${memberManagers.includes(m.name) ? "checked" : ""}>
+                    <span>${m.name}</span>
+                    <small>${m.role}</small>
+                </label>
+            </div>
+        `)
         .join("");
     
-    const directReports = APP_STATE.team.filter((item) => item.manager === member.name);
+    const directReports = APP_STATE.team.filter((item) => {
+        const itemManagers = Array.isArray(item.manager) ? item.manager : (item.manager ? [item.manager] : []);
+        return itemManagers.includes(member.name);
+    });
     const reportCheckboxes = APP_STATE.team
         .filter(m => m.name !== member.name)
         .map(m => `
@@ -4898,10 +4926,14 @@ function buildTeamEditModal(index, member) {
                 <select name="status">
                     ${["Online", "In a Meeting", "Away"].map((status) => `<option value="${status}" ${member.status === status ? "selected" : ""}>${status}</option>`).join("")}
                 </select>
-                <select name="manager">
-                    <option value="">No manager (top level)</option>
-                    ${managerOptions}
-                </select>
+                <div class="form-section-divider"></div>
+                <div class="form-section-header">
+                    <h3>Managers</h3>
+                    <p class="field-hint">Select all managers for ${member.name}</p>
+                </div>
+                <div class="checkboxes-grid">
+                    ${managerCheckboxes}
+                </div>
                 <div class="form-section-divider"></div>
                 <div class="form-section-header">
                     <h3>Direct Reports</h3>
@@ -4926,8 +4958,16 @@ function buildTeamEditModal(index, member) {
 }
 
 function buildTeamCreateModal() {
-    const managerOptions = APP_STATE.team
-        .map(m => `<option value="${m.name}">${m.name}</option>`)
+    const managerCheckboxes = APP_STATE.team
+        .map(m => `
+            <div class="checkbox-field">
+                <label>
+                    <input type="checkbox" name="managers" value="${m.name}">
+                    <span>${m.name}</span>
+                    <small>${m.role}</small>
+                </label>
+            </div>
+        `)
         .join("");
     
     return `
@@ -4944,10 +4984,15 @@ function buildTeamCreateModal() {
                 <select name="status">
                     ${["Online", "In a Meeting", "Away"].map((status) => `<option value="${status}">${status}</option>`).join("")}
                 </select>
-                <select name="manager">
-                    <option value="">No manager (top level)</option>
-                    ${managerOptions}
-                </select>
+                <div class="form-section-divider"></div>
+                <div class="form-section-header">
+                    <h3>Managers</h3>
+                    <p class="field-hint">Select managers for this team member</p>
+                </div>
+                <div class="checkboxes-grid">
+                    ${managerCheckboxes}
+                </div>
+                <div class="form-section-divider"></div>
                 <input type="text" name="school" placeholder="School or university">
                 <input type="email" name="email" placeholder="Email address (e.g. name@company.com)">
                 <input type="text" name="linkedin" placeholder="LinkedIn URL (www.linkedin.com/in/...)">
