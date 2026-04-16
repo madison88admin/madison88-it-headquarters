@@ -4442,7 +4442,7 @@ function buildOrgChartHTML(memberName) {
                 <button type="button" class="org-chart-node manager-node" data-view-profile="${manager.name}" style="border: none; background: none; cursor: pointer; width: 100%;">
                     <div class="org-chart-node-header">
                         <div class="org-chart-name">${manager.name}</div>
-                        <span class="org-chart-level">${manager.level}</span>
+                        <span class="org-chart-level" data-level="${manager.level}">${manager.level}</span>
                     </div>
                     <div class="org-chart-role">${manager.role}</div>
                     <div class="org-chart-meta">${manager.status}</div>
@@ -4459,7 +4459,7 @@ function buildOrgChartHTML(memberName) {
             <div class="org-chart-node current-node">
                 <div class="org-chart-node-header">
                     <div class="org-chart-name">${member.name}</div>
-                    <span class="org-chart-level">${member.level}</span>
+                    <span class="org-chart-level" data-level="${member.level}">${member.level}</span>
                 </div>
                 <div class="org-chart-role">${member.role}</div>
                 <div class="org-chart-meta">${member.status}</div>
@@ -4478,7 +4478,7 @@ function buildOrgChartHTML(memberName) {
                         <button type="button" class="org-chart-node report-node" data-view-profile="${report.name}" style="border: none; background: none; cursor: pointer; width: 100%;">
                             <div class="org-chart-node-header">
                                 <div class="org-chart-name">${report.name}</div>
-                                <span class="org-chart-level">${report.level}</span>
+                                <span class="org-chart-level" data-level="${report.level}">${report.level}</span>
                             </div>
                             <div class="org-chart-role">${report.role}</div>
                             <div class="org-chart-meta">${report.status}</div>
@@ -4893,7 +4893,7 @@ function buildTeamEditModal(index, member) {
                 <input type="text" name="name" value="${member.name}" placeholder="Full name (e.g. John Carlo Manalo)">
                 <input type="text" name="role" value="${member.role}" placeholder="Role (e.g. IT Intern)">
                 <select name="level">
-                    ${["intern", "senior", "executive"].map((level) => `<option value="${level}" ${member.level === level ? "selected" : ""}>${level}</option>`).join("")}
+                    ${["intern", "supervisor", "senior", "executive"].map((level) => `<option value="${level}" ${member.level === level ? "selected" : ""}>${level}</option>`).join("")}
                 </select>
                 <select name="status">
                     ${["Online", "In a Meeting", "Away"].map((status) => `<option value="${status}" ${member.status === status ? "selected" : ""}>${status}</option>`).join("")}
@@ -4939,7 +4939,7 @@ function buildTeamCreateModal() {
                 <input type="text" name="name" placeholder="Full name (e.g. John Carlo Manalo)">
                 <input type="text" name="role" placeholder="Role (e.g. IT Intern)">
                 <select name="level">
-                    ${["intern", "senior", "executive"].map((level) => `<option value="${level}">${level}</option>`).join("")}
+                    ${["intern", "supervisor", "senior", "executive"].map((level) => `<option value="${level}">${level}</option>`).join("")}
                 </select>
                 <select name="status">
                     ${["Online", "In a Meeting", "Away"].map((status) => `<option value="${status}">${status}</option>`).join("")}

@@ -3557,6 +3557,12 @@ body:not(.admin-mode) #add-quickhelp-card-button {
     border-color: rgba(120, 147, 194, 0.16);
 }
 
+.org-chart-level[data-level="supervisor"] {
+    background: rgba(184, 134, 11, 0.12);
+    border-color: rgba(184, 134, 11, 0.18);
+    color: #d4a500;
+}
+
 .org-chart-reports {
     display: grid;
     gap: 10px;
@@ -4587,6 +4593,12 @@ body.modal-open { overflow: hidden; }
     background: rgba(88, 144, 194, 0.12);
     border-color: rgba(88, 144, 194, 0.16);
     color: #3d7fb8;
+}
+
+:root[data-theme="light"] .org-chart-level[data-level="supervisor"] {
+    background: rgba(184, 134, 11, 0.14);
+    border-color: rgba(184, 134, 11, 0.2);
+    color: #b8860b;
 }
 
 :root[data-theme="light"] .org-chart-empty {
