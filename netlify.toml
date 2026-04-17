@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  VITE_SUPABASE_URL = "https://bmlmxeakyivzwjwemrov.supabase.co"
+  VITE_SUPABASE_ANON_KEY = "sb_publishable_QrZIapvR0-7Cl0joIg4kbA_Xwzon0m0"
+  VITE_SUPABASE_TABLE = "dashboard_content"
+  VITE_SUPABASE_PHOTO_BUCKET = "team-photos"
+  VITE_ADMIN_USERNAME = "ITAdmin"
+  VITE_ADMIN_PASSWORD = "M@dis0n_88"
