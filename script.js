@@ -140,8 +140,8 @@ const APP_CONFIG = {
         }
     },
     adminCredentials: {
-        username: "admin123",
-        password: "admin123"
+        username: import.meta.env.VITE_ADMIN_USERNAME || "admin123",
+        password: import.meta.env.VITE_ADMIN_PASSWORD || "admin123"
     },
     integrations: {
         supabase: {
