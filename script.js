@@ -3,6 +3,15 @@
  * Update names, links, statuses, descriptions, and announcements here.
  * Non-developers can safely edit the text values in this object.
  */
+
+// Initialize Supabase credentials from environment variables
+window.M88_SUPABASE = {
+    url: import.meta.env.VITE_SUPABASE_URL || "https://bmlmxeakyivzwjwemrov.supabase.co",
+    anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "sb_publishable_QrZIapvR0-7Cl0joIg4kbA_Xwzon0m0",
+    table: import.meta.env.VITE_SUPABASE_TABLE || "dashboard_content",
+    photoBucket: import.meta.env.VITE_SUPABASE_PHOTO_BUCKET || "team-photos"
+};
+
 const APP_CONFIG = {
     timezone: "Asia/Manila",
     overview: {
