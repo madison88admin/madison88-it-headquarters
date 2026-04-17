@@ -12,6 +12,12 @@ window.M88_SUPABASE = {
     photoBucket: import.meta.env.VITE_SUPABASE_PHOTO_BUCKET || "team-photos"
 };
 
+// Initialize Admin credentials from environment variables
+window.M88_ADMIN = {
+    username: import.meta.env.VITE_ADMIN_USERNAME || "admin123",
+    password: import.meta.env.VITE_ADMIN_PASSWORD || "admin123"
+};
+
 const APP_CONFIG = {
     timezone: "Asia/Manila",
     overview: {
@@ -140,8 +146,8 @@ const APP_CONFIG = {
         }
     },
     adminCredentials: {
-        username: import.meta.env.VITE_ADMIN_USERNAME || "admin123",
-        password: import.meta.env.VITE_ADMIN_PASSWORD || "admin123"
+        username: window.M88_ADMIN.username,
+        password: window.M88_ADMIN.password
     },
     integrations: {
         supabase: {
