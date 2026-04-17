@@ -871,7 +871,7 @@ async function hydrateAppStateFromSupabase() {
                     return normalizeTeamMember({
                         ...member,
                         image: configMember?.image || member.image,  // ← ADD THIS LINE
-                        manager: configMember?.manager || member.manager || null
+                        manager: member.manager !== undefined ? member.manager : (configMember?.manager || null)
                     });
                 }).sort((a, b) => a.hierarchy - b.hierarchy);
             }
