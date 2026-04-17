@@ -870,7 +870,8 @@ async function hydrateAppStateFromSupabase() {
                     const configMember = configTeam.find((cm) => cm.name === member.name);
                     return normalizeTeamMember({
                         ...member,
-                        image: configMember?.image || member.image,  // ← ADD THIS LINE
+                        image: configMember?.image || member.image,
+                        level: member.level !== undefined ? member.level : (configMember?.level || "intern"),
                         manager: member.manager !== undefined ? member.manager : (configMember?.manager || null)
                     });
                 }).sort((a, b) => a.hierarchy - b.hierarchy);
