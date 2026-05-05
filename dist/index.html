@@ -8,8 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" crossorigin src="/assets/index-CDPpCiMl.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-DiZ0mpUw.css">
+  <script type="module" crossorigin src="/assets/index-dk7O20Rk.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DjEacIpE.css">
 </head>
 <body class="lenis">
     <div id="universal-modal" class="modal-overlay" aria-hidden="true">
@@ -113,11 +113,25 @@
                         <div class="hero-timezone-toggle" role="tablist" aria-label="Select hero timezone">
                             <button class="timezone-toggle-button is-active" type="button" role="tab" aria-selected="true" data-timezone-option="manila">Philippines</button>
                             <button class="timezone-toggle-button" type="button" role="tab" aria-selected="false" data-timezone-option="denver">Denver</button>
+                            <button class="timezone-toggle-button" type="button" role="tab" aria-selected="false" data-timezone-option="newyork">New York</button>
+                            <button class="timezone-toggle-button" type="button" role="tab" aria-selected="false" data-timezone-option="china">China</button>
+                            <button class="timezone-toggle-button" type="button" role="tab" aria-selected="false" data-timezone-option="indonesia">Indonesia</button>
                         </div>
                         <span class="clock-label" id="clock-label">Philippines time</span>
                         <strong id="current-time">--:--</strong>
                         <span id="current-date">Loading date</span>
                     </div>
+                </section>
+
+                <section class="section-shell reveal facilities-shell" id="facilities">
+                    <div class="section-heading compact-heading">
+                        <div>
+                            <span class="eyebrow">Global Facilities</span>
+                            <h2>Live Time & Weather</h2>
+                            <p class="section-subcopy">Each card shows the local time in that site using the viewer's browser, plus current weather for the mapped city.</p>
+                        </div>
+                    </div>
+                    <div class="facilities-grid" id="facilities-grid" aria-live="polite"></div>
                 </section>
 
                 <section class="section-bridge glass reveal" aria-labelledby="it-definition-title">

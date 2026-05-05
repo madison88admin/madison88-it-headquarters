@@ -21,6 +21,8 @@ window.M88_ADMIN = {
 const HERO_LOCATIONS = {
     manila: {
         label: "Philippines",
+        city: "Manila",
+        country: "Philippines",
         clockLabel: "Philippines time",
         locale: "en-PH",
         timezone: "Asia/Manila",
@@ -32,6 +34,8 @@ const HERO_LOCATIONS = {
     },
     denver: {
         label: "Denver",
+        city: "Denver",
+        country: "USA",
         clockLabel: "Denver time",
         locale: "en-US",
         timezone: "America/Denver",
@@ -39,6 +43,45 @@ const HERO_LOCATIONS = {
         weatherUrl: "https://api.open-meteo.com/v1/forecast?latitude=39.7392&longitude=-104.9903&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=America%2FDenver&forecast_days=1",
         fallbackTemperature: 18,
         fallbackCondition: "Partly cloudy",
+        fallbackState: "partly-cloudy"
+    },
+    newyork: {
+        label: "New York",
+        city: "New York",
+        country: "USA",
+        clockLabel: "New York time",
+        locale: "en-US",
+        timezone: "America/New_York",
+        weatherLabel: "Current weather in New York, USA",
+        weatherUrl: "https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=America%2FNew_York&forecast_days=1",
+        fallbackTemperature: 17,
+        fallbackCondition: "Cloudy",
+        fallbackState: "cloudy"
+    },
+    china: {
+        label: "China",
+        city: "Shanghai",
+        country: "China",
+        clockLabel: "China time",
+        locale: "en-US",
+        timezone: "Asia/Shanghai",
+        weatherLabel: "Current weather in Shanghai, China",
+        weatherUrl: "https://api.open-meteo.com/v1/forecast?latitude=31.2304&longitude=121.4737&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=Asia%2FShanghai&forecast_days=1",
+        fallbackTemperature: 22,
+        fallbackCondition: "Cloudy",
+        fallbackState: "cloudy"
+    },
+    indonesia: {
+        label: "Indonesia",
+        city: "Jakarta",
+        country: "Indonesia",
+        clockLabel: "Indonesia time",
+        locale: "en-US",
+        timezone: "Asia/Jakarta",
+        weatherLabel: "Current weather in Jakarta, Indonesia",
+        weatherUrl: "https://api.open-meteo.com/v1/forecast?latitude=-6.2088&longitude=106.8456&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=Asia%2FJakarta&forecast_days=1",
+        fallbackTemperature: 30,
+        fallbackCondition: "Humid",
         fallbackState: "partly-cloudy"
     }
 };
@@ -659,7 +702,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         setupSearch();
         setupAdminAutofill();
         setupClock();
-        setupWeatherWidget();
         setupLiveItsmTicketStat();
         setupNavigation();
         setupModalSystem();
@@ -3264,6 +3306,89 @@ function ensureTeamAutofillList() {
     }).join("");
 }
 
+function formatLocationTime(location, now = new Date()) {
+    return new Intl.DateTimeFormat(location.locale, {
+        timeZone: location.timezone,
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+    }).format(now);
+}
+
+function formatLocationDate(location, now = new Date()) {
+    return new Intl.DateTimeFormat(location.locale, {
+        timeZone: location.timezone,
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+    }).format(now);
+}
+
+function getLocationHour(location, now = new Date()) {
+    return Number(new Intl.DateTimeFormat(location.locale, {
+        timeZone: location.timezone,
+        hour: "numeric",
+        hour12: false
+    }).format(now));
+}
+
+function getWeatherPresentation(locationKey, payload) {
+    const location = HERO_LOCATIONS[locationKey] || HERO_LOCATIONS.manila;
+    if (!payload) {
+        return {
+            temperature: Math.round(Number(location.fallbackTemperature)),
+            condition: location.fallbackCondition,
+            state: location.fallbackState,
+            iconMarkup: buildWeatherIconMarkup(location.fallbackState)
+        };
+    }
+
+    const weather = mapWeatherCodeToDisplay(payload.weather_code, payload.is_day);
+    const displayTemperature = typeof payload.apparent_temperature === "number"
+        ? payload.apparent_temperature
+        : payload.temperature_2m;
+
+    return {
+        temperature: Math.round(Number(displayTemperature)),
+        condition: weather.label,
+        state: weather.state,
+        iconMarkup: buildWeatherIconMarkup(weather.state)
+    };
+}
+
+function renderFacilitiesPanel() {
+    const container = document.getElementById("facilities-grid");
+    if (!container) return;
+
+    container.innerHTML = Object.entries(HERO_LOCATIONS).map(([locationKey, location]) => `
+        <button
+            class="facility-card glass"
+            type="button"
+            data-facility-card="${locationKey}"
+            aria-label="Show ${location.label} in the main time panel"
+        >
+            <div class="facility-card-topline">
+                <div>
+                    <span class="facility-label">${location.label}</span>
+                    <strong>${location.city}</strong>
+                </div>
+                <span class="facility-timezone">${location.timezone.replace("_", " ")}</span>
+            </div>
+            <strong class="facility-time" data-facility-time="${locationKey}">--:--</strong>
+            <span class="facility-date" data-facility-date="${locationKey}">Loading date</span>
+            <div class="facility-weather" data-facility-weather="${locationKey}">
+                <span class="facility-weather-icon" aria-hidden="true" data-facility-weather-icon="${locationKey}">${buildWeatherIconMarkup(location.fallbackState)}</span>
+                <div class="facility-weather-copy">
+                    <strong data-facility-weather-temp="${locationKey}">${Math.round(Number(location.fallbackTemperature))}&deg;C</strong>
+                    <span data-facility-weather-condition="${locationKey}">${location.fallbackCondition}</span>
+                </div>
+            </div>
+        </button>
+    `).join("");
+}
+
 function setupClock() {
     const timeEl = document.getElementById("current-time");
     const dateEl = document.getElementById("current-date");
@@ -3285,13 +3410,13 @@ function setupClock() {
     const updateClock = () => {
         const activeLocation = HERO_LOCATIONS[activeLocationKey] || HERO_LOCATIONS.manila;
         const now = new Date();
-        const hour = Number(new Intl.DateTimeFormat(activeLocation.locale, { timeZone: activeLocation.timezone, hour: "numeric", hour12: false }).format(now));
+        const hour = getLocationHour(activeLocation, now);
         if (greetingEl) {
             greetingEl.textContent = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
         }
         labelEl.textContent = activeLocation.clockLabel;
-        timeEl.textContent = new Intl.DateTimeFormat(activeLocation.locale, { timeZone: activeLocation.timezone, hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }).format(now);
-        dateEl.textContent = new Intl.DateTimeFormat(activeLocation.locale, { timeZone: activeLocation.timezone, weekday: "long", month: "long", day: "numeric", year: "numeric" }).format(now);
+        timeEl.textContent = formatLocationTime(activeLocation, now);
+        dateEl.textContent = formatLocationDate(activeLocation, now);
     };
 
     window.setHeroLocation = (locationKey) => {
@@ -3313,6 +3438,67 @@ function setupClock() {
     setInterval(updateClock, 1000);
 }
 
+function setupFacilitiesPanel() {
+    const cards = [...document.querySelectorAll("[data-facility-card]")];
+    if (!cards.length) return;
+
+    const syncActiveFacility = (activeLocationKey = "manila") => {
+        cards.forEach((card) => {
+            const isActive = card.dataset.facilityCard === activeLocationKey;
+            card.classList.toggle("is-active", isActive);
+            card.setAttribute("aria-pressed", String(isActive));
+        });
+    };
+
+    const updateFacilityTimes = () => {
+        const now = new Date();
+        Object.entries(HERO_LOCATIONS).forEach(([locationKey, location]) => {
+            const timeEl = document.querySelector(`[data-facility-time="${locationKey}"]`);
+            const dateEl = document.querySelector(`[data-facility-date="${locationKey}"]`);
+            if (timeEl) timeEl.textContent = formatLocationTime(location, now);
+            if (dateEl) dateEl.textContent = formatLocationDate(location, now);
+        });
+    };
+
+    const applyFacilityWeather = (locationKey, payload) => {
+        const weatherWrap = document.querySelector(`[data-facility-weather="${locationKey}"]`);
+        const iconEl = document.querySelector(`[data-facility-weather-icon="${locationKey}"]`);
+        const tempEl = document.querySelector(`[data-facility-weather-temp="${locationKey}"]`);
+        const conditionEl = document.querySelector(`[data-facility-weather-condition="${locationKey}"]`);
+        if (!weatherWrap || !iconEl || !tempEl || !conditionEl) return;
+
+        const display = getWeatherPresentation(locationKey, payload);
+        weatherWrap.dataset.weatherState = display.state;
+        iconEl.innerHTML = display.iconMarkup;
+        tempEl.innerHTML = `${display.temperature}&deg;C`;
+        conditionEl.textContent = display.condition;
+    };
+
+    cards.forEach((card) => {
+        card.addEventListener("click", () => {
+            window.setHeroLocation?.(card.dataset.facilityCard || "manila");
+        });
+    });
+
+    syncActiveFacility();
+    updateFacilityTimes();
+    Object.keys(HERO_LOCATIONS).forEach((locationKey) => {
+        applyFacilityWeather(locationKey, HERO_WEATHER_CACHE.get(locationKey) || null);
+    });
+
+    window.addEventListener("hero-location-change", (event) => {
+        syncActiveFacility(event.detail?.locationKey || "manila");
+    });
+
+    window.addEventListener("hero-weather-updated", (event) => {
+        const locationKey = event.detail?.locationKey;
+        if (!locationKey) return;
+        applyFacilityWeather(locationKey, event.detail?.payload || null);
+    });
+
+    setInterval(updateFacilityTimes, 1000);
+}
+
 function setupWeatherWidget() {
     const widget = document.querySelector(".weather-widget");
     const temperatureEl = document.getElementById("weather-temperature");
@@ -3332,22 +3518,8 @@ function setupWeatherWidget() {
     const applyLocationWeather = (locationKey, payload) => {
         const location = HERO_LOCATIONS[locationKey] || HERO_LOCATIONS.manila;
         widget.setAttribute("aria-label", location.weatherLabel);
-
-        if (!payload) {
-            applyWeather(
-                location.fallbackTemperature,
-                location.fallbackCondition,
-                buildWeatherIconMarkup(location.fallbackState),
-                location.fallbackState
-            );
-            return;
-        }
-
-        const weather = mapWeatherCodeToDisplay(payload.weather_code, payload.is_day);
-        const displayTemperature = typeof payload.apparent_temperature === "number"
-            ? payload.apparent_temperature
-            : payload.temperature_2m;
-        applyWeather(displayTemperature, weather.label, buildWeatherIconMarkup(weather.state), weather.state);
+        const display = getWeatherPresentation(locationKey, payload);
+        applyWeather(display.temperature, display.condition, display.iconMarkup, display.state);
     };
 
     const loadWeather = async (locationKey = activeLocationKey) => {
@@ -3368,6 +3540,7 @@ function setupWeatherWidget() {
             const current = payload?.current;
             if (!current || typeof current.temperature_2m !== "number") return;
             HERO_WEATHER_CACHE.set(locationKey, current);
+            window.dispatchEvent(new CustomEvent("hero-weather-updated", { detail: { locationKey, payload: current } }));
             if (locationKey === activeLocationKey) {
                 applyLocationWeather(locationKey, current);
             }
@@ -3376,6 +3549,9 @@ function setupWeatherWidget() {
             if (locationKey === activeLocationKey) {
                 applyLocationWeather(locationKey, HERO_WEATHER_CACHE.get(locationKey) || null);
             }
+            window.dispatchEvent(new CustomEvent("hero-weather-updated", {
+                detail: { locationKey, payload: HERO_WEATHER_CACHE.get(locationKey) || null }
+            }));
         }
     };
 

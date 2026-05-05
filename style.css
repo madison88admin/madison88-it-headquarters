@@ -562,6 +562,7 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
 
 .hero-timezone-toggle {
     display: inline-flex;
+    flex-wrap: wrap;
     justify-self: end;
     width: fit-content;
     padding: 4px;
@@ -599,6 +600,118 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
 }
 
 .hero-clock strong { font-size: clamp(2rem, 3vw, 3.4rem); }
+
+.facilities-shell {
+    display: grid;
+    gap: 20px;
+}
+
+.facilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.facility-card {
+    width: 100%;
+    border-radius: 22px;
+    border: 1px solid rgba(216, 204, 182, 0.12);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        radial-gradient(circle at top right, rgba(118, 193, 242, 0.12), transparent 36%);
+    padding: 18px;
+    text-align: left;
+    display: grid;
+    gap: 12px;
+    cursor: pointer;
+    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.facility-card:hover,
+.facility-card:focus-visible {
+    transform: translateY(-2px);
+    border-color: rgba(50, 192, 182, 0.28);
+    box-shadow: 0 16px 36px rgba(3, 10, 20, 0.22);
+    outline: none;
+}
+
+.facility-card.is-active {
+    border-color: rgba(50, 192, 182, 0.34);
+    box-shadow: inset 0 0 0 1px rgba(50, 192, 182, 0.18), 0 14px 34px rgba(3, 10, 20, 0.2);
+}
+
+.facility-card-topline {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.facility-card-topline strong,
+.facility-time {
+    color: var(--text-white);
+}
+
+.facility-label,
+.facility-timezone {
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.facility-card-topline strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 1.15rem;
+}
+
+.facility-time {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.8rem, 2.4vw, 2.5rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+}
+
+.facility-date {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.facility-weather {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.facility-weather-icon {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-gold-light);
+}
+
+.facility-weather-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.facility-weather-copy {
+    display: grid;
+}
+
+.facility-weather-copy strong {
+    color: var(--text-white);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1rem;
+}
+
+.facility-weather-copy span {
+    color: var(--text-muted);
+    font-size: 0.84rem;
+}
 
 .hero-grid {
     display: grid;
@@ -4241,6 +4354,33 @@ body.modal-open { overflow: hidden; }
 :root[data-theme="light"] .timezone-toggle-button.is-active {
     background: rgba(0, 201, 167, 0.14);
     box-shadow: inset 0 0 0 1px rgba(0, 201, 167, 0.22);
+}
+
+:root[data-theme="light"] .facility-card {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(248, 249, 253, 0.74)),
+        radial-gradient(circle at top right, rgba(118, 193, 242, 0.12), transparent 38%);
+    border-color: rgba(15, 77, 100, 0.12);
+    box-shadow: 0 8px 24px rgba(100, 160, 200, 0.12);
+}
+
+:root[data-theme="light"] .facility-card:hover,
+:root[data-theme="light"] .facility-card:focus-visible,
+:root[data-theme="light"] .facility-card.is-active {
+    border-color: rgba(0, 201, 167, 0.3);
+}
+
+:root[data-theme="light"] .facility-label,
+:root[data-theme="light"] .facility-timezone,
+:root[data-theme="light"] .facility-date,
+:root[data-theme="light"] .facility-weather-copy span {
+    color: rgba(25, 48, 60, 0.72);
+}
+
+:root[data-theme="light"] .facility-card-topline strong,
+:root[data-theme="light"] .facility-time,
+:root[data-theme="light"] .facility-weather-copy strong {
+    color: #163447;
 }
 
 /* Stat cards */
