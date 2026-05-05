@@ -557,7 +557,45 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
     min-width: 220px;
     text-align: right;
     display: grid;
-    gap: 4px;
+    gap: 8px;
+}
+
+.hero-timezone-toggle {
+    display: inline-flex;
+    justify-self: end;
+    width: fit-content;
+    padding: 4px;
+    border-radius: 999px;
+    border: 1px solid rgba(216, 204, 182, 0.16);
+    background: rgba(7, 14, 24, 0.26);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.timezone-toggle-button {
+    border: 0;
+    border-radius: 999px;
+    padding: 7px 12px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.timezone-toggle-button:hover,
+.timezone-toggle-button:focus-visible {
+    color: var(--text-white);
+    outline: none;
+}
+
+.timezone-toggle-button.is-active {
+    color: var(--text-white);
+    background: rgba(50, 192, 182, 0.2);
+    box-shadow: inset 0 0 0 1px rgba(50, 192, 182, 0.24);
 }
 
 .hero-clock strong { font-size: clamp(2rem, 3vw, 3.4rem); }
@@ -3758,6 +3796,9 @@ body.modal-open { overflow: hidden; }
         align-items: flex-start;
         justify-content: flex-start;
     }
+    .hero-timezone-toggle {
+        justify-self: start;
+    }
     .weather-widget {
         width: fit-content;
         max-width: 100%;
@@ -3901,6 +3942,14 @@ body.modal-open { overflow: hidden; }
     }
     .weather-widget {
         gap: 8px;
+    }
+    .hero-timezone-toggle {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .timezone-toggle-button {
+        flex: 1 1 0;
+        text-align: center;
     }
     .weather-copy strong {
         font-size: 1.2rem;
@@ -4172,6 +4221,26 @@ body.modal-open { overflow: hidden; }
 
 :root[data-theme="light"] .weather-icon {
     color: #00c9a7;
+}
+
+:root[data-theme="light"] .hero-timezone-toggle {
+    background: rgba(255, 255, 255, 0.62);
+    border-color: rgba(15, 77, 100, 0.14);
+}
+
+:root[data-theme="light"] .timezone-toggle-button {
+    color: rgba(25, 48, 60, 0.66);
+}
+
+:root[data-theme="light"] .timezone-toggle-button:hover,
+:root[data-theme="light"] .timezone-toggle-button:focus-visible,
+:root[data-theme="light"] .timezone-toggle-button.is-active {
+    color: #163447;
+}
+
+:root[data-theme="light"] .timezone-toggle-button.is-active {
+    background: rgba(0, 201, 167, 0.14);
+    box-shadow: inset 0 0 0 1px rgba(0, 201, 167, 0.22);
 }
 
 /* Stat cards */

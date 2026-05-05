@@ -18,8 +18,33 @@ window.M88_ADMIN = {
     password: import.meta.env.VITE_ADMIN_PASSWORD || "admin123"
 };
 
+const HERO_LOCATIONS = {
+    manila: {
+        label: "Philippines",
+        clockLabel: "Philippines time",
+        locale: "en-PH",
+        timezone: "Asia/Manila",
+        weatherLabel: "Current weather in Manila, Philippines",
+        weatherUrl: "https://api.open-meteo.com/v1/forecast?latitude=14.5995&longitude=120.9842&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=Asia%2FManila&forecast_days=1",
+        fallbackTemperature: 29,
+        fallbackCondition: "Sunny",
+        fallbackState: "sunny"
+    },
+    denver: {
+        label: "Denver",
+        clockLabel: "Denver time",
+        locale: "en-US",
+        timezone: "America/Denver",
+        weatherLabel: "Current weather in Denver, Colorado",
+        weatherUrl: "https://api.open-meteo.com/v1/forecast?latitude=39.7392&longitude=-104.9903&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=America%2FDenver&forecast_days=1",
+        fallbackTemperature: 18,
+        fallbackCondition: "Partly cloudy",
+        fallbackState: "partly-cloudy"
+    }
+};
+
 const APP_CONFIG = {
-    timezone: "Asia/Manila",
+    timezone: HERO_LOCATIONS.manila.timezone,
     overview: {
         currentUser: "Madison88 Team",
         heroDescription: "One launchpad for support, systems, projects, and the people keeping Madison88 running at full speed.",
@@ -760,7 +785,7 @@ function updateNavigationLabels() {
     }
 }
 
-const MANILA_WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=14.5995&longitude=120.9842&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=Asia%2FManila&forecast_days=1";
+const HERO_WEATHER_CACHE = new Map();
 const ITSM_API_BASE = "https://madison88-itsm.onrender.com/api";
 const ITSM_LOGIN_URL = `${ITSM_API_BASE}/auth/login`;
 const ITSM_ACTIVE_TICKET_STATUSES = ["New", "In Progress", "Pending"];
@@ -3242,19 +3267,48 @@ function ensureTeamAutofillList() {
 function setupClock() {
     const timeEl = document.getElementById("current-time");
     const dateEl = document.getElementById("current-date");
+    const labelEl = document.getElementById("clock-label");
     const greetingEl = document.getElementById("greeting-part");
-    if (!timeEl || !dateEl) return;
+    const toggleButtons = [...document.querySelectorAll("[data-timezone-option]")];
+    if (!timeEl || !dateEl || !labelEl) return;
+
+    let activeLocationKey = "manila";
+
+    const syncToggleState = () => {
+        toggleButtons.forEach((button) => {
+            const isActive = button.dataset.timezoneOption === activeLocationKey;
+            button.classList.toggle("is-active", isActive);
+            button.setAttribute("aria-selected", String(isActive));
+        });
+    };
 
     const updateClock = () => {
+        const activeLocation = HERO_LOCATIONS[activeLocationKey] || HERO_LOCATIONS.manila;
         const now = new Date();
-        const hour = Number(new Intl.DateTimeFormat("en-PH", { timeZone: APP_CONFIG.timezone, hour: "numeric", hour12: false }).format(now));
+        const hour = Number(new Intl.DateTimeFormat(activeLocation.locale, { timeZone: activeLocation.timezone, hour: "numeric", hour12: false }).format(now));
         if (greetingEl) {
             greetingEl.textContent = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
         }
-        timeEl.textContent = new Intl.DateTimeFormat("en-PH", { timeZone: APP_CONFIG.timezone, hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }).format(now);
-        dateEl.textContent = new Intl.DateTimeFormat("en-PH", { timeZone: APP_CONFIG.timezone, weekday: "long", month: "long", day: "numeric", year: "numeric" }).format(now);
+        labelEl.textContent = activeLocation.clockLabel;
+        timeEl.textContent = new Intl.DateTimeFormat(activeLocation.locale, { timeZone: activeLocation.timezone, hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }).format(now);
+        dateEl.textContent = new Intl.DateTimeFormat(activeLocation.locale, { timeZone: activeLocation.timezone, weekday: "long", month: "long", day: "numeric", year: "numeric" }).format(now);
     };
 
+    window.setHeroLocation = (locationKey) => {
+        if (!HERO_LOCATIONS[locationKey] || locationKey === activeLocationKey) return;
+        activeLocationKey = locationKey;
+        syncToggleState();
+        updateClock();
+        window.dispatchEvent(new CustomEvent("hero-location-change", { detail: { locationKey } }));
+    };
+
+    toggleButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            window.setHeroLocation?.(button.dataset.timezoneOption || "manila");
+        });
+    });
+
+    syncToggleState();
     updateClock();
     setInterval(updateClock, 1000);
 }
@@ -3266,6 +3320,8 @@ function setupWeatherWidget() {
     const iconEl = document.getElementById("weather-icon");
     if (!widget || !temperatureEl || !conditionEl || !iconEl) return;
 
+    let activeLocationKey = "manila";
+
     const applyWeather = (temperature, condition, iconMarkup, state) => {
         temperatureEl.innerHTML = `${Math.round(Number(temperature))}&deg;C`;
         conditionEl.textContent = condition;
@@ -3273,12 +3329,37 @@ function setupWeatherWidget() {
         widget.dataset.weatherState = state;
     };
 
-    const fallbackIcon = buildWeatherIconMarkup("sunny");
-    applyWeather(29, "Sunny", fallbackIcon, "sunny");
+    const applyLocationWeather = (locationKey, payload) => {
+        const location = HERO_LOCATIONS[locationKey] || HERO_LOCATIONS.manila;
+        widget.setAttribute("aria-label", location.weatherLabel);
 
-    const loadWeather = async () => {
+        if (!payload) {
+            applyWeather(
+                location.fallbackTemperature,
+                location.fallbackCondition,
+                buildWeatherIconMarkup(location.fallbackState),
+                location.fallbackState
+            );
+            return;
+        }
+
+        const weather = mapWeatherCodeToDisplay(payload.weather_code, payload.is_day);
+        const displayTemperature = typeof payload.apparent_temperature === "number"
+            ? payload.apparent_temperature
+            : payload.temperature_2m;
+        applyWeather(displayTemperature, weather.label, buildWeatherIconMarkup(weather.state), weather.state);
+    };
+
+    const loadWeather = async (locationKey = activeLocationKey) => {
+        const location = HERO_LOCATIONS[locationKey] || HERO_LOCATIONS.manila;
+        if (!location) return;
+
+        if (locationKey === activeLocationKey) {
+            applyLocationWeather(locationKey, HERO_WEATHER_CACHE.get(locationKey) || null);
+        }
+
         try {
-            const response = await fetch(MANILA_WEATHER_URL, {
+            const response = await fetch(location.weatherUrl, {
                 headers: { Accept: "application/json" },
                 cache: "no-store"
             });
@@ -3286,19 +3367,31 @@ function setupWeatherWidget() {
             const payload = await response.json();
             const current = payload?.current;
             if (!current || typeof current.temperature_2m !== "number") return;
-
-            const weather = mapWeatherCodeToDisplay(current.weather_code, current.is_day);
-            const displayTemperature = typeof current.apparent_temperature === "number"
-                ? current.apparent_temperature
-                : current.temperature_2m;
-            applyWeather(displayTemperature, weather.label, buildWeatherIconMarkup(weather.state), weather.state);
+            HERO_WEATHER_CACHE.set(locationKey, current);
+            if (locationKey === activeLocationKey) {
+                applyLocationWeather(locationKey, current);
+            }
         } catch (error) {
             console.warn("Weather widget fallback in use:", error);
+            if (locationKey === activeLocationKey) {
+                applyLocationWeather(locationKey, HERO_WEATHER_CACHE.get(locationKey) || null);
+            }
         }
     };
 
+    applyLocationWeather(activeLocationKey, HERO_WEATHER_CACHE.get(activeLocationKey) || null);
+    window.addEventListener("hero-location-change", (event) => {
+        activeLocationKey = event.detail?.locationKey || "manila";
+        applyLocationWeather(activeLocationKey, HERO_WEATHER_CACHE.get(activeLocationKey) || null);
+        loadWeather(activeLocationKey);
+    });
+
     loadWeather();
-    setInterval(loadWeather, 15 * 60 * 1000);
+    setInterval(() => {
+        Object.keys(HERO_LOCATIONS).forEach((locationKey) => {
+            loadWeather(locationKey);
+        });
+    }, 15 * 60 * 1000);
 }
 
 function setupLiveItsmTicketStat() {

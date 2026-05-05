@@ -8,16 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        window.M88_SUPABASE = {
-            url: "https://bmlmxeakyivzwjwemrov.supabase.co",
-            anonKey: "sb_publishable_QrZIapvR0-7Cl0joIg4kbA_Xwzon0m0",
-            table: "dashboard_content",
-            photoBucket: "team-photos"
-        };
-    </script>
-  <script type="module" crossorigin src="/assets/index-DLpriqls.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-BHp6EZMy.css">
+  <script type="module" crossorigin src="/assets/index-CDPpCiMl.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DiZ0mpUw.css">
 </head>
 <body class="lenis">
     <div id="universal-modal" class="modal-overlay" aria-hidden="true">
@@ -99,7 +91,7 @@
                     <div class="hero-copy">
                         <div class="hero-kicker-row">
                             <span class="eyebrow">IT Command Center</span>
-                            <div class="weather-widget" aria-label="Current weather in Manila, Philippines">
+                            <div class="weather-widget" aria-live="polite" aria-label="Current weather in Manila, Philippines">
                                 <span class="weather-icon" aria-hidden="true" id="weather-icon">
                                     <svg viewBox="0 0 48 48" fill="none">
                                         <circle cx="18" cy="18" r="7" fill="currentColor"></circle>
@@ -118,7 +110,11 @@
                         <button class="btn btn-secondary admin-inline-button" type="button" id="edit-overview-button" hidden>Edit Overview</button>
                     </div>
                     <div class="hero-clock">
-                        <span class="clock-label">Philippines time</span>
+                        <div class="hero-timezone-toggle" role="tablist" aria-label="Select hero timezone">
+                            <button class="timezone-toggle-button is-active" type="button" role="tab" aria-selected="true" data-timezone-option="manila">Philippines</button>
+                            <button class="timezone-toggle-button" type="button" role="tab" aria-selected="false" data-timezone-option="denver">Denver</button>
+                        </div>
+                        <span class="clock-label" id="clock-label">Philippines time</span>
                         <strong id="current-time">--:--</strong>
                         <span id="current-date">Loading date</span>
                     </div>
@@ -248,12 +244,6 @@
             <footer class="footer-bar glass reveal">
                 <div class="footer-meta">
                     <div><span class="footer-label">IT operating hours</span><strong>Mon-Fri, 8:00 AM-6:00 PM PHT</strong></div>
-                    <div><span class="footer-label">Emergency support</span><strong>+63 917 800 1188</strong></div>
-                </div>
-                <div class="footer-links">
-                    <a href="#">IT Policies</a>
-                    <a href="#">User Guides</a>
-                    <a href="#">Org Chart</a>
                 </div>
             </footer>
         </main>
