@@ -697,11 +697,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderQuickHelp();
         renderSupportCards();
         renderMissionVision();
+        renderFacilitiesPanel();
         setupProjectFilters();
         setupAutomationDashboardToggle();
         setupSearch();
         setupAdminAutofill();
         setupClock();
+        setupFacilitiesPanel();
+        setupWeatherWidget();
         setupLiveItsmTicketStat();
         setupNavigation();
         setupModalSystem();
@@ -3562,7 +3565,9 @@ function setupWeatherWidget() {
         loadWeather(activeLocationKey);
     });
 
-    loadWeather();
+    Object.keys(HERO_LOCATIONS).forEach((locationKey) => {
+        loadWeather(locationKey);
+    });
     setInterval(() => {
         Object.keys(HERO_LOCATIONS).forEach((locationKey) => {
             loadWeather(locationKey);
