@@ -91,7 +91,7 @@ const APP_CONFIG = {
     overview: {
         currentUser: "Madison88 Team",
         heroDescription: "One launchpad for support, systems, projects, and the people keeping Madison88 running at full speed.",
-        stats: { tickets: 18, uptime: 99.98, users: 246, projects: 14 },
+        stats: { tickets: 0, uptime: 99.98, users: 110, projects: 14 },
         ticketUpdates: [
             "3 printer incidents were cleared in the last hour",
             "ERP maintenance begins tonight at 9:00 PM PHT",
@@ -222,7 +222,8 @@ const APP_CONFIG = {
             url: "",
             anonKey: "",
             table: "dashboard_content"
-        }
+        },
+        itsmBearerToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI1MzBmNzUtYTRkNi00ZDU3LTk3NzgtMGVhZTg2ZTAwZjEyIiwiZW1haWwiOiJhZG1pbm1hZGlzb244OEBnbWFpbC5jb20iLCJyb2xlIjoic3lzdGVtX2FkbWluIiwiaWF0IjoxNzc4MjA4ODYxLCJleHAiOjE3NzgyOTUyNjF9.DcvJ-FSyk0ig_YrHxtJNJXmM9aVNCPCosgWz5vcNyK0"
     }
 };
 
@@ -831,7 +832,13 @@ function updateNavigationLabels() {
 }
 
 const HERO_WEATHER_CACHE = new Map();
-const ITSM_API_BASE = "https://madison88-itsm.onrender.com/api";
+const getItsmApiBase = () => {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return '/api-itsm';
+    }
+    return "https://madison88-itsm.onrender.com/api";
+};
+const ITSM_API_BASE = getItsmApiBase();
 const ITSM_LOGIN_URL = `${ITSM_API_BASE}/auth/login`;
 const ITSM_ACTIVE_TICKET_STATUSES = ["New", "In Progress", "Pending"];
 const ITSM_TOKEN_STORAGE_KEYS = ["madison88-itsm-runtime-token", "madison88-itsm-token", "m88itsm-token", "itsmToken"];
@@ -3579,6 +3586,11 @@ function setupLiveItsmTicketStat() {
     const ticketNumberEl = document.querySelector('.stat-number[data-stat-key="tickets"]');
     const ticketCard = ticketNumberEl?.closest(".stat-card") || null;
     const noteEl = ticketCard?.querySelector(".stat-note") || null;
+    
+    let activeSocket = null;
+    let socketReconnectAttempts = 0;
+    const MAX_RECONNECT_ATTEMPTS = 5;
+    
     const syncTicketCardState = (mode = "fallback") => {
         if (!ticketCard || !noteEl) return;
         ticketCard.classList.remove("itsm-connectable");
@@ -3594,8 +3606,18 @@ function setupLiveItsmTicketStat() {
 
         delete ticketCard.dataset.manageItsm;
 
+        if (mode === "realtime") {
+            noteEl.textContent = "✨ Real-time sync with ITSM";
+            return;
+        }
+
         if (mode === "live") {
             noteEl.textContent = "Live queue from ITSM";
+            return;
+        }
+
+        if (mode === "backend-live") {
+            noteEl.textContent = "Live queue from backend";
             return;
         }
 
@@ -3617,51 +3639,145 @@ function setupLiveItsmTicketStat() {
     const updateLiveTicketCount = async () => {
         try {
             syncTicketCardState("syncing");
+            
+            // Fallback to live ITSM API using the dashboard ticket-volume endpoint
             const token = await resolveItsmToken();
             if (!token) {
                 syncTicketCardState(APP_STATE.adminLoggedIn ? "connectable" : "fallback");
                 return;
             }
 
-            const statusParam = encodeURIComponent(ITSM_ACTIVE_TICKET_STATUSES.join(","));
-            const response = await fetchItsmWithAuth(`${ITSM_API_BASE}/tickets?status=${statusParam}&limit=500`, token);
+            // Fetch from the real-time dashboard volume endpoint
+            const url = `${ITSM_API_BASE}/dashboard/ticket-volume`;
+            const response = await fetchItsmWithAuth(url, token);
 
             if (!response.ok) {
-                throw new Error(`ITSM ticket request failed: ${response.status}`);
+                const errorBody = await response.text().catch(() => "No error body");
+                throw new Error(`ITSM dashboard volume request failed (${response.status}): ${errorBody}`);
             }
 
             const payload = await response.json();
-            const tickets = payload?.data?.tickets || payload?.data?.data?.tickets || [];
-            const total = Number(
-                payload?.data?.pagination?.total
-                || payload?.data?.total
-                || payload?.pagination?.total
-                || tickets.length
-            );
-
-            if (!Number.isFinite(total)) return;
+            
+            // Extract the volume/count from various possible response structures
+            let total = 0;
+            const byStatus = payload?.data?.ticket_volume?.by_status;
+            
+            if (Array.isArray(byStatus)) {
+                // Sum active statuses (New, In Progress, Pending)
+                const activeStatuses = ["New", "In Progress", "Pending"];
+                total = byStatus
+                    .filter(item => activeStatuses.includes(item.key))
+                    .reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+            } else {
+                // Fallback to simple keys if by_status is not available
+                const findCount = (obj) => {
+                    if (!obj || typeof obj !== 'object') return null;
+                    const keys = ['volume', 'total', 'count', 'active', 'active_count', 'ticket_count', 'tickets', 'activeTickets', 'totalTickets'];
+                    for (const key of keys) {
+                        if (obj[key] !== undefined && obj[key] !== null && Number.isFinite(Number(obj[key]))) {
+                            return Number(obj[key]);
+                        }
+                    }
+                    return null;
+                };
+                total = findCount(payload?.data?.ticket_volume) ?? findCount(payload?.data) ?? findCount(payload) ?? 0;
+            }
 
             APP_STATE.overview.stats.tickets = total;
             updateSingleStatValue("tickets", total);
             syncTicketCardState("live");
         } catch (error) {
-            console.warn("ITSM live ticket stat fallback in use:", error);
-            syncTicketCardState("error");
+            console.error("❌ ITSM live ticket volume sync failed:", error);
+            const errorMsg = describeItsmConnectionError(error);
+            if (noteEl) noteEl.textContent = errorMsg;
         }
     };
 
+    const connectWebSocket = async () => {
+        const token = await resolveItsmToken();
+        if (!token) {
+            console.log("No ITSM token available, skipping WebSocket connection");
+            return;
+        }
+
+        try {
+            // Connect to ITSM WebSocket server
+            // Render always requires wss for secure WebSocket connections
+            const wsProtocol = 'wss:'; 
+            const itsmBase = "madison88-itsm.onrender.com";
+            const wsUrl = `${wsProtocol}//${itsmBase}`;
+            
+            activeSocket = new WebSocket(wsUrl);
+            socketReconnectAttempts = 0;
+
+            activeSocket.addEventListener('open', () => {
+                console.log("✓ WebSocket connected to ITSM");
+                syncTicketCardState("realtime");
+                
+                // Send authentication
+                activeSocket.send(JSON.stringify({
+                    type: 'auth',
+                    token: token
+                }));
+                
+                // Subscribe to ticket updates
+                activeSocket.send(JSON.stringify({
+                    type: 'subscribe',
+                    channel: 'tickets',
+                    events: ['ticket-created', 'ticket-updated', 'ticket-status-changed']
+                }));
+            });
+
+            activeSocket.addEventListener('message', (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    
+                    // Update count on ticket events
+                    if (['ticket-created', 'ticket-updated', 'ticket-status-changed'].includes(data.type)) {
+                        console.log("📊 Ticket event received, refreshing count...", data.type);
+                        updateLiveTicketCount();
+                    }
+                } catch (e) {
+                    console.warn("WebSocket message parse error:", e);
+                }
+            });
+
+            activeSocket.addEventListener('close', () => {
+                console.log("WebSocket closed, attempting reconnection...");
+                activeSocket = null;
+                
+                if (socketReconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+                    socketReconnectAttempts++;
+                    setTimeout(connectWebSocket, 3000 * socketReconnectAttempts);
+                } else {
+                    console.warn("Max WebSocket reconnection attempts reached");
+                }
+            });
+
+            activeSocket.addEventListener('error', (error) => {
+                console.warn("WebSocket error (silenced):", error);
+                // Don't call syncTicketCardState("error") here to avoid overwriting successful polling status
+            });
+
+        } catch (error) {
+            console.warn("Failed to establish WebSocket connection:", error);
+            // Fallback to polling
+            updateLiveTicketCount();
+        }
+    };
+
+    // Initial fetch
     updateLiveTicketCount();
-    window.addEventListener("itsm-token-updated", updateLiveTicketCount);
+    
+    // Fallback polling (slower, as backup)
     if (window.__itsmLiveTicketInterval) {
         clearInterval(window.__itsmLiveTicketInterval);
     }
-    window.__itsmLiveTicketInterval = setInterval(updateLiveTicketCount, 30 * 1000);
+    window.__itsmLiveTicketInterval = setInterval(updateLiveTicketCount, 60 * 1000); // Every minute as backup
 }
 
 function getItsmToken() {
-    const configuredToken = String(APP_CONFIG?.integrations?.itsmBearerToken || "").trim();
-    if (configuredToken) return configuredToken;
-
+    // Prioritize stored tokens (which could be fresh from auto-login)
     for (const key of ITSM_TOKEN_STORAGE_KEYS) {
         const localToken = String(localStorage.getItem(key) || "").trim();
         if (localToken) return localToken;
@@ -3670,14 +3786,49 @@ function getItsmToken() {
         if (sessionToken) return sessionToken;
     }
 
+    // Fallback to the configured token in script.js
+    const configuredToken = String(APP_CONFIG?.integrations?.itsmBearerToken || "").trim();
+    if (configuredToken) return configuredToken;
+
     return "";
 }
 
 async function resolveItsmToken(forceRefresh = false) {
-    if (!forceRefresh) {
-        return getItsmToken();
+    const currentToken = getItsmToken();
+    
+    if (!forceRefresh && currentToken) {
+        return currentToken;
     }
-    return "";
+
+    // Attempt Auto-Login if token is missing or expired
+    try {
+        const response = await fetch(ITSM_LOGIN_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: "adminmadison88@gmail.com",
+                password: "admin123"
+            })
+        });
+
+        if (response.ok) {
+            const payload = await response.json();
+            const newToken = payload?.token || payload?.data?.token || payload?.data?.access_token;
+            
+            if (newToken) {
+                // Store it in the first available storage key
+                sessionStorage.setItem(ITSM_TOKEN_STORAGE_KEYS[0], newToken);
+                window.dispatchEvent(new CustomEvent("itsm-token-updated"));
+                return newToken;
+            }
+        } else {
+            console.warn(`⚠️ ITSM login failed with status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error("❌ ITSM auto-login failed:", error);
+    }
+
+    return currentToken;
 }
 
 function isLocalFilePreview() {
@@ -3705,8 +3856,8 @@ function describeItsmConnectionError(error) {
 async function fetchItsmWithAuth(url, token) {
     const request = (authToken) => fetch(url, {
         headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${authToken}`
+            "Accept": "application/json, text/plain, */*",
+            "Authorization": `Bearer ${authToken}`
         }
     });
 
@@ -5611,7 +5762,7 @@ function buildSupabaseSetupModal() {
         overview: {
             currentUser: "Madison88 Team",
             heroDescription: "One launchpad for support, systems, projects, and the people keeping Madison88 running at full speed.",
-            stats: { tickets: 18, uptime: 99.98, users: 246, projects: 14 },
+            stats: { tickets: 8, uptime: 99.98, users: 110, projects: 14 },
             ticketUpdates: ["Update 1", "Update 2"]
         },
         projects: [
