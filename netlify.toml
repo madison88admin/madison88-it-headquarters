@@ -9,3 +9,10 @@
   VITE_SUPABASE_PHOTO_BUCKET = "team-photos"
   VITE_ADMIN_USERNAME = "ITAdmin"
   VITE_ADMIN_PASSWORD = "M@dis0n_88"
+
+[[redirects]]
+  from = "/api-itsm/*"
+  to = "https://madison88-itsm.onrender.com/api/:splat"
+  status = 200
+  force = true
+

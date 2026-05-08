@@ -833,10 +833,7 @@ function updateNavigationLabels() {
 
 const HERO_WEATHER_CACHE = new Map();
 const getItsmApiBase = () => {
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        return '/api-itsm';
-    }
-    return "https://madison88-itsm.onrender.com/api";
+    return '/api-itsm';
 };
 const ITSM_API_BASE = getItsmApiBase();
 const ITSM_LOGIN_URL = `${ITSM_API_BASE}/auth/login`;
