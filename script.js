@@ -223,7 +223,7 @@ const APP_CONFIG = {
             anonKey: "",
             table: "dashboard_content"
         },
-        itsmBearerToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI1MzBmNzUtYTRkNi00ZDU3LTk3NzgtMGVhZTg2ZTAwZjEyIiwiZW1haWwiOiJhZG1pbm1hZGlzb244OEBnbWFpbC5jb20iLCJyb2xlIjoic3lzdGVtX2FkbWluIiwiaWF0IjoxNzc4MjA4ODYxLCJleHAiOjE3NzgyOTUyNjF9.DcvJ-FSyk0ig_YrHxtJNJXmM9aVNCPCosgWz5vcNyK0"
+        itsmBearerToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI1MzBmNzUtYTRkNi00ZDU3LTk3NzgtMGVhZTg2ZTAwZjEyIiwiZW1haWwiOiJhZG1pbm1hZGlzb244OEBnbWFpbC5jb20iLCJyb2xlIjoic3lzdGVtX2FkbWluIiwiaWF0IjoxNzc4NTc0NDQ2LCJleHAiOjE3Nzg2NjA4NDZ9.KHCgUD7kmqUfWeEwP4u56CGfvoQTgY8WTdXNQ5oV04k"
     }
 };
 
@@ -3799,9 +3799,13 @@ async function resolveItsmToken(forceRefresh = false) {
 
     // Attempt Auto-Login if token is missing or expired
     try {
+        console.log("🔐 Attempting auto-login to ITSM...");
         const response = await fetch(ITSM_LOGIN_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
             body: JSON.stringify({
                 email: "adminmadison88@gmail.com",
                 password: "admin123"
@@ -3813,13 +3817,18 @@ async function resolveItsmToken(forceRefresh = false) {
             const newToken = payload?.token || payload?.data?.token || payload?.data?.access_token;
             
             if (newToken) {
+                console.log("✅ ITSM auto-login successful!");
                 // Store it in the first available storage key
                 sessionStorage.setItem(ITSM_TOKEN_STORAGE_KEYS[0], newToken);
+                localStorage.setItem(ITSM_TOKEN_STORAGE_KEYS[0], newToken);
                 window.dispatchEvent(new CustomEvent("itsm-token-updated"));
                 return newToken;
+            } else {
+                console.warn("⚠️ ITSM login successful but no token found in response:", payload);
             }
         } else {
-            console.warn(`⚠️ ITSM login failed with status: ${response.status}`);
+            const errorText = await response.text().catch(() => "Unknown error");
+            console.warn(`⚠️ ITSM login failed with status: ${response.status}. Response: ${errorText}`);
         }
     } catch (error) {
         console.error("❌ ITSM auto-login failed:", error);
@@ -3861,7 +3870,11 @@ async function fetchItsmWithAuth(url, token) {
     let response = await request(token);
     if (response.status !== 401) return response;
 
-    sessionStorage.removeItem(ITSM_TOKEN_STORAGE_KEYS[0]);
+    // Clear all possible storage keys to ensure a fresh start
+    for (const key of ITSM_TOKEN_STORAGE_KEYS) {
+        sessionStorage.removeItem(key);
+        localStorage.removeItem(key);
+    }
     window.dispatchEvent(new CustomEvent("itsm-token-updated"));
     const refreshedToken = await resolveItsmToken(true);
     if (!refreshedToken) return response;
