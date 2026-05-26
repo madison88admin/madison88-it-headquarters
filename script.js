@@ -102,9 +102,8 @@ const APP_CONFIG = {
     projects: [
         { id: "m88-it-headquarters", name: "m88-it-headquarters", status: "Live", filter: "active", description: "IT headquarters dashboard deployed from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 10 at 9:26 AM", team: ["JC"], systemUrl: "", restricted: false },
         { id: "m88itsm", name: "m88itsm", status: "Live", filter: "active", description: "IT service management deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Mar 18", team: ["JC", "MP"], systemUrl: "https://m88itsm.netlify.app", restricted: false },
-        { id: "m88iis", name: "m88iis", status: "Live", filter: "active", description: "Infrastructure services deployment from GitHub.", progress: 100, owner: "SS", ownerName: "John Sedrick Sarol", updated: "Published Mar 9", team: ["SS"], systemUrl: "https://m88iis.netlify.app", restricted: false },
         { id: "poinstructions", name: "poinstructions", status: "Live", filter: "active", description: "PO instructions deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Jan 6", team: ["JC"], systemUrl: "https://poinstructions.netlify.app", restricted: false },
-        { id: "m88accountallocation", name: "m88accountallocation", status: "Live", filter: "active", description: "Account allocation deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Sep 9, 2025", team: ["SS"], systemUrl: "https://m88accountallocation.netlify.app", restricted: false },
+        { id: "m88accountallocation", name: "m88accountallocation", status: "Live", filter: "active", description: "Account allocation deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Sep 9, 2025", team: ["JC"], systemUrl: "https://m88accountallocation.netlify.app", restricted: false },
         { id: "m88ipt", name: "m88ipt", status: "Live", filter: "active", description: "IT procurement deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 10 at 10:29 AM", team: ["JC"], systemUrl: "https://m88ipt.netlify.app", restricted: false },
         { id: "m88cashflow", name: "m88cashflow", status: "Live", filter: "active", description: "Cash flow deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 7", team: ["JC"], systemUrl: "https://m88cashflow.netlify.app", restricted: false },
         { id: "m88-po-cutting", name: "m88-po-cutting", status: "Live", filter: "active", description: "PO cutting deployment from GitHub with Next.js.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Mar 31", team: ["JC"], systemUrl: "https://m88-po-cutting.netlify.app", restricted: false },
@@ -121,8 +120,7 @@ const APP_CONFIG = {
             { icon: "🔄", name: "Continuous Improvement / Continuous Development", description: "Ongoing process of refining systems, software, and services through iterative development and feedback loops.", status: "online", url: "" },
             { icon: "🏗️", name: "Infrastructure", description: "Management and maintenance of the underlying physical and virtual components that support IT operations.", status: "online", url: "" },
             { icon: "🚚", name: "Service Delivery", description: "Efficient delivery of IT services to end-users, ensuring timely and reliable support.", status: "online", url: "" },
-            { icon: "💻", name: "Hardware", description: "Procurement, setup, and maintenance of physical computing devices and peripherals.", status: "online", url: "" },
-            { icon: "📦", name: "Software Delivery", description: "Development, testing, and deployment of software applications and updates to meet business needs.", status: "online", url: "" }
+            { icon: "", name: "Software Delivery", description: "Development, testing, and deployment of software applications and updates to meet business needs.", status: "online", url: "" }
         ] }
     ],
     team: [
@@ -133,18 +131,17 @@ const APP_CONFIG = {
         { name: "Paul Avendaño", role: "IT Global Systems Manager", level: "senior", status: "Online", skills: ["Systems Management", "IT Operations", "Planning"], message: "paul.avendano@madison88.com", email: "paul.avendano@madison88.com", number: "+63 917 800 1101", school: "Polytechnic University of the Philippines", linkedin: "https://www.linkedin.com/in/paul-avendano", contactFor: "IT systems management and administration oversight", image: "1775459518364-gemini_generated_image_vlsyw4vlsyw4vlsy1.png", manager: "Chris Cantasano", hierarchy: 3 },
         { name: "Lester Mendoza", role: "System Administrator", level: "senior", status: "In a Meeting", skills: ["Infrastructure", "Network", "Identity"], message: "lester.mendoza@madison88.com", email: "lester.mendoza@madison88.com", number: "+63 917 800 1102", school: "Technological Institute of the Philippines", linkedin: "https://www.linkedin.com/in/lester-mendoza", contactFor: "Account, server, network, and access administration", image: "1775459535019-gemini_generated_image_k7ruxbk7ruxbk7ru1.png", manager: "Paul Avendaño", hierarchy: 4 },
         { name: "John Carlo M. Manalo", role: "IT Intern", level: "intern", status: "Online", skills: ["Support", "Documentation", "UI/UX"], message: "johncarlo.manalo@madison88.com", email: "johncarlo.manalo@madison88.com", number: "+63 917 800 1103", school: "Batangas State University", linkedin: "www.linkedin.com/in/john-carlo-manalo-54582b171", contactFor: "Portal updates, user guides, and basic support", image: "1775483369735-gemini_generated_image_4c2z094c2z094c2z.png", manager: "Paul Avendaño", hierarchy: 4 },
-        { name: "John Sedrick N. Sarol", role: "IT Intern", level: "intern", status: "Away", skills: ["Hardware", "Troubleshooting", "Deployment"], message: "johnsedrick.sarol@madison88.com", email: "johnsedrick.sarol@madison88.com", number: "+63 917 800 1104", school: "STI College", linkedin: "https://www.linkedin.com/in/john-sedrick-sarol", contactFor: "Device setup, peripherals, and workstation issues", image: "1775459550191-gemini_generated_image_uqjmmwuqjmmwuqjm.png", manager: "Paul Avendaño", hierarchy: 4 },
         { name: "Stephanie Joyce A. Guce", role: "IT Intern", level: "intern", status: "Online", skills: ["UI/UX", "Content", "Training"], message: "stephanie.guce@madison88.com", email: "stephanie.guce@madison88.com", number: "+63 917 800 1105", school: "Far Eastern University", linkedin: "https://www.linkedin.com/in/stephanie-guce", contactFor: "Interface guidance and process walkthroughs", image: "1775459560688-gemini_generated_image_sr1p0tsr1p0tsr1p.png", manager: "Paul Avendaño", hierarchy: 4 },
         { name: "Mhark Anthony Pentinio", role: "IT Intern", level: "intern", status: "Online", skills: ["Cybersecurity", "Monitoring", "Endpoint Care"], message: "mhark.pentinio@madison88.com", email: "mhark.pentinio@madison88.com", number: "+63 917 800 1106", school: "Batangas State University", linkedin: "https://www.linkedin.com/in/mhark-pentinio", contactFor: "Security concerns and suspicious activity reports", image: "1775460116077-gemini_generated_image_ei1744ei1744ei17.png", manager: "Paul Avendaño", hierarchy: 4 }
     ],
     quickHelp: [
         { label: "Team Coverage", title: "Project approvals and cross-team coordination", body: "Route rollout approvals, timelines, and cross-department planning to Paul Avendaño.", action: "Message Paul", actionType: "message", value: "paul.avendano@madison88.com", person: "Paul Avendaño" },
         { label: "IT Responsibility Map", title: "Account access, password reset, and VPN", body: "Best handled by Lester Mendoza for identity, server, and access-related concerns.", action: "Message Lester", actionType: "message", value: "lester.mendoza@madison88.com", person: "Lester Mendoza" },
-        { label: "Who To Contact", title: "Hardware setup, peripherals, and workstation issues", body: "For device support and deployment concerns, contact John Sedrick Sarol.", action: "Message Sedrick", actionType: "message", value: "johnsedrick.sarol@madison88.com", person: "John Sedrick Sarol" },
         { label: "Find The Right IT Person", title: "Portal guidance, onboarding help, and documentation", body: "For walkthroughs, user guidance, and UI-related help, contact Stephanie Guce or John Carlo Manalo.", action: "View Team", actionType: "url", value: "#team" }
     ],
     contactGuide: [
-        { label: "Project Ownership", issue: "Project approvals or system rollout concerns", owner: "Paul AvendaÃ±o", initials: "PA" }
+        { label: "HARDWARE AND SETUP", issue: "Hardware setup, peripherals, or deployment support", owner: "John Carlo Manalo", initials: "JCM" },
+        { label: "Project Ownership", issue: "Project approvals or system rollout concerns", owner: "Paul Avendaño", initials: "PA" }
     ],
     supportCards: [
         { label: "Priority Lane", title: "Submit a ticket", body: "For device, access, printer, email, or account issues.", action: "Open ITSM", actionType: "url", value: "https://m88itsm.netlify.app" },
@@ -453,26 +450,6 @@ const AUTOMATION_SOURCE_DATA = [
         hourlyCostPhp: 450
     },
     {
-        sourceKey: "HRIS",
-        projectId: "",
-        label: "HRIS",
-        department: "Human Resources",
-        processName: "Performance Evaluation",
-        automationTool: "Performance Evaluation",
-        manualAvgMins: 28800,
-        manualVolumeDay: 480,
-        manualVolumeWeek: 1,
-        manualVolumeMonth: 1,
-        autoAvgMins: 0,
-        autoVolumeDay: 480,
-        autoVolumeWeek: 1,
-        autoVolumeMonth: 1,
-        reportedManualMonthlyMins: 13824000,
-        reportedSavedMins: 13824000,
-        roles: "HR Team",
-        hourlyCostPhp: 450
-    },
-    {
         sourceKey: "IPT",
         projectId: "",
         label: "Interns Productivity Tool",
@@ -490,26 +467,6 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 7800,
         reportedSavedMins: 3900,
         roles: "IT Interns",
-        hourlyCostPhp: 450
-    },
-    {
-        sourceKey: "IIS",
-        projectId: "m88iis",
-        label: "m88iis",
-        department: "Information Technology",
-        processName: "I.T. Equipment Inventory",
-        automationTool: "I.T. Inventory System",
-        manualAvgMins: 480,
-        manualVolumeDay: 1,
-        manualVolumeWeek: 1,
-        manualVolumeMonth: 2,
-        autoAvgMins: 240,
-        autoVolumeDay: 1,
-        autoVolumeWeek: 1,
-        autoVolumeMonth: 2,
-        reportedManualMonthlyMins: 960,
-        reportedSavedMins: 480,
-        roles: "Systems Admin",
         hourlyCostPhp: 450
     },
     {
@@ -562,12 +519,9 @@ const AUTOMATION_PROJECT_ALIASES = {
     "po-cutting-system": "m88-po-cutting",
     "costing-automation": "costingautomationm88",
     "it-service-management": "m88itsm",
-    "it-infrastructure-services": "m88iis",
-    "account-allocation": "m88iis",
     "m88-po-cutting": "m88-po-cutting",
     "costingautomationm88": "costingautomationm88",
-    "m88itsm": "m88itsm",
-    "m88iis": "m88iis"
+    "m88itsm": "m88itsm"
 };
 
 const SYSTEM_PROJECT_DEFAULTS = Object.fromEntries(
@@ -2382,10 +2336,6 @@ function renderProjects(projects) {
                         <div class="project-owner-inline">
                             <div class="owner-chip"><span class="owner-avatar">${project.owner}</span><span>Owner: ${project.ownerName}</span></div>
                             <div class="avatar-stack">${project.team.map((member) => `<span>${member}</span>`).join("")}</div>
-                        </div>
-                        <div class="project-admin-meta">
-                            <span>Overseen by: ${project.overseenBy}</span>
-                            <span>Assigned by: ${project.assignedBy}</span>
                         </div>
                         <div class="project-actions">
                             ${openButton}
@@ -5081,8 +5031,6 @@ function buildProjectModal(project) {
                 <li>Status: ${project.status}</li>
                 <li>Progress: ${project.progress}%</li>
                 <li>Owner: ${project.ownerName}</li>
-                <li>Overseen by: ${project.overseenBy}</li>
-                <li>Assigned by: ${project.assignedBy}</li>
                 <li>Assigned team: ${project.team.map((member) => resolveMemberName(member, member)).join(", ")}</li>
                 <li>Last update: ${project.updated}</li>
             </ul>
@@ -5181,14 +5129,6 @@ function buildProjectFormFields(project = {}) {
                 <label class="field-stack">
                     <span>Owner full name</span>
                     <input type="text" name="ownerName" value="${escapeHtml(project.ownerName || "")}" placeholder="Auto-filled from team directory when available">
-                </label>
-                <label class="field-stack">
-                    <span>Overseen by</span>
-                    <input type="text" name="overseenBy" value="${escapeHtml(project.overseenBy || "")}" placeholder="Usually the same as the owner or lead approver">
-                </label>
-                <label class="field-stack">
-                    <span>Assigned by</span>
-                    <input type="text" name="assignedBy" value="${escapeHtml(project.assignedBy || "")}" placeholder="Defaults to Admin if left blank">
                 </label>
                 <label class="field-stack project-form-span-2">
                     <span>Developers</span>
@@ -6244,11 +6184,17 @@ function autofillGuideOwnerFields(form, member) {
 }
 
 function normalizeContactGuideRow(row) {
-    const owner = String(row.owner || "").trim() || "IT Team";
-    const initials = String(row.initials || getInitials(owner)).trim().toUpperCase().slice(0, 3) || "IT";
+    const label = String(row.label || "").trim() || "Who To Contact";
+    const issue = String(row.issue || "").trim() || "Update this guidance row";
+    let owner = String(row.owner || "").trim() || "IT Team";
+    let initials = String(row.initials || getInitials(owner)).trim().toUpperCase().slice(0, 3) || "IT";
+    if (/hardware\s+and\s+setup/i.test(label)) {
+        owner = "John Carlo Manalo";
+        initials = "JCM";
+    }
     return {
-        label: String(row.label || "").trim() || "Who To Contact",
-        issue: String(row.issue || "").trim() || "Update this guidance row",
+        label,
+        issue,
         owner,
         initials
     };
