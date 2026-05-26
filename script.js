@@ -959,7 +959,8 @@ async function hydrateAppStateFromSupabase() {
                     const configMember = configTeam.find((cm) => cm.name === member.name);
                     return normalizeTeamMember({
                         ...member,
-                        image: configMember?.image || member.image,
+                        // Prefer image stored in Supabase so uploads survive refresh (config is only a fallback).
+                        image: String(member.image || "").trim() || configMember?.image || "",
                         level: member.level !== undefined ? member.level : (configMember?.level || "intern"),
                         manager: member.manager !== undefined ? member.manager : (configMember?.manager || null)
                     });
@@ -2662,13 +2663,16 @@ function setupTeamDragAndDrop() {
         });
     };
 
-    const reorderTeam = (sourceIndex, targetIndex) => {
+    const reorderTeam = async (sourceIndex, targetIndex) => {
         if (sourceIndex === targetIndex) return;
         const moved = APP_STATE.team.splice(sourceIndex, 1)[0];
         APP_STATE.team.splice(targetIndex, 0, moved);
         APP_STATE.team = APP_STATE.team.map((member, index) => ({ ...member, hierarchy: index }));
-        saveTeam();
+        const saved = await saveTeam();
         renderTeam();
+        if (!saved) {
+            window.alert(APP_RUNTIME.supabaseLastError || "Unable to save team order. Check your connection and try again.");
+        }
     };
 
     grid.querySelectorAll(".team-card").forEach((card) => {
@@ -4304,7 +4308,11 @@ function setupModalSystem() {
                 });
                 
                 APP_STATE.projects = syncProjectsWithTeamMember(previousMember, APP_STATE.team[index]);
-                saveTeam();
+                const teamSaved = await saveTeam();
+                if (!teamSaved) {
+                    window.alert(APP_RUNTIME.supabaseLastError || "Unable to save team changes. Your photo may not appear after refresh.");
+                    return;
+                }
                 saveProjects();
                 renderTeam();
                 renderProjects(APP_STATE.projects);
@@ -4337,7 +4345,11 @@ function setupModalSystem() {
                     manager: selectedManagers.length > 0 ? selectedManagers : null
                 });
                 APP_STATE.team = [newMember, ...APP_STATE.team];
-                saveTeam();
+                const teamSaved = await saveTeam();
+                if (!teamSaved) {
+                    window.alert(APP_RUNTIME.supabaseLastError || "Unable to save the new team member. Check your connection and try again.");
+                    return;
+                }
                 renderTeam();
                 renderProjects(APP_STATE.projects);
                 closeModal();
@@ -4682,11 +4694,17 @@ function setupModalSystem() {
                 ...project,
                 team: Array.isArray(project.team) ? project.team.filter((item) => item !== removedInitials) : project.team
             }));
-            saveTeam();
-            saveProjects();
-            renderTeam();
-            renderProjects(APP_STATE.projects);
-            closeModal();
+            void (async () => {
+                const teamSaved = await saveTeam();
+                if (!teamSaved) {
+                    window.alert(APP_RUNTIME.supabaseLastError || "Unable to save team changes after delete.");
+                    return;
+                }
+                saveProjects();
+                renderTeam();
+                renderProjects(APP_STATE.projects);
+                closeModal();
+            })();
             return;
         }
 
@@ -4695,8 +4713,14 @@ function setupModalSystem() {
             if (!APP_STATE.adminLoggedIn) return;
             if (!confirm("Reset all edited team member changes and restore the default IT team list?")) return;
             APP_STATE.team = loadTeam();
-            saveTeam();
-            renderTeam();
+            void (async () => {
+                const teamSaved = await saveTeam();
+                if (!teamSaved) {
+                    window.alert(APP_RUNTIME.supabaseLastError || "Unable to save reset team list.");
+                    return;
+                }
+                renderTeam();
+            })();
             renderProjects(APP_STATE.projects);
             closeModal();
             return;
@@ -5906,10 +5930,10 @@ function saveServices() {
     void persistSupabaseSection(SUPABASE_SECTION_KEYS.services, APP_STATE.services);
 }
 
-function saveTeam() {
+async function saveTeam() {
     APP_STATE.team = APP_STATE.team.map(normalizeTeamMember);
     ensureTeamAutofillList();
-    void persistSupabaseSection(SUPABASE_SECTION_KEYS.team, APP_STATE.team);
+    return await persistSupabaseSection(SUPABASE_SECTION_KEYS.team, APP_STATE.team);
 }
 
 function saveQuickHelp() {
