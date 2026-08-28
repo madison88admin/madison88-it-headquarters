@@ -14,8 +14,8 @@ window.M88_SUPABASE = {
 
 // Initialize Admin credentials from environment variables
 window.M88_ADMIN = {
-    username: import.meta.env.VITE_ADMIN_USERNAME || "admin123",
-    password: import.meta.env.VITE_ADMIN_PASSWORD || "admin123"
+    username: import.meta.env.VITE_ADMIN_USERNAME || "",
+    password: import.meta.env.VITE_ADMIN_PASSWORD || ""
 };
 
 const HERO_LOCATIONS = {
@@ -110,7 +110,11 @@ const APP_CONFIG = {
         { id: "m88devtracker", name: "m88devtracker", status: "Live", filter: "active", description: "Developer tracker deployment from GitHub.", progress: 100, owner: "MP", ownerName: "Mhark Pentinio", updated: "Published Mar 26", team: ["SS"], systemUrl: "https://m88devtracker.netlify.app", restricted: false },
         { id: "madison88-orgchart", name: "madison88-orgchart", status: "Live", filter: "active", description: "Organization chart deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Mar 10", team: ["JC"], systemUrl: "https://madison88-orgchart.netlify.app", restricted: false },
         { id: "m88ideaintake", name: "m88ideaintake", status: "Live", filter: "active", description: "Idea intake deployment from GitHub.", progress: 100, owner: "MP", ownerName: "Mhark Pentinio", updated: "Published Mar 5", team: ["MP", "SS"], systemUrl: "https://m88ideaintake.netlify.app", restricted: false },
-        { id: "costingautomationm88", name: "costingautomationm88", status: "Live", filter: "active", description: "Costing automation deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Feb 27", team: ["JC"], systemUrl: "https://costingautomationm88.netlify.app", restricted: false }
+        { id: "costingautomationm88", name: "costingautomationm88", status: "Live", filter: "active", description: "Costing automation deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Feb 27", team: ["JC"], systemUrl: "https://costingautomationm88.netlify.app", restricted: false },
+        { id: "m88apinvoice", name: "AP Invoice", status: "UAT", filter: "in-progress", description: "Accounts payable invoice system currently under user acceptance testing.", progress: 0, owner: "JC", ownerName: "John Carlo Manalo", updated: "Under UAT", team: ["JC"], systemUrl: "https://m88apinvoice.netlify.app/login", restricted: false },
+        { id: "m88trimautomation", name: "Trim Summary", status: "UAT", filter: "in-progress", description: "Trim Summary automation currently under user acceptance testing.", progress: 0, owner: "MP", ownerName: "Mhark Pentinio", updated: "Under UAT", team: ["MP"], systemUrl: "https://app.netlify.com/projects/m88trimautomation/overview", restricted: false },
+        { id: "smart-techpack-to-costing", name: "Smart Techpack to Costing", status: "In Progress", filter: "in-progress", description: "Smart Techpack to Costing system currently under development.", progress: 0, owner: "JC", ownerName: "John Carlo Manalo", updated: "Under Development", team: ["JC"], systemUrl: "", restricted: false },
+        { id: "techpack-creation", name: "Techpack Creation", status: "In Progress", filter: "in-progress", description: "Techpack Creation system currently under development.", progress: 0, owner: "MP", ownerName: "Mhark Pentinio", updated: "Under Development", team: ["MP"], systemUrl: "", restricted: false }
     ],
     services: [
         { category: "IT Services", items: [
@@ -220,7 +224,7 @@ const APP_CONFIG = {
             anonKey: "",
             table: "dashboard_content"
         },
-        itsmBearerToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI1MzBmNzUtYTRkNi00ZDU3LTk3NzgtMGVhZTg2ZTAwZjEyIiwiZW1haWwiOiJhZG1pbm1hZGlzb244OEBnbWFpbC5jb20iLCJyb2xlIjoic3lzdGVtX2FkbWluIiwiaWF0IjoxNzc4NTc0NDQ2LCJleHAiOjE3Nzg2NjA4NDZ9.KHCgUD7kmqUfWeEwP4u56CGfvoQTgY8WTdXNQ5oV04k"
+        itsmBearerToken: import.meta.env.VITE_ITSM_BEARER_TOKEN || ""
     }
 };
 
@@ -922,7 +926,7 @@ async function hydrateAppStateFromSupabase() {
             };
         }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.projects])) {
-            APP_STATE.projects = snapshot[SUPABASE_SECTION_KEYS.projects].map(normalizeProject);
+            APP_STATE.projects = reconcileSystemProjects(snapshot[SUPABASE_SECTION_KEYS.projects]);
         }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.services])) {
             APP_STATE.services = snapshot[SUPABASE_SECTION_KEYS.services];
@@ -3781,8 +3785,8 @@ async function resolveItsmToken(forceRefresh = false) {
                 'Accept': 'application/json'
             },
             body: JSON.stringify({
-                email: "adminmadison88@gmail.com",
-                password: "admin123"
+                email: import.meta.env.VITE_ITSM_USERNAME || "",
+                password: import.meta.env.VITE_ITSM_PASSWORD || ""
             })
         });
 

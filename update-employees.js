@@ -1,8 +1,8 @@
 // Script to update the employee count in Supabase
 import https from 'https';
 
-const SUPABASE_URL = "bmlmxeakyivzwjwemrov.supabase.co";
-const SUPABASE_KEY = "sb_publishable_QrZIapvR0-7Cl0joIg4kbA_Xwzon0m0";
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL?.replace(/^https?:\/\//, "");
+const SUPABASE_KEY = process.env.VITE_SUPABASE_ANON_KEY;
 const TABLE = "dashboard_content";
 
 function makeRequest(method, path, data = null) {
