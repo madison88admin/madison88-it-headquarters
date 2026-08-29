@@ -10,7 +10,7 @@
 
 [[redirects]]
   from = "/api-itsm/*"
-  to = "http://5.223.78.194:3011/api/:splat"
+  to = "/.netlify/functions/itsm-proxy/:splat"
   status = 200
   force = true
 
