@@ -10,7 +10,7 @@
 
 [[redirects]]
   from = "/api-itsm/*"
-  to = "https://madison88-itsm.onrender.com/api/:splat"
+  to = "http://5.223.78.194:3011/api/:splat"
   status = 200
   force = true
 

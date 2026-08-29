@@ -3632,6 +3632,9 @@ function setupLiveItsmTicketStat() {
             }
 
             const payload = await response.json();
+            if (payload?.status && payload.status !== "success") {
+                throw new Error(`ITSM ticket volume API returned status: ${payload.status}`);
+            }
             
             // Extract the volume/count from various possible response structures
             let total = 0;
@@ -3641,8 +3644,8 @@ function setupLiveItsmTicketStat() {
                 // Sum active statuses (New, In Progress, Pending)
                 const activeStatuses = ["New", "In Progress", "Pending"];
                 total = byStatus
-                    .filter(item => activeStatuses.includes(item.key))
-                    .reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+                    .filter(item => activeStatuses.includes(String(item?.key ?? item?.status ?? item?.name ?? "").trim()))
+                    .reduce((sum, item) => sum + (Number(item?.value ?? item?.count ?? item?.total) || 0), 0);
             } else {
                 // Fallback to simple keys if by_status is not available
                 const findCount = (obj) => {
