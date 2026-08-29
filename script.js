@@ -3617,16 +3617,14 @@ function setupLiveItsmTicketStat() {
         try {
             syncTicketCardState("syncing");
             
-            // Fallback to live ITSM API using the dashboard ticket-volume endpoint
-            const token = await resolveItsmToken();
-            if (!token) {
-                syncTicketCardState(APP_STATE.adminLoggedIn ? "connectable" : "fallback");
-                return;
-            }
-
             // Fetch from the real-time dashboard volume endpoint
+            // Auth is handled server-side by the Netlify function
             const url = `${ITSM_API_BASE}/dashboard/ticket-volume`;
-            const response = await fetchItsmWithAuth(url, token);
+            const response = await fetch(url, {
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
 
             if (!response.ok) {
                 const errorBody = await response.text().catch(() => "No error body");
