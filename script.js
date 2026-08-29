@@ -91,7 +91,7 @@ const APP_CONFIG = {
     overview: {
         currentUser: "Madison88 Team",
         heroDescription: "One launchpad for support, systems, projects, and the people keeping Madison88 running at full speed.",
-        stats: { tickets: 0, uptime: 99.98, users: 110, projects: 14 },
+        stats: { tickets: 0, uptime: 99.98, users: 0, projects: 14 },
         ticketUpdates: [
             "3 printer incidents were cleared in the last hour",
             "ERP maintenance begins tonight at 9:00 PM PHT",
@@ -924,6 +924,8 @@ async function hydrateAppStateFromSupabase() {
                     ...(snapshot[SUPABASE_SECTION_KEYS.overview]?.stats || {})
                 }
             };
+            // This card now represents resolved tickets; do not reuse the legacy active-user count.
+            APP_STATE.overview.stats.users = 0;
         }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.projects])) {
             APP_STATE.projects = reconcileSystemProjects(snapshot[SUPABASE_SECTION_KEYS.projects]);
@@ -3637,32 +3639,41 @@ function setupLiveItsmTicketStat() {
             }
             
             // Extract the volume/count from various possible response structures
-            let total = 0;
+            let activeTotal = 0;
+            let resolvedTotal = 0;
             const byStatus = payload?.data?.ticket_volume?.by_status;
             
             if (Array.isArray(byStatus)) {
-                // Sum active statuses (New, In Progress, Pending)
+                // Sum active statuses (New, In Progress, Pending) and resolved statuses (Resolved, Closed)
                 const activeStatuses = ["New", "In Progress", "Pending"];
-                total = byStatus
-                    .filter(item => activeStatuses.includes(String(item?.key ?? item?.status ?? item?.name ?? "").trim()))
-                    .reduce((sum, item) => sum + (Number(item?.value ?? item?.count ?? item?.total) || 0), 0);
+                const resolvedStatuses = ["Resolved", "Closed", "Done", "Completed"];
+                byStatus.forEach(item => {
+                    const status = String(item?.key ?? item?.status ?? item?.name ?? "").trim();
+                    const count = Number(item?.value ?? item?.count ?? item?.total) || 0;
+                    if (activeStatuses.includes(status)) activeTotal += count;
+                    if (resolvedStatuses.includes(status)) resolvedTotal += count;
+                });
             } else {
                 // Fallback to simple keys if by_status is not available
-                const findCount = (obj) => {
+                const findCount = (obj, targetKeys) => {
                     if (!obj || typeof obj !== 'object') return null;
-                    const keys = ['volume', 'total', 'count', 'active', 'active_count', 'ticket_count', 'tickets', 'activeTickets', 'totalTickets'];
-                    for (const key of keys) {
+                    for (const key of targetKeys) {
                         if (obj[key] !== undefined && obj[key] !== null && Number.isFinite(Number(obj[key]))) {
                             return Number(obj[key]);
                         }
                     }
                     return null;
                 };
-                total = findCount(payload?.data?.ticket_volume) ?? findCount(payload?.data) ?? findCount(payload) ?? 0;
+                const volumeKeys = ['volume', 'total', 'count', 'active', 'active_count', 'ticket_count', 'tickets', 'activeTickets', 'totalTickets'];
+                const resolvedKeys = ['resolved', 'closed', 'done', 'completed', 'resolved_count', 'closed_count'];
+                activeTotal = findCount(payload?.data?.ticket_volume, volumeKeys) ?? findCount(payload?.data, volumeKeys) ?? findCount(payload, volumeKeys) ?? 0;
+                resolvedTotal = findCount(payload?.data?.ticket_volume, resolvedKeys) ?? findCount(payload?.data, resolvedKeys) ?? findCount(payload, resolvedKeys) ?? 0;
             }
 
-            APP_STATE.overview.stats.tickets = total;
-            updateSingleStatValue("tickets", total);
+            APP_STATE.overview.stats.tickets = activeTotal;
+            updateSingleStatValue("tickets", activeTotal);
+            APP_STATE.overview.stats.users = resolvedTotal;
+            updateSingleStatValue("users", resolvedTotal);
             syncTicketCardState("live");
         } catch (error) {
             console.error("❌ ITSM live ticket volume sync failed:", error);
@@ -5763,7 +5774,7 @@ function buildSupabaseSetupModal() {
         overview: {
             currentUser: "Madison88 Team",
             heroDescription: "One launchpad for support, systems, projects, and the people keeping Madison88 running at full speed.",
-            stats: { tickets: 8, uptime: 99.98, users: 110, projects: 14 },
+            stats: { tickets: 8, uptime: 99.98, users: 0, projects: 14 },
             ticketUpdates: ["Update 1", "Update 2"]
         },
         projects: [
