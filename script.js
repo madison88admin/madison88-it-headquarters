@@ -381,16 +381,18 @@ const AUTOMATION_SOURCE_DATA = [
         department: "Costing",
         processName: "Trim Summary",
         automationTool: "Costing Automation",
+        // Workbook auto-effort is 10 min/transaction plus 2 min exception handling
+        // at a 5% exception rate (1,414 min/month), i.e. 10.1 min/transaction effective.
         manualAvgMins: 30,
         manualVolumeDay: 6,
         manualVolumeWeek: 32,
         manualVolumeMonth: 140,
-        autoAvgMins: 10,
+        autoAvgMins: 10.1,
         autoVolumeDay: 6,
         autoVolumeWeek: 32,
         autoVolumeMonth: 140,
         reportedManualMonthlyMins: 4200,
-        reportedSavedMins: 2800,
+        reportedSavedMins: 2786,
         roles: "Supervisor, Rank and File",
         hourlyCostPhp: 150
     },
