@@ -514,7 +514,10 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 6125,
         reportedSavedMins: 5880,
         roles: "Logistics Rank and File",
-        hourlyCostPhp: 144.29
+        hourlyCostPhp: 144.29,
+        // Workbook computes FTE capacity at 208 h/month (26 working days x 8 h)
+        // for this logistics process, unlike the 160 h/month used elsewhere.
+        productiveHoursPerMonth: 208
     },
     {
         sourceKey: "AP_Invoice",
@@ -1646,6 +1649,7 @@ function resolveMonthlyAutomationVolume(monthlyValue, weeklyValue, dailyValue) {
 }
 
 function buildAutomationValidation(row = {}) {
+    const productiveHoursPerMonth = normalizeAutomationNumber(row.productiveHoursPerMonth) || PRODUCTIVE_HOURS_PER_MONTH;
     const manualAvgMins = normalizeAutomationNumber(row.manualAvgMins);
     const manualVolumeDay = normalizeAutomationNumber(row.manualVolumeDay || 1);
     const manualVolumeWeek = normalizeAutomationNumber(row.manualVolumeWeek || 1);
@@ -1707,6 +1711,7 @@ function buildAutomationValidation(row = {}) {
         autoVolumeDay,
         autoVolumeWeek,
         autoVolumeMonth,
+        productiveHoursPerMonth,
         calculatedManualMonthlyMins,
         calculatedAutoMonthlyMins,
         calculatedSavedMins,
@@ -1744,6 +1749,7 @@ function buildAutomationComparison(sourceRows = []) {
                 manualWeightedMins: validation.calculatedManualMonthlyMins,
                 autoWeightedMins: validation.calculatedAutoMonthlyMins,
                 hourlyCostPhpWeighted: normalizeAutomationNumber(row.hourlyCostPhp || 0) * Math.max(validation.calculatedManualMonthlyMins, 1),
+                productiveHoursPerMonth: validation.productiveHoursPerMonth,
                 sourceCount: 1,
                 integrityChecks: [validation.integrityCheck],
                 integrityMessages: [validation.integrityMessage],
@@ -1787,6 +1793,7 @@ function buildAutomationComparison(sourceRows = []) {
             avgHandlingTimeMins: manualMonthlyMins / manualVolume,
             automatedHandlingTimeMins: autoMonthlyMins / autoVolume,
             hourlyCostPhp: Number(entry.hourlyCostPhpWeighted || 0) / weightBase,
+            productiveHoursPerMonth: Number(entry.productiveHoursPerMonth || PRODUCTIVE_HOURS_PER_MONTH),
             integrityCheck: entry.integrityChecks.every((status) => status === "PASS") ? "PASS" : "FAIL",
             integrityMessage: entry.integrityMessages.filter(Boolean).join(" || "),
             integrityMismatches: Number(entry.integrityMismatches || 0),
@@ -1831,7 +1838,8 @@ function computeAutomationBenefits(entry, multiplier = 1) {
     const monthlyTransactions = Number(entry.monthlyTransactions || 0);
     const avgHandlingTimeMins = Number(entry.avgHandlingTimeMins || 0);
     const automatedHandlingTimeMins = Number(entry.automatedHandlingTimeMins || 0);
-    const productiveHoursForPeriod = Math.max(PRODUCTIVE_HOURS_PER_MONTH * Number(multiplier || 1), 1);
+    const productiveHoursPerMonth = Number(entry.productiveHoursPerMonth || PRODUCTIVE_HOURS_PER_MONTH);
+    const productiveHoursForPeriod = Math.max(productiveHoursPerMonth * Number(multiplier || 1), 1);
     const automatedVolume = scaleAutomationMetric(entry.automatedVolume, multiplier);
     const manualVolume = scaleAutomationMetric(monthlyTransactions, multiplier);
     const calculatedManualMonthlyMins = Number(entry.manualMonthlyMins || (monthlyTransactions * avgHandlingTimeMins));
@@ -1845,7 +1853,7 @@ function computeAutomationBenefits(entry, multiplier = 1) {
     const hourlyCostPhp = Number(entry.hourlyCostPhp || 450);
     const timeSavedValuePhp = hoursSaved * hourlyCostPhp;
     const capacityReleaseFte = hoursSaved / productiveHoursForPeriod;
-    const annualCostPerFte = hourlyCostPhp * PRODUCTIVE_HOURS_PER_MONTH * 12;
+    const annualCostPerFte = hourlyCostPhp * productiveHoursPerMonth * 12;
     // Policy-based inference: without separate growth/hiring assumptions,
     // treat released FTE capacity as the avoided future FTE requirement.
     const annualCostAvoidancePhp = capacityReleaseFte * annualCostPerFte;
