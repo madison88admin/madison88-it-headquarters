@@ -622,8 +622,8 @@ const AUTOMATION_SOURCE_DATA = [
 ];
 
 const AUTOMATION_INTEGRITY_TOLERANCE_MINS = 0.01;
-const AUTOMATION_COMPARISON = buildAutomationComparison(AUTOMATION_SOURCE_DATA);
 const PRODUCTIVE_HOURS_PER_MONTH = 160;
+const AUTOMATION_COMPARISON = buildAutomationComparison(AUTOMATION_SOURCE_DATA);
 
 // Reference PHP→USD rate used so savings are always reported in dollars,
 // even before the first live exchange-rate fetch completes or when it fails.
