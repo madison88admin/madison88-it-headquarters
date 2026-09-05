@@ -620,6 +620,10 @@ const AUTOMATION_INTEGRITY_TOLERANCE_MINS = 0.01;
 const AUTOMATION_COMPARISON = buildAutomationComparison(AUTOMATION_SOURCE_DATA);
 const PRODUCTIVE_HOURS_PER_MONTH = 160;
 
+// Reference PHP→USD rate used so savings are always reported in dollars,
+// even before the first live exchange-rate fetch completes or when it fails.
+const FALLBACK_PHP_TO_USD_RATE = 0.016;
+
 const AUTOMATION_PROJECT_ALIASES = {
     "po-cutting-system": "m88-po-cutting",
     "costing-automation": "costingautomationm88",
@@ -2104,17 +2108,18 @@ async function fetchLatestExchangeRate() {
 
 function convertPhpToUsd(value) {
     const amount = Number(value);
-    const rate = Number(APP_RUNTIME.exchangeRate.rate);
+    const liveRate = Number(APP_RUNTIME.exchangeRate.rate);
+    const rate = Number.isFinite(liveRate) && liveRate > 0 ? liveRate : FALLBACK_PHP_TO_USD_RATE;
     if (!Number.isFinite(amount) || !Number.isFinite(rate) || rate <= 0) return null;
     return amount * rate;
 }
 
 function getSavingsCurrencyLabel() {
-    return convertPhpToUsd(1) === null ? "PHP" : "USD";
+    return "USD";
 }
 
 function getSavingsNarrativeLabel() {
-    return convertPhpToUsd(1) === null ? "Philippine pesos" : "U.S. dollars";
+    return "U.S. dollars";
 }
 
 function formatExchangeRateTimestamp(value) {
@@ -2164,11 +2169,12 @@ function getExchangeRateNote() {
         return `${freshness}: 1 PHP = ${formatExchangeRateValue(rate)} from ${APP_RUNTIME.exchangeRate.source || "exchange feed"}.${providerLabel}${checkedLabel}`;
     }
 
+    const referenceNote = `Reference rate: 1 PHP = ${formatExchangeRateValue(FALLBACK_PHP_TO_USD_RATE)}.`;
     if (APP_RUNTIME.exchangeRate.status === "loading") {
-        return "Loading the latest PHP to USD exchange rate. Savings will switch to dollars as soon as the rate is available.";
+        return `${referenceNote} Fetching the live PHP to USD rate.`;
     }
 
-    return "Live USD rate is temporarily unavailable, so savings are still shown in Philippine pesos for now.";
+    return `${referenceNote} Live USD rate is temporarily unavailable, so savings stay on the reference rate.`;
 }
 
 function scaleAutomationMetric(value, multiplier) {
