@@ -1241,71 +1241,6 @@ function renderAutomationDashboard() {
             </div>
         </div>
         <div class="automation-dashboard-body" id="automation-dashboard-body"${isHidden ? " hidden" : ""}>
-        <div class="automation-overall-chart-card">
-            <div class="automation-overall-chart-copy">
-                <div>
-                    <span class="quick-help-label">Overall Chart</span>
-                    <h4>Effort Reduction and Total Benefits by Solution</h4>
-                    <p class="automation-chart-intro">Gray bars show estimated manual effort hours, green bars show estimated automation effort hours, and the blue line shows total computed benefits in ${getSavingsNarrativeLabel()}.</p>
-                    <p class="automation-chart-intro"><strong>Viewing:</strong> ${period.label}${period.key === "annual" ? " totals for the full year" : ` estimates derived from the monthly baseline dataset`}</p>
-                    <p class="automation-chart-intro">${exchangeRateNote}</p>
-                </div>
-                <div class="automation-chart-toolbar">
-                    <div class="automation-period-switch" role="tablist" aria-label="Automation timeframe filter">
-                        ${AUTOMATION_PERIODS.map((item) => `
-                            <button
-                                class="automation-period-btn${item.key === period.key ? " is-active" : ""}"
-                                type="button"
-                                data-automation-period="${item.key}"
-                                aria-pressed="${String(item.key === period.key)}"
-                            >${item.label}</button>
-                        `).join("")}
-                    </div>
-                    <div class="automation-chart-legend">
-                    <span><i class="legend-swatch legend-swatch-manual"></i>Manual effort hours</span>
-                    <span><i class="legend-swatch legend-swatch-auto"></i>Automation effort hours</span>
-                    <span><i class="legend-line legend-line-savings"></i>Total benefits (${savingsLabel})</span>
-                    </div>
-                </div>
-            </div>
-            <div class="automation-panels-grid">
-                <div class="automation-insight-strip">
-                    <div class="automation-insight-card">
-                        <span>Highest Total Benefit</span>
-                        <strong>${bestPerformer.projectName}</strong>
-                        <small>${formatCurrencyCompact(bestPerformer.totalBenefitPhp)} in computed ${period.label.toLowerCase()} benefits</small>
-                    </div>
-                    <div class="automation-insight-card">
-                        <span>Overall Throughput</span>
-                        <strong>${Math.round((totalVolumeAutomated / Math.max(totalVolumeManual, 1)) * 100)}%</strong>
-                        <small>of the ${period.label.toLowerCase()} baseline volume handled through automation</small>
-                    </div>
-                </div>
-                <div class="automation-multiplier-card">
-                    <div class="automation-multiplier-header">
-                        <span class="quick-help-label">Capacity</span>
-                        <h5>${period.label} Capacity Release Per Solution</h5>
-                    </div>
-                    <div class="automation-multiplier-list">
-                        ${rows.map((item) => {
-                            return `
-                                <div class="automation-multiplier-row" data-automation-key="${escapeHtml(item.automationKey)}" tabindex="0">
-                                    <span>${escapeHtml(item.label)}</span>
-                                    <div class="automation-multiplier-track">
-                                        <div class="automation-multiplier-fill" style="width:${(item.capacityReleaseFte / Math.max(...rows.map((row) => row.capacityReleaseFte), 1)) * 100}%"></div>
-                                        <strong>${formatDecimal(item.capacityReleaseFte)} FTE</strong>
-                                    </div>
-                                </div>
-                            `;
-                        }).join("")}
-                    </div>
-                </div>
-            </div>
-            <div class="automation-chart-shell automation-chart-shell-interactive" data-automation-tooltip-shell>
-                ${overallChart}
-                <div class="automation-chart-tooltip" data-automation-tooltip hidden></div>
-            </div>
-        </div>
             <div class="automation-overall-chart-card">
                 <div class="automation-overall-chart-copy">
                     <div>
@@ -1367,6 +1302,71 @@ function renderAutomationDashboard() {
                 </table>
             </div>
         </div>
+            <div class="automation-overall-chart-card">
+                <div class="automation-overall-chart-copy">
+                    <div>
+                        <span class="quick-help-label">Overall Chart</span>
+                        <h4>Effort Reduction and Total Benefits by Solution</h4>
+                        <p class="automation-chart-intro">Gray bars show estimated manual effort hours, green bars show estimated automation effort hours, and the blue line shows total computed benefits in ${getSavingsNarrativeLabel()}.</p>
+                        <p class="automation-chart-intro"><strong>Viewing:</strong> ${period.label}${period.key === "annual" ? " totals for the full year" : ` estimates derived from the monthly baseline dataset`}</p>
+                        <p class="automation-chart-intro">${exchangeRateNote}</p>
+                    </div>
+                    <div class="automation-chart-toolbar">
+                        <div class="automation-period-switch" role="tablist" aria-label="Automation timeframe filter">
+                            ${AUTOMATION_PERIODS.map((item) => `
+                                <button
+                                    class="automation-period-btn${item.key === period.key ? " is-active" : ""}"
+                                    type="button"
+                                    data-automation-period="${item.key}"
+                                    aria-pressed="${String(item.key === period.key)}"
+                                >${item.label}</button>
+                            `).join("")}
+                        </div>
+                        <div class="automation-chart-legend">
+                            <span><i class="legend-swatch legend-swatch-manual"></i>Manual effort hours</span>
+                            <span><i class="legend-swatch legend-swatch-auto"></i>Automation effort hours</span>
+                            <span><i class="legend-line legend-line-savings"></i>Total benefits (${savingsLabel})</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="automation-panels-grid">
+                    <div class="automation-insight-strip">
+                        <div class="automation-insight-card">
+                            <span>Highest Total Benefit</span>
+                            <strong>${bestPerformer.projectName}</strong>
+                            <small>${formatCurrencyCompact(bestPerformer.totalBenefitPhp)} in computed ${period.label.toLowerCase()} benefits</small>
+                        </div>
+                        <div class="automation-insight-card">
+                            <span>Overall Throughput</span>
+                            <strong>${Math.round((totalVolumeAutomated / Math.max(totalVolumeManual, 1)) * 100)}%</strong>
+                            <small>of the ${period.label.toLowerCase()} baseline volume handled through automation</small>
+                        </div>
+                    </div>
+                    <div class="automation-multiplier-card">
+                        <div class="automation-multiplier-header">
+                            <span class="quick-help-label">Capacity</span>
+                            <h5>${period.label} Capacity Release Per Solution</h5>
+                        </div>
+                        <div class="automation-multiplier-list">
+                            ${rows.map((item) => {
+                                return `
+                                    <div class="automation-multiplier-row" data-automation-key="${escapeHtml(item.automationKey)}" tabindex="0">
+                                        <span>${escapeHtml(item.label)}</span>
+                                        <div class="automation-multiplier-track">
+                                            <div class="automation-multiplier-fill" style="width:${(item.capacityReleaseFte / Math.max(...rows.map((row) => row.capacityReleaseFte), 1)) * 100}%"></div>
+                                            <strong>${formatDecimal(item.capacityReleaseFte)} FTE</strong>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join("")}
+                        </div>
+                    </div>
+                </div>
+                <div class="automation-chart-shell automation-chart-shell-interactive" data-automation-tooltip-shell>
+                    ${overallChart}
+                    <div class="automation-chart-tooltip" data-automation-tooltip hidden></div>
+                </div>
+            </div>
         </div>
     `;
 
@@ -4847,7 +4847,7 @@ function setupRevealAnimations() {
                 observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.12 });
+    }, { threshold: 0 });
     elements.forEach((element) => { if (!element.classList.contains("active")) observer.observe(element); });
 }
 
