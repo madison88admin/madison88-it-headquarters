@@ -1303,6 +1303,68 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
     font-size: clamp(1.6rem, 2.5vw, 2.4rem);
 }
 
+.automation-filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(118, 193, 242, 0.1);
+}
+
+.automation-filter-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.automation-filter-label {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.automation-department-filter {
+    appearance: none;
+    -webkit-appearance: none;
+    min-width: 210px;
+    padding: 9px 36px 9px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(118, 193, 242, 0.18);
+    background:
+        url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2376c1f2' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center,
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+        rgba(15, 29, 49, 0.5);
+    color: var(--text-white);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.automation-department-filter:hover,
+.automation-department-filter:focus-visible {
+    border-color: rgba(118, 193, 242, 0.42);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(118, 193, 242, 0.12);
+}
+
+.automation-department-filter option {
+    background: #0f1d31;
+    color: #f5f1e8;
+}
+
+.automation-filter-meta {
+    color: var(--text-faint);
+    font-size: 0.82rem;
+}
+
 .automation-dashboard-body {
     display: grid;
     min-width: 0;
@@ -4529,6 +4591,24 @@ body.modal-open { overflow: hidden; }
     background: rgba(248, 249, 253, 0.56);
     border: 1px solid rgba(126, 157, 180, 0.18);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.54);
+}
+
+:root[data-theme="light"] .automation-filter-bar {
+    background: rgba(248, 249, 253, 0.5);
+    border-color: rgba(126, 157, 180, 0.16);
+}
+
+:root[data-theme="light"] .automation-department-filter {
+    background:
+        url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%230f4d64' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center,
+        rgba(255, 255, 255, 0.85);
+    border-color: rgba(126, 157, 180, 0.22);
+    color: #0f4d64;
+}
+
+:root[data-theme="light"] .automation-department-filter option {
+    background: #ffffff;
+    color: #0f4d64;
 }
 
 :root[data-theme="light"] .automation-period-btn {

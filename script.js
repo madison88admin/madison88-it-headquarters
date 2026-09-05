@@ -241,6 +241,7 @@ const STORAGE_KEYS = {
     themePreference: "madison88-theme-preference",
     automationDashboardHidden: "madison88-automation-dashboard-hidden",
     automationPeriod: "madison88-automation-period",
+    automationDepartment: "madison88-automation-department",
     exchangeRateData: "madison88-exchange-rate-data"
 };
 
@@ -708,6 +709,7 @@ const APP_STATE = {
     theme: localStorage.getItem(STORAGE_KEYS.themePreference) === "light" ? "light" : "dark",
     automationDashboardHidden: localStorage.getItem(STORAGE_KEYS.automationDashboardHidden) === "true",
     automationPeriod: localStorage.getItem(STORAGE_KEYS.automationPeriod) || "monthly",
+    automationDepartment: localStorage.getItem(STORAGE_KEYS.automationDepartment) || "all",
     currentProjectFilter: "all",
     currentProjectPage: 1,
     projectsPerPage: 8
@@ -1247,8 +1249,11 @@ function renderAutomationDashboard() {
 
     const period = getAutomationPeriodConfig(APP_STATE.automationPeriod);
     const annualPeriod = getAutomationPeriodConfig("annual");
-    const annualRows = AUTOMATION_COMPARISON.map((entry) => computeAutomationBenefits(entry, annualPeriod.multiplier));
-    const rows = AUTOMATION_COMPARISON.map((entry) => {
+    const departments = [...new Set(AUTOMATION_COMPARISON.map((entry) => String(entry.department || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+    const activeDepartment = departments.includes(APP_STATE.automationDepartment) ? APP_STATE.automationDepartment : "all";
+    const sourceRows = AUTOMATION_COMPARISON.filter((entry) => activeDepartment === "all" || String(entry.department || "").trim() === activeDepartment);
+    const annualRows = sourceRows.map((entry) => computeAutomationBenefits(entry, annualPeriod.multiplier));
+    const rows = sourceRows.map((entry) => {
         const project = APP_STATE.projects.find((item) => item.id === entry.projectId);
         return {
             ...computeAutomationBenefits(entry, period.multiplier),
@@ -1283,6 +1288,16 @@ function renderAutomationDashboard() {
                 <h3>Automation Impact Summary</h3>
                 <p class="service-copy">This view follows the benefits policy framework across all solutions: baseline hours, time saved, capacity release, and cost avoidance. Every total is recalculated using average handling time and one monthly transaction volume baseline before reporting.</p>
                 <p class="service-copy">Estimated values based on Benefits Calculation Policy monthly-volume model.</p>
+            </div>
+            <div class="automation-filter-bar">
+                <div class="automation-filter-control">
+                    <label class="automation-filter-label" for="automation-department-filter">Department</label>
+                    <select class="automation-department-filter" id="automation-department-filter" aria-label="Filter automation solutions by department">
+                        <option value="all">All departments</option>
+                        ${departments.map((dept) => `<option value="${escapeHtml(dept)}"${dept === activeDepartment ? " selected" : ""}>${escapeHtml(dept)}</option>`).join("")}
+                    </select>
+                </div>
+                <span class="automation-filter-meta">${rows.length} of ${AUTOMATION_COMPARISON.length} solutions shown</span>
             </div>
             <div class="automation-kpi-grid">
                 <article class="automation-kpi-card">
@@ -1506,6 +1521,16 @@ function setupAutomationDashboardInteractions(container) {
             renderAutomationDashboard();
         });
     });
+
+    const departmentFilter = container.querySelector("#automation-department-filter");
+    if (departmentFilter) {
+        departmentFilter.addEventListener("change", () => {
+            if (departmentFilter.value === APP_STATE.automationDepartment) return;
+            APP_STATE.automationDepartment = departmentFilter.value;
+            localStorage.setItem(STORAGE_KEYS.automationDepartment, APP_STATE.automationDepartment);
+            renderAutomationDashboard();
+        });
+    }
 
     const clearActive = () => {
         container.classList.remove("has-linked-active");
