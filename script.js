@@ -1255,10 +1255,30 @@ function renderTicker() {
         : [];
     const items = [
         ...itsmLiveItems,
-        ...staticItems,
         ...staticItems
     ];
-    track.innerHTML = items.map((item) => `<span class="ticker-pill"><strong>IT Update</strong><span>${item}</span></span>`).join("");
+
+    if (items.length === 0) {
+        track.innerHTML = '';
+        return;
+    }
+
+    // Dedupe consecutive identical items to avoid visual spam in the pill view.
+    const dedupeKey = (text) => String(text || '').trim().toLowerCase();
+    const seen = new Set();
+    const uniqueItems = items.filter((item) => {
+        const key = dedupeKey(item);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+
+    const pills = uniqueItems.map((item, index) => {
+        const isFirst = index === 0;
+        return `<span class="live-feed-pill${isFirst ? ' is-featured' : ''}"><strong>IT Update</strong><span>${escapeHtml(item)}</span></span>`;
+    }).join("");
+
+    track.innerHTML = pills;
 }
 
 function renderAutomationDashboard() {

@@ -1040,12 +1040,94 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
     border: 1px solid rgba(61, 79, 92, 0.34);
     border-radius: 999px;
     color: var(--text-muted);
-    animation: ticker-slide 18s linear infinite;
 }
 
-@keyframes ticker-slide {
-    from { transform: translateX(0); }
-    to { transform: translateX(-100%); }
+/* Live feed pills — rendered inside the search card's status-ticker panel. */
+.live-feed-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background:
+        linear-gradient(90deg, rgba(42, 74, 53, 0.18), rgba(61, 79, 92, 0.12)),
+        rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(61, 79, 92, 0.34);
+    border-radius: 999px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.live-feed-pill strong {
+    color: var(--accent-gold);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+/* Featured/active pill — latest feed item gets a brighter, more prominent treatment. */
+.live-feed-pill.is-featured {
+    background:
+        linear-gradient(90deg, rgba(0, 201, 167, 0.22), rgba(61, 79, 92, 0.18)),
+        rgba(0, 201, 167, 0.08);
+    border-color: var(--accent-gold);
+    color: var(--text-white);
+    box-shadow: 0 0 0 1px rgba(0, 201, 167, 0.28), 0 6px 18px rgba(0, 201, 167, 0.18);
+}
+
+.live-feed-pill.is-featured strong {
+    color: var(--accent-gold-light);
+}
+
+.live-feed-pill.is-featured span {
+    color: var(--text-white);
+}
+
+/* Panel-level layout: center the pills when few, allow them to wrap when many. */
+.status-ticker.glass {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    padding: 10px 6px;
+}
+
+.status-ticker.glass .ticker-label {
+    position: static;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 6px;
+}
+
+/* Teal live indicator dot inside the label, matching the UI screenshot. */
+.status-ticker.glass .ticker-label::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    box-shadow: 0 0 8px var(--accent-gold);
+    animation: live-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.55;
+        transform: scale(0.85);
+    }
 }
 
 .hero-stats {
