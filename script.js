@@ -254,7 +254,8 @@ const SUPABASE_SECTION_KEYS = {
     contactGuide: "contact_guide",
     supportCards: "support_cards",
     policyDocuments: "policy_documents",
-    missionVision: "mission_vision"
+    missionVision: "mission_vision",
+    automationData: "automation_data"
 };
 
 const APP_RUNTIME = {
@@ -623,7 +624,44 @@ const AUTOMATION_SOURCE_DATA = [
 
 const AUTOMATION_INTEGRITY_TOLERANCE_MINS = 0.01;
 const PRODUCTIVE_HOURS_PER_MONTH = 160;
-const AUTOMATION_COMPARISON = buildAutomationComparison(AUTOMATION_SOURCE_DATA);
+let AUTOMATION_COMPARISON = buildAutomationComparison(AUTOMATION_SOURCE_DATA);
+
+function rebuildAutomationComparison() {
+    AUTOMATION_COMPARISON = buildAutomationComparison(getAutomationSourceData());
+}
+
+function normalizeAutomationSourceRows(rows) {
+    const source = Array.isArray(rows) && rows.length ? rows : AUTOMATION_SOURCE_DATA;
+    return source
+        .map((row) => {
+            const label = String(row?.label || "").trim();
+            if (!label) return null;
+            return {
+                sourceKey: String(row?.sourceKey || `custom_${label.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`).trim(),
+                projectId: String(row?.projectId || "").trim(),
+                label,
+                department: String(row?.department || "").trim(),
+                processName: String(row?.processName || "").trim(),
+                automationTool: String(row?.automationTool || "").trim(),
+                manualAvgMins: normalizeAutomationNumber(row?.manualAvgMins),
+                manualVolumeMonth: normalizeAutomationNumber(row?.manualVolumeMonth),
+                autoAvgMins: normalizeAutomationNumber(row?.autoAvgMins),
+                autoVolumeMonth: normalizeAutomationNumber(row?.autoVolumeMonth),
+                roles: String(row?.roles || "").trim(),
+                hourlyCostPhp: normalizeAutomationNumber(row?.hourlyCostPhp),
+                ...(normalizeAutomationNumber(row?.productiveHoursPerMonth) > 0
+                    ? { productiveHoursPerMonth: normalizeAutomationNumber(row?.productiveHoursPerMonth) }
+                    : {})
+            };
+        })
+        .filter(Boolean);
+}
+
+function getAutomationSourceData() {
+    const stored = APP_STATE.automationData;
+    if (Array.isArray(stored) && stored.length) return stored;
+    return cloneData(AUTOMATION_SOURCE_DATA);
+}
 
 // Reference PHP→USD rate used so savings are always reported in dollars,
 // even before the first live exchange-rate fetch completes or when it fails.
@@ -721,7 +759,8 @@ const APP_STATE = {
     automationDepartment: localStorage.getItem(STORAGE_KEYS.automationDepartment) || "all",
     currentProjectFilter: "all",
     currentProjectPage: 1,
-    projectsPerPage: 8
+    projectsPerPage: 8,
+    automationData: null
 };
 
 let startupLoaderHidden = false;
@@ -1057,6 +1096,10 @@ async function hydrateAppStateFromSupabase() {
                 ...snapshot[SUPABASE_SECTION_KEYS.missionVision]
             };
         }
+        if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.automationData]) && snapshot[SUPABASE_SECTION_KEYS.automationData].length) {
+            APP_STATE.automationData = normalizeAutomationSourceRows(snapshot[SUPABASE_SECTION_KEYS.automationData]);
+            rebuildAutomationComparison();
+        }
 
         APP_RUNTIME.supabaseStatus = "connected";
         APP_RUNTIME.supabaseLastError = "";
@@ -1323,6 +1366,7 @@ function renderAutomationDashboard() {
                     </select>
                 </div>
                 <span class="automation-filter-meta">${rows.length} of ${AUTOMATION_COMPARISON.length} solutions shown</span>
+                <button class="btn btn-secondary admin-inline-button automation-edit-data-button" type="button" id="edit-automation-data-button"${APP_STATE.adminLoggedIn ? "" : " hidden"}>Edit Automation Data</button>
             </div>
             <div class="automation-kpi-grid">
                 <article class="automation-kpi-card">
@@ -1584,6 +1628,14 @@ function setupAutomationDashboardInteractions(container, latestStatusSummaries =
             tooltip.innerHTML = "";
         }
     };
+
+    const editDataButton = container.querySelector("#edit-automation-data-button");
+    if (editDataButton) {
+        editDataButton.addEventListener("click", () => {
+            if (!APP_STATE.adminLoggedIn) return;
+            openManagedModal(buildAutomationDataEditorModal());
+        });
+    }
 
     const updateTooltipPosition = (event) => {
         if (!tooltipShell || !tooltip || tooltip.hidden) return;
@@ -4824,6 +4876,41 @@ function setupModalSystem() {
     });
 
     document.addEventListener("click", (event) => {
+        const editorAddRow = event.target.closest("#automation-editor-add-row");
+        if (editorAddRow) {
+            const body = document.getElementById("automation-editor-body");
+            if (!body) return;
+            const index = body.querySelectorAll(".automation-editor-row").length;
+            const temp = document.createElement("tbody");
+            temp.innerHTML = buildAutomationEditorRow({ label: "", department: "", manualVolumeMonth: "", manualAvgMins: "", autoAvgMins: "", hourlyCostPhp: "" }, index);
+            const row = temp.querySelector(".automation-editor-row");
+            if (!row) return;
+            body.appendChild(row);
+            row.querySelector("input")?.focus();
+            return;
+        }
+
+        const editorDeleteRow = event.target.closest(".automation-editor-delete");
+        if (editorDeleteRow) {
+            editorDeleteRow.closest(".automation-editor-row")?.remove();
+            return;
+        }
+
+        const editorReset = event.target.closest("#automation-editor-reset");
+        if (editorReset) {
+            if (!confirm("Reset all automation data to the built-in defaults? Unsaved edits will be lost.")) return;
+            saveAutomationData(cloneData(AUTOMATION_SOURCE_DATA));
+            const modalBody = document.getElementById("modal-body");
+            if (modalBody) modalBody.innerHTML = buildAutomationDataEditorModal();
+            return;
+        }
+
+        const editorSave = event.target.closest("#automation-editor-save");
+        if (editorSave) {
+            handleAutomationEditorSave();
+            return;
+        }
+
         const editPolicyDocumentButton = event.target.closest("[data-edit-policy-document]");
         if (editPolicyDocumentButton) {
             if (!APP_STATE.adminLoggedIn) return;
@@ -5573,6 +5660,93 @@ function buildSupportCenterModal() {
     `;
 }
 
+function buildAutomationEditorRow(row, index) {
+    const productiveHours = normalizeAutomationNumber(row.productiveHoursPerMonth) || PRODUCTIVE_HOURS_PER_MONTH;
+    return `
+        <tr class="automation-editor-row" data-editor-index="${index}">
+            <td data-label="Solution"><input type="text" name="label" value="${escapeHtml(row.label || "")}" placeholder="Solution name"></td>
+            <td data-label="Department"><input type="text" name="department" value="${escapeHtml(row.department || "")}" placeholder="Department"></td>
+            <td data-label="Trans / month"><input type="number" step="any" min="0" name="manualVolumeMonth" value="${normalizeAutomationNumber(row.manualVolumeMonth)}"></td>
+            <td data-label="Manual mins"><input type="number" step="any" min="0" name="manualAvgMins" value="${normalizeAutomationNumber(row.manualAvgMins)}"></td>
+            <td data-label="Auto mins"><input type="number" step="any" min="0" name="autoAvgMins" value="${normalizeAutomationNumber(row.autoAvgMins)}"></td>
+            <td data-label="Cost / hr (PHP)"><input type="number" step="any" min="0" name="hourlyCostPhp" value="${normalizeAutomationNumber(row.hourlyCostPhp)}"></td>
+            <td data-label="Productive hrs"><input type="number" step="any" min="1" name="productiveHoursPerMonth" value="${productiveHours}"></td>
+            <td data-label=""><button class="btn btn-danger automation-editor-delete" type="button" data-delete-row="${index}" title="Remove this solution">&times;</button></td>
+        </tr>
+    `;
+}
+
+function buildAutomationDataEditorModal() {
+    const rows = getAutomationSourceData();
+    const editorRows = rows.map((row, index) => buildAutomationEditorRow(row, index)).join("");
+
+    return `
+        <div class="modal-block automation-editor-block">
+            <h2 id="modal-title">Automation Data Editor</h2>
+            <p>Edit the source data behind the Automation Dashboard: transaction volume, handling times, hourly cost, and department per solution. All dashboard totals, charts, and breakdowns recalculate from these values.</p>
+            <div class="automation-editor-scroll">
+                <table class="automation-editor-table">
+                    <thead>
+                        <tr>
+                            <th>Solution</th>
+                            <th>Department</th>
+                            <th>Trans / month</th>
+                            <th>Manual mins</th>
+                            <th>Auto mins</th>
+                            <th>Cost / hr (PHP)</th>
+                            <th>Productive hrs</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="automation-editor-body">${editorRows}</tbody>
+                </table>
+            </div>
+            <div class="automation-editor-actions">
+                <button class="btn btn-secondary" type="button" id="automation-editor-add-row">+ Add Solution</button>
+                <button class="btn btn-secondary" type="button" id="automation-editor-reset">Reset to Defaults</button>
+                <button class="btn btn-primary" type="button" id="automation-editor-save">Save Changes</button>
+            </div>
+            <p class="admin-feedback automation-editor-feedback" style="color:#f3c8c8;"></p>
+        </div>
+    `;
+}
+
+function collectAutomationEditorRows() {
+    const body = document.getElementById("automation-editor-body");
+    if (!body) return null;
+
+    return [...body.querySelectorAll(".automation-editor-row")].map((row) => ({
+        label: String(row.querySelector("[name=\"label\"]")?.value || "").trim(),
+        department: String(row.querySelector("[name=\"department\"]")?.value || "").trim(),
+        manualVolumeMonth: normalizeAutomationNumber(row.querySelector("[name=\"manualVolumeMonth\"]")?.value),
+        manualAvgMins: normalizeAutomationNumber(row.querySelector("[name=\"manualAvgMins\"]")?.value),
+        autoAvgMins: normalizeAutomationNumber(row.querySelector("[name=\"autoAvgMins\"]")?.value),
+        hourlyCostPhp: normalizeAutomationNumber(row.querySelector("[name=\"hourlyCostPhp\"]")?.value),
+        productiveHoursPerMonth: normalizeAutomationNumber(row.querySelector("[name=\"productiveHoursPerMonth\"]")?.value)
+    }));
+}
+
+function handleAutomationEditorSave() {
+    const feedback = document.querySelector(".automation-editor-feedback");
+    const rows = collectAutomationEditorRows();
+    if (!rows) return;
+
+    if (rows.some((row) => !row.label)) {
+        if (feedback) feedback.textContent = "Every solution needs a name.";
+        return;
+    }
+    if (rows.some((row) => row.manualVolumeMonth <= 0)) {
+        if (feedback) feedback.textContent = "Transactions per month must be greater than 0 for every solution.";
+        return;
+    }
+
+    saveAutomationData(rows);
+    if (feedback) {
+        feedback.style.color = "#9fe8c8";
+        feedback.textContent = "Saved. Dashboard updated.";
+    }
+}
+
 function buildAdminLoginModal() {
     return `
         <div class="modal-block">
@@ -6173,6 +6347,8 @@ function updateAdminUI() {
     if (addTeamButton) addTeamButton.hidden = !APP_STATE.adminLoggedIn;
     if (addSupportCardButton) addSupportCardButton.hidden = !APP_STATE.adminLoggedIn;
     if (addQuickHelpCardButton) addQuickHelpCardButton.hidden = !APP_STATE.adminLoggedIn;
+    const editAutomationDataButton = document.getElementById("edit-automation-data-button");
+    if (editAutomationDataButton) editAutomationDataButton.hidden = !APP_STATE.adminLoggedIn;
     window.dispatchEvent(new CustomEvent("itsm-token-updated"));
 }
 
@@ -6223,6 +6399,13 @@ function saveSupportCards() {
 function savePolicyDocuments() {
     APP_STATE.policyDocuments = APP_STATE.policyDocuments.map(normalizePolicyDocument);
     void persistSupabaseSection(SUPABASE_SECTION_KEYS.policyDocuments, APP_STATE.policyDocuments);
+}
+
+function saveAutomationData(rows) {
+    APP_STATE.automationData = normalizeAutomationSourceRows(rows);
+    rebuildAutomationComparison();
+    void persistSupabaseSection(SUPABASE_SECTION_KEYS.automationData, APP_STATE.automationData);
+    renderAutomationDashboard();
 }
 
 function loadProjects(source = "default") {
