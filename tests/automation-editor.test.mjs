@@ -103,4 +103,13 @@ await vm.runInContext(`(async () => {
   );
   APP_STATE.automationDepartment = 'all';
   console.log('PASS: department filter scopes lifecycle cards and drill-down projects');
+
+  const workbookV3Annual = AUTOMATION_COMPARISON.map(entry => computeAutomationBenefits(entry, 12));
+  assert.equal(workbookV3Annual.length, 13);
+  assert.ok(Math.abs(workbookV3Annual.reduce((sum, item) => sum + item.hoursSaved, 0) - 17832.8) < 0.000001);
+  assert.ok(Math.abs(workbookV3Annual.reduce((sum, item) => sum + item.capacityReleaseFte, 0) - 9.14657051282051) < 0.000001);
+  assert.ok(Math.abs(workbookV3Annual.reduce((sum, item) => sum + item.totalBenefitPhp, 0) - 525270.367124934) < 0.000001);
+  assert.ok(workbookV3Annual.some(item => item.label === 'Costing BCBD Automation' && item.department === 'Costing Department'));
+  assert.ok(workbookV3Annual.some(item => item.label === 'Purchasing AP Invoicing' && item.projectId === 'm88apinvoice'));
+  console.log('PASS: workbook v3 data totals and project mappings match the dashboard');
 })()`, context);

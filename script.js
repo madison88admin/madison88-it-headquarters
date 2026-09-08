@@ -373,15 +373,15 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 28800,
         reportedSavedMins: 25600,
         roles: "Rank and File",
-        hourlyCostPhp: 150
+        hourlyCostPhp: 0
     },
     {
-        sourceKey: "Trim_Summary",
-        projectId: "costingautomationm88",
-        label: "Trim Summary",
-        department: "Costing",
-        processName: "Trim Summary",
-        automationTool: "Costing Automation",
+        sourceKey: "Costing_BCBD",
+        projectId: "smart-techpack-to-costing",
+        label: "Costing BCBD Automation",
+        department: "Costing Department",
+        processName: "Costing BCBD Automation",
+        automationTool: "Costing BCBD Automation",
         // Workbook auto-effort is 10 min/transaction plus 2 min exception handling
         // at a 5% exception rate (1,414 min/month), i.e. 10.1 min/transaction effective.
         manualAvgMins: 30,
@@ -394,8 +394,8 @@ const AUTOMATION_SOURCE_DATA = [
         autoVolumeMonth: 140,
         reportedManualMonthlyMins: 4200,
         reportedSavedMins: 2786,
-        roles: "Supervisor, Rank and File",
-        hourlyCostPhp: 150
+        roles: "Costing Department",
+        hourlyCostPhp: 0
     },
     {
         sourceKey: "ITSM",
@@ -415,13 +415,13 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 1800,
         reportedSavedMins: 900,
         roles: "Rank and File",
-        hourlyCostPhp: 300
+        hourlyCostPhp: 0
     },
     {
         sourceKey: "Dev_Tracker",
         projectId: "m88devtracker",
-        label: "Dev Tracker",
-        department: "Information Technology",
+        label: "Proto Tracking System",
+        department: "PBD, TD, MD, Costing, Factory",
         processName: "Proto Tracking System",
         automationTool: "Proto Tracking System",
         manualAvgMins: 10,
@@ -435,12 +435,12 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 9100,
         reportedSavedMins: 6370,
         roles: "PBD, TD, MD, Costing, Factory",
-        hourlyCostPhp: 150
+        hourlyCostPhp: 0
     },
     {
         sourceKey: "Cash_Flow",
         projectId: "m88cashflow",
-        label: "Cash Flow",
+        label: "Accounting Cash Flow Dashboard",
         department: "Accounting",
         processName: "Cash Flow",
         automationTool: "Cash Flow Dashboard Automation",
@@ -455,12 +455,12 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 1280,
         reportedSavedMins: 1000,
         roles: "Supervisor",
-        hourlyCostPhp: 250
+        hourlyCostPhp: 0
     },
     {
         sourceKey: "IPT",
         projectId: "",
-        label: "Interns Productivity Tool",
+        label: "Admin Interns Productivity Tracker",
         department: "Admin",
         processName: "Interns Daily Time Logs and Task",
         automationTool: "Interns Productivity Tool",
@@ -475,12 +475,12 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 4200,
         reportedSavedMins: 3600,
         roles: "Rank and File, Supervisor",
-        hourlyCostPhp: 150
+        hourlyCostPhp: 0
     },
     {
         sourceKey: "KPI",
         projectId: "",
-        label: "KPI",
+        label: "Logistics KPI Dashboard via Power BI",
         department: "Logistics",
         processName: "KPI",
         automationTool: "Automated KPI Dashboard (Power BI)",
@@ -495,12 +495,12 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 2400,
         reportedSavedMins: 2000,
         roles: "Manager & Supervisor",
-        hourlyCostPhp: 255
+        hourlyCostPhp: 0
     },
     {
         sourceKey: "Invoice_Packing_List",
         projectId: "",
-        label: "Invoice & Packing List Automation",
+        label: "Logistics Packing List Automation",
         department: "Logistics",
         processName: "Non-EDI Invoice & Packing List Creation",
         automationTool: "Invoice & Packing List Automation (Non-EDI → Automated)",
@@ -515,15 +515,15 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 6125,
         reportedSavedMins: 5880,
         roles: "Logistics Rank and File",
-        hourlyCostPhp: 144.29,
+        hourlyCostPhp: 0,
         // Workbook computes FTE capacity at 208 h/month (26 working days x 8 h)
         // for this logistics process, unlike the 160 h/month used elsewhere.
         productiveHoursPerMonth: 208
     },
     {
         sourceKey: "AP_Invoice",
-        projectId: "",
-        label: "AP Invoice Automation",
+        projectId: "m88apinvoice",
+        label: "Purchasing AP Invoicing",
         department: "Purchasing",
         processName: "AP Invoice Processing & Validation",
         automationTool: "AP Invoice Automation (Digital Ingestion & Auto-Matching)",
@@ -538,14 +538,14 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 17025,
         reportedSavedMins: 15890,
         roles: "Rank and File",
-        hourlyCostPhp: 127.31
+        hourlyCostPhp: 165.2833125
     },
     {
         sourceKey: "Accounting_AP",
         projectId: "",
         label: "Accounting AP Invoicing",
         department: "Accounting",
-        processName: "AP Invoice Recording, Payment & SOA Reconciliation",
+        processName: "Accounting AP Invoicing",
         automationTool: "AP Invoice Automation (Accounting)",
         manualAvgMins: 8,
         manualVolumeDay: 115,
@@ -558,7 +558,7 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 19976,
         reportedSavedMins: 9988,
         roles: "Rank and File",
-        hourlyCostPhp: 127.31
+        hourlyCostPhp: 0
     },
     {
         sourceKey: "Brand_Analysis",
@@ -578,7 +578,7 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 1620,
         reportedSavedMins: 1080,
         roles: "Supervisor",
-        hourlyCostPhp: 350
+        hourlyCostPhp: 0
     },
     {
         sourceKey: "HR_PE",
@@ -598,7 +598,7 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 14625,
         reportedSavedMins: 11550,
         roles: "Rank and File",
-        hourlyCostPhp: 150
+        hourlyCostPhp: 0
     },
     {
         sourceKey: "IT_Inventory",
@@ -618,7 +618,7 @@ const AUTOMATION_SOURCE_DATA = [
         reportedManualMonthlyMins: 2880,
         reportedSavedMins: 2520,
         roles: "Rank and File",
-        hourlyCostPhp: 150
+        hourlyCostPhp: 0
     }
 ];
 
@@ -663,13 +663,22 @@ function getAutomationSourceData() {
     return cloneData(AUTOMATION_SOURCE_DATA);
 }
 
+function isPreWorkbookV3AutomationData(rows) {
+    if (!Array.isArray(rows) || !rows.length) return false;
+    const sourceKeys = new Set(rows.map((row) => String(row?.sourceKey || "").trim()));
+    // The approved v3 workbook replaces the former Trim Summary source with
+    // Costing BCBD Automation, so older shared dashboard data must not override it.
+    return sourceKeys.has("Trim_Summary") && !sourceKeys.has("Costing_BCBD");
+}
+
 // Reference PHP→USD rate used so savings are always reported in dollars,
 // even before the first live exchange-rate fetch completes or when it fails.
 const FALLBACK_PHP_TO_USD_RATE = 0.016;
 
 const AUTOMATION_PROJECT_ALIASES = {
     "po-cutting-system": "m88-po-cutting",
-    "costing-automation": "costingautomationm88",
+    "costing-automation": "smart-techpack-to-costing",
+    "costing-bcbd-automation": "smart-techpack-to-costing",
     "it-service-management": "m88itsm",
     "m88-po-cutting": "m88-po-cutting",
     "costingautomationm88": "costingautomationm88",
@@ -1097,7 +1106,10 @@ async function hydrateAppStateFromSupabase() {
             };
         }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.automationData]) && snapshot[SUPABASE_SECTION_KEYS.automationData].length) {
-            APP_STATE.automationData = normalizeAutomationSourceRows(snapshot[SUPABASE_SECTION_KEYS.automationData]);
+            const sharedAutomationData = snapshot[SUPABASE_SECTION_KEYS.automationData];
+            APP_STATE.automationData = isPreWorkbookV3AutomationData(sharedAutomationData)
+                ? cloneData(AUTOMATION_SOURCE_DATA)
+                : normalizeAutomationSourceRows(sharedAutomationData);
             rebuildAutomationComparison();
         }
 
@@ -1946,7 +1958,9 @@ function computeAutomationBenefits(entry, multiplier = 1) {
     const manualHours = scaleAutomationMetric(calculatedManualMonthlyMins / 60, multiplier);
     const automatedHours = scaleAutomationMetric(calculatedAutoMonthlyMins / 60, multiplier);
     const hoursSaved = scaleAutomationMetric(Math.max(0, calculatedSavedMonthlyMins) / 60, multiplier);
-    const hourlyCostPhp = Number(entry.hourlyCostPhp || 450);
+    // A zero cost is intentional for workbook rows without a validated cost
+    // avoidance rate. Do not substitute a fallback and overstate benefits.
+    const hourlyCostPhp = normalizeAutomationNumber(entry.hourlyCostPhp);
     const timeSavedValuePhp = hoursSaved * hourlyCostPhp;
     const capacityReleaseFte = hoursSaved / productiveHoursForPeriod;
     const annualCostPerFte = hourlyCostPhp * productiveHoursPerMonth * 12;
