@@ -1316,7 +1316,7 @@ function renderAutomationDashboard() {
     if (!container) return;
 
     const period = getAutomationPeriodConfig(APP_STATE.automationPeriod);
-    const annualPeriod = getAutomationPeriodConfig("annual");
+    const annualPeriod = period;
     const departments = [...new Set(AUTOMATION_COMPARISON.map((entry) => String(entry.department || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
     const activeDepartment = departments.includes(APP_STATE.automationDepartment) ? APP_STATE.automationDepartment : "all";
     const sourceRows = AUTOMATION_COMPARISON.filter((entry) => activeDepartment === "all" || String(entry.department || "").trim() === activeDepartment);
@@ -1355,7 +1355,7 @@ function renderAutomationDashboard() {
                 <span class="quick-help-label">Automation Dashboard</span>
                 <h3>Automation Impact Summary</h3>
                 <p class="service-copy">This view follows the benefits policy framework across all solutions: baseline hours, time saved, capacity release, and cost avoidance. Every total is recalculated using average handling time and one monthly transaction volume baseline, then annualized to a 12-month horizon before reporting.</p>
-                <p class="service-copy">Estimated values based on the Benefits Calculation Policy annual model.</p>
+                <p class="service-copy">Estimates for ${escapeHtml(period.label)} based on monthly baselines.${period.key === "ytd" ? " January 1 through today (Philippines time); the current month is prorated by elapsed calendar days. These are estimates, not recorded actual savings." : ""}</p>
             </div>
             <div class="automation-filter-bar">
                 <div class="automation-filter-control">
@@ -1366,28 +1366,28 @@ function renderAutomationDashboard() {
                     </select>
                 </div>
                 <span class="automation-filter-meta">${rows.length} of ${AUTOMATION_COMPARISON.length} solutions shown</span>
-                <button class="btn btn-secondary admin-inline-button automation-edit-data-button" type="button" id="edit-automation-data-button"${APP_STATE.adminLoggedIn ? "" : " hidden"}>Edit Automation Data</button>
+                ${APP_STATE.adminLoggedIn ? '<button class="btn btn-secondary admin-inline-button automation-edit-data-button" type="button" id="edit-automation-data-button">Edit Automation Data</button>' : ""}
             </div>
             <div class="automation-kpi-grid">
                 <article class="automation-kpi-card">
                     <span>Estimated Baseline Work</span>
                     <strong>${formatCompactNumber(annualBaselineHours)}</strong>
-                    <small>estimated hours required annually before automation</small>
+                    <small>estimated hours required before automation (${escapeHtml(period.label)})</small>
                 </article>
                 <article class="automation-kpi-card">
                     <span>Estimated Time Saved</span>
                     <strong>${formatCompactNumber(annualHoursSaved)}</strong>
-                    <small>estimated hours removed from manual work annually</small>
+                    <small>estimated hours removed from manual work (${escapeHtml(period.label)})</small>
                 </article>
                 <article class="automation-kpi-card">
                     <span>FTE Savings</span>
                     <strong>${formatDecimal(annualCapacityRelease)} FTE</strong>
-                    <small>estimated annual redeployable capacity</small>
+                    <small>estimated redeployable capacity (${escapeHtml(period.label)})</small>
                 </article>
                 <article class="automation-kpi-card">
                     <span>Estimated Total Benefits</span>
                     <strong>${formatCurrencyCompact(annualBenefits)}</strong>
-                    <small>${formatCurrencyCompact(annualCostAvoidance)} estimated from cost avoidance annually</small>
+                    <small>${formatCurrencyCompact(annualCostAvoidance)} estimated cost avoidance (${escapeHtml(period.label)})</small>
                 </article>
             </div>
             <div class="automation-status-grid">
@@ -1598,6 +1598,8 @@ function setupAutomationDashboardInteractions(container, latestStatusSummaries =
             if (departmentFilter.value === APP_STATE.automationDepartment) return;
             APP_STATE.automationDepartment = departmentFilter.value;
             localStorage.setItem(STORAGE_KEYS.automationDepartment, APP_STATE.automationDepartment);
+            APP_STATE.currentProjectPage = 1;
+            renderProjects(APP_STATE.projects);
             renderAutomationDashboard();
         });
     }
@@ -1914,11 +1916,18 @@ const AUTOMATION_PERIODS = [
     { key: "daily", label: "Daily", multiplier: 1 / 22 },
     { key: "weekly", label: "Weekly", multiplier: 1 / 4.33 },
     { key: "monthly", label: "Monthly", multiplier: 1 },
-    { key: "annual", label: "Annual", multiplier: 12 }
+    { key: "annual", label: "Annual", multiplier: 12 },
+    { key: "ytd", label: "Year to Date", multiplier: 1 }
 ];
 
 function getAutomationPeriodConfig(periodKey) {
-    return AUTOMATION_PERIODS.find((item) => item.key === periodKey) || AUTOMATION_PERIODS[AUTOMATION_PERIODS.length - 1];
+    if (periodKey === "ytd") {
+        const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Manila", year: "numeric", month: "numeric", day: "numeric" }).formatToParts(new Date());
+        const value = (key) => Number(parts.find((part) => part.type === key).value);
+        const year = value("year"), month = value("month"), day = value("day");
+        return { key: "ytd", label: "Year to Date", multiplier: month - 1 + day / new Date(Date.UTC(year, month, 0)).getUTCDate() };
+    }
+    return AUTOMATION_PERIODS.find((item) => item.key === periodKey) || AUTOMATION_PERIODS.find((item) => item.key === "annual");
 }
 
 function computeAutomationBenefits(entry, multiplier = 1) {
@@ -2064,6 +2073,13 @@ function resolveAutomationBenefitsForProject(project, lookup) {
     return null;
 }
 
+function projectMatchesAutomationDepartment(project, lookup = buildAutomationLookupMap()) {
+    const selected = APP_STATE.automationDepartment;
+    if (!selected || selected === "all") return true;
+    const match = resolveAutomationBenefitsForProject(project, lookup);
+    return String(project.department || match?.department || "").trim() === selected;
+}
+
 function buildAutomationStatusSummaries() {
     const automationLookup = buildAutomationLookupMap();
     const benchmarks = getAutomationPortfolioBenchmarks();
@@ -2075,6 +2091,7 @@ function buildAutomationStatusSummaries() {
     };
 
     APP_STATE.projects.forEach((project) => {
+        if (!projectMatchesAutomationDepartment(project, automationLookup)) return;
         const lifecycleStatus = getProjectLifecycleStatus(project);
         const summary = summaryMap[lifecycleStatus];
         if (!summary) return;
@@ -2082,19 +2099,20 @@ function buildAutomationStatusSummaries() {
         summary.projectCount += 1;
         const automation = resolveAutomationBenefitsForProject(project, automationLookup);
         const benefitSource = automation || estimateAutomationBenefitsForProject(project, lifecycleStatus, benchmarks);
-        const hoursSaved = Number(benefitSource.hoursSaved || 0);
+        const periodScale = getAutomationPeriodConfig(APP_STATE.automationPeriod).multiplier / 12;
+        const hoursSaved = Number(benefitSource.hoursSaved || 0) * periodScale;
         const capacityFte = Number(
-            benefitSource.capacityReleaseFte || hoursSaved / (PRODUCTIVE_HOURS_PER_MONTH * 12)
+            benefitSource.capacityReleaseFte || Number(benefitSource.hoursSaved || 0) / (PRODUCTIVE_HOURS_PER_MONTH * 12)
         );
 
         summary.hoursSaved += hoursSaved;
         summary.capacityReleaseFte += capacityFte;
-        summary.totalBenefitPhp += Number(benefitSource.totalBenefitPhp || 0);
+        summary.totalBenefitPhp += Number(benefitSource.totalBenefitPhp || 0) * periodScale;
         summary.projects.push({
             project,
             hoursSaved,
             capacityReleaseFte: capacityFte,
-            totalBenefitPhp: Number(benefitSource.totalBenefitPhp || 0),
+            totalBenefitPhp: Number(benefitSource.totalBenefitPhp || 0) * periodScale,
             department: String(benefitSource.department || "").trim()
         });
     });
@@ -2598,7 +2616,7 @@ function renderProjects(projects) {
     const filteredProjects = projects.filter((project) => {
         const matchesFilter = APP_STATE.currentProjectFilter === "all" || project.filter === APP_STATE.currentProjectFilter;
         const matchesQuery = !query || buildSearchText([project.name, project.description, project.ownerName, project.status, project.overseenBy, project.assignedBy]).includes(query);
-        return matchesFilter && matchesQuery;
+        return matchesFilter && matchesQuery && projectMatchesAutomationDepartment(project);
     });
     const totalPages = Math.max(1, Math.ceil(filteredProjects.length / APP_STATE.projectsPerPage));
     APP_STATE.currentProjectPage = Math.min(APP_STATE.currentProjectPage, totalPages);
@@ -4877,6 +4895,7 @@ function setupModalSystem() {
 
     document.addEventListener("click", (event) => {
         const editorAddRow = event.target.closest("#automation-editor-add-row");
+        if (event.target.closest(".automation-editor-actions, .automation-editor-delete") && !APP_STATE.adminLoggedIn) return;
         if (editorAddRow) {
             const body = document.getElementById("automation-editor-body");
             if (!body) return;
@@ -4899,9 +4918,15 @@ function setupModalSystem() {
         const editorReset = event.target.closest("#automation-editor-reset");
         if (editorReset) {
             if (!confirm("Reset all automation data to the built-in defaults? Unsaved edits will be lost.")) return;
-            saveAutomationData(cloneData(AUTOMATION_SOURCE_DATA));
-            const modalBody = document.getElementById("modal-body");
-            if (modalBody) modalBody.innerHTML = buildAutomationDataEditorModal();
+            void saveAutomationData(cloneData(AUTOMATION_SOURCE_DATA)).then((saved) => {
+                if (!saved) {
+                    const feedback = document.querySelector(".automation-editor-feedback");
+                    if (feedback) feedback.textContent = "Reset failed. Your saved data has not changed.";
+                    return;
+                }
+                const modalBody = document.getElementById("modal-body");
+                if (modalBody && APP_STATE.adminLoggedIn) modalBody.innerHTML = buildAutomationDataEditorModal();
+            });
             return;
         }
 
@@ -5663,7 +5688,7 @@ function buildSupportCenterModal() {
 function buildAutomationEditorRow(row, index) {
     const productiveHours = normalizeAutomationNumber(row.productiveHoursPerMonth) || PRODUCTIVE_HOURS_PER_MONTH;
     return `
-        <tr class="automation-editor-row" data-editor-index="${index}">
+        <tr class="automation-editor-row" data-editor-index="${index}" data-source-key="${escapeHtml(row.sourceKey || "")}">
             <td data-label="Solution"><input type="text" name="label" value="${escapeHtml(row.label || "")}" placeholder="Solution name"></td>
             <td data-label="Department"><input type="text" name="department" value="${escapeHtml(row.department || "")}" placeholder="Department"></td>
             <td data-label="Trans / month"><input type="number" step="any" min="0" name="manualVolumeMonth" value="${normalizeAutomationNumber(row.manualVolumeMonth)}"></td>
@@ -5677,6 +5702,7 @@ function buildAutomationEditorRow(row, index) {
 }
 
 function buildAutomationDataEditorModal() {
+    if (!APP_STATE.adminLoggedIn) return "";
     const rows = getAutomationSourceData();
     const editorRows = rows.map((row, index) => buildAutomationEditorRow(row, index)).join("");
 
@@ -5716,9 +5742,11 @@ function collectAutomationEditorRows() {
     if (!body) return null;
 
     return [...body.querySelectorAll(".automation-editor-row")].map((row) => ({
+        ...getAutomationSourceData().find((source) => source.sourceKey === row.dataset.sourceKey),
         label: String(row.querySelector("[name=\"label\"]")?.value || "").trim(),
         department: String(row.querySelector("[name=\"department\"]")?.value || "").trim(),
         manualVolumeMonth: normalizeAutomationNumber(row.querySelector("[name=\"manualVolumeMonth\"]")?.value),
+        autoVolumeMonth: normalizeAutomationNumber(row.querySelector("[name=\"manualVolumeMonth\"]")?.value),
         manualAvgMins: normalizeAutomationNumber(row.querySelector("[name=\"manualAvgMins\"]")?.value),
         autoAvgMins: normalizeAutomationNumber(row.querySelector("[name=\"autoAvgMins\"]")?.value),
         hourlyCostPhp: normalizeAutomationNumber(row.querySelector("[name=\"hourlyCostPhp\"]")?.value),
@@ -5726,10 +5754,15 @@ function collectAutomationEditorRows() {
     }));
 }
 
-function handleAutomationEditorSave() {
+async function handleAutomationEditorSave() {
+    if (!APP_STATE.adminLoggedIn) return;
     const feedback = document.querySelector(".automation-editor-feedback");
     const rows = collectAutomationEditorRows();
     if (!rows) return;
+    if (!rows.length) {
+        if (feedback) feedback.textContent = "Keep at least one solution.";
+        return;
+    }
 
     if (rows.some((row) => !row.label)) {
         if (feedback) feedback.textContent = "Every solution needs a name.";
@@ -5740,7 +5773,11 @@ function handleAutomationEditorSave() {
         return;
     }
 
-    saveAutomationData(rows);
+    const saved = await saveAutomationData(rows);
+    if (!saved) {
+        if (feedback) feedback.textContent = "Save failed. Changes have not been saved. Please retry.";
+        return;
+    }
     if (feedback) {
         feedback.style.color = "#9fe8c8";
         feedback.textContent = "Saved. Dashboard updated.";
@@ -6401,11 +6438,16 @@ function savePolicyDocuments() {
     void persistSupabaseSection(SUPABASE_SECTION_KEYS.policyDocuments, APP_STATE.policyDocuments);
 }
 
-function saveAutomationData(rows) {
-    APP_STATE.automationData = normalizeAutomationSourceRows(rows);
+async function saveAutomationData(rows) {
+    if (!APP_STATE.adminLoggedIn) return false;
+    const normalized = normalizeAutomationSourceRows(rows);
+    const saved = await persistSupabaseSection(SUPABASE_SECTION_KEYS.automationData, normalized);
+    if (!saved) return false;
+    APP_STATE.automationData = normalized;
     rebuildAutomationComparison();
-    void persistSupabaseSection(SUPABASE_SECTION_KEYS.automationData, APP_STATE.automationData);
     renderAutomationDashboard();
+    renderProjects(APP_STATE.projects);
+    return true;
 }
 
 function loadProjects(source = "default") {

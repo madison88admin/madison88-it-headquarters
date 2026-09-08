@@ -2552,6 +2552,8 @@ body:not(.admin-mode) .project-card { cursor: default; }
     align-self: center;
 }
 
+.automation-edit-data-button[hidden] { display: none !important; }
+
 .automation-editor-block {
     max-width: 960px;
 }
