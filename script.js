@@ -1311,8 +1311,8 @@ function renderAutomationDashboard() {
             <div>
                 <span class="quick-help-label">Automation Dashboard</span>
                 <h3>Automation Impact Summary</h3>
-                <p class="service-copy">This view follows the benefits policy framework across all solutions: baseline hours, time saved, capacity release, and cost avoidance. Every total is recalculated using average handling time and one monthly transaction volume baseline before reporting.</p>
-                <p class="service-copy">Estimated values based on Benefits Calculation Policy monthly-volume model.</p>
+                <p class="service-copy">This view follows the benefits policy framework across all solutions: baseline hours, time saved, capacity release, and cost avoidance. Every total is recalculated using average handling time and one monthly transaction volume baseline, then annualized to a 12-month horizon before reporting.</p>
+                <p class="service-copy">Estimated values based on the Benefits Calculation Policy annual model.</p>
             </div>
             <div class="automation-filter-bar">
                 <div class="automation-filter-control">
