@@ -84,4 +84,23 @@ await vm.runInContext(`(async () => {
   assert.equal(buildAutomationDataEditorModal(), '');
   assert.equal(await saveAutomationData(defaults), false);
   console.log('PASS: reset restores defaults and logout blocks editor');
+
+  // The Department selector must filter the three lifecycle cards and their
+  // drill-down project arrays, not merely the solution-level charts.
+  APP_STATE.automationDepartment = 'Accounting';
+  APP_STATE.automationPeriod = 'annual';
+  const accountingSummaries = buildAutomationStatusSummaries();
+  const accountingProjects = accountingSummaries.flatMap(summary => summary.projects);
+  assert.ok(accountingProjects.length > 0, 'Accounting should have linked projects');
+  assert.ok(accountingProjects.every(item => item.department === 'Accounting'));
+  assert.equal(
+    accountingSummaries.reduce((sum, summary) => sum + summary.projectCount, 0),
+    accountingProjects.length
+  );
+  assert.equal(
+    accountingSummaries.reduce((sum, summary) => sum + summary.projectCount, 0),
+    APP_STATE.projects.filter(project => projectMatchesAutomationDepartment(project)).length
+  );
+  APP_STATE.automationDepartment = 'all';
+  console.log('PASS: department filter scopes lifecycle cards and drill-down projects');
 })()`, context);
