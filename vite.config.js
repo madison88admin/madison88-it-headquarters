@@ -6,7 +6,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/api-itsm': {
-        target: 'http://5.223.78.194:3011',
+        target: 'https://madison88-itsm.onrender.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api-itsm/, '/api')
       }
@@ -17,7 +17,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/api-itsm': {
-        target: 'http://5.223.78.194:3011',
+        target: 'https://madison88-itsm.onrender.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api-itsm/, '/api')
       }
