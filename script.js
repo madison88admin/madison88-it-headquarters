@@ -1336,7 +1336,7 @@ function renderAutomationDashboard() {
                     <small>estimated hours removed from manual work annually</small>
                 </article>
                 <article class="automation-kpi-card">
-                    <span>Estimated Capacity Release</span>
+                    <span>FTE Savings</span>
                     <strong>${formatDecimal(annualCapacityRelease)} FTE</strong>
                     <small>estimated annual redeployable capacity</small>
                 </article>
@@ -1348,12 +1348,13 @@ function renderAutomationDashboard() {
             </div>
             <div class="automation-status-grid">
                 ${statusSummaries.map((summary) => `
-                    <article class="automation-kpi-card automation-status-card">
-                        <span>${summary.label}</span>
+                    <article class="automation-kpi-card automation-status-card automation-status-card-clickable" data-status-key="${escapeHtml(summary.key)}" tabindex="0" role="button" aria-label="View ${escapeHtml(summary.label)} projects (${summary.projectCount})">
+                        <span>${escapeHtml(summary.label)}</span>
                         <strong>${summary.projectCount}</strong>
                         <small>${summary.projectCount === 1 ? "project" : "projects"} in this lifecycle stage</small>
                         <div class="automation-status-metrics">
                             <p><strong>${formatCompactNumber(summary.hoursSaved)}</strong> estimated hours saved</p>
+                            <p><strong>${formatDecimal(summary.capacityReleaseFte)} FTE</strong> FTE savings</p>
                             <p><strong>${formatCurrencyCompact(summary.totalBenefitPhp)}</strong> estimated total benefits</p>
                         </div>
                     </article>
@@ -1491,7 +1492,7 @@ function renderAutomationDashboard() {
     `;
 
     applyAutomationDashboardVisibility(container, isHidden);
-    setupAutomationDashboardInteractions(container);
+    setupAutomationDashboardInteractions(container, statusSummaries);
 }
 
 function toggleAutomationDashboardVisibility() {
@@ -1532,7 +1533,7 @@ function applyAutomationDashboardVisibility(container, isHidden) {
     }
 }
 
-function setupAutomationDashboardInteractions(container) {
+function setupAutomationDashboardInteractions(container, latestStatusSummaries = []) {
     if (!container) return;
     const tooltipShell = container.querySelector("[data-automation-tooltip-shell]");
     const tooltip = container.querySelector("[data-automation-tooltip]");
@@ -1556,6 +1557,24 @@ function setupAutomationDashboardInteractions(container) {
             renderAutomationDashboard();
         });
     }
+
+    container.querySelectorAll(".automation-status-card-clickable").forEach((card) => {
+        const openLifecycleModal = () => {
+            const statusKey = card.getAttribute("data-status-key");
+            const summary = latestStatusSummaries.find((item) => item.key === statusKey);
+            if (summary && typeof window.dashboardOpenModal === "function") {
+                window.dashboardOpenModal(buildLifecycleProjectsModal(summary));
+            }
+        };
+
+        card.addEventListener("click", openLifecycleModal);
+        card.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openLifecycleModal();
+            }
+        });
+    });
 
     const clearActive = () => {
         container.classList.remove("has-linked-active");
@@ -1998,9 +2017,9 @@ function buildAutomationStatusSummaries() {
     const benchmarks = getAutomationPortfolioBenchmarks();
 
     const summaryMap = {
-        completed: { key: "completed", label: "Completed", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0 },
-        "in-progress": { key: "in-progress", label: "In Progress", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0 },
-        "not-started": { key: "not-started", label: "Not Started", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0 }
+        completed: { key: "completed", label: "Completed", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0, capacityReleaseFte: 0, projects: [] },
+        "in-progress": { key: "in-progress", label: "In Development", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0, capacityReleaseFte: 0, projects: [] },
+        "not-started": { key: "not-started", label: "Pipeline", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0, capacityReleaseFte: 0, projects: [] }
     };
 
     APP_STATE.projects.forEach((project) => {
@@ -2011,9 +2030,21 @@ function buildAutomationStatusSummaries() {
         summary.projectCount += 1;
         const automation = resolveAutomationBenefitsForProject(project, automationLookup);
         const benefitSource = automation || estimateAutomationBenefitsForProject(project, lifecycleStatus, benchmarks);
+        const hoursSaved = Number(benefitSource.hoursSaved || 0);
+        const capacityFte = Number(
+            benefitSource.capacityReleaseFte || hoursSaved / (PRODUCTIVE_HOURS_PER_MONTH * 12)
+        );
 
-        summary.hoursSaved += Number(benefitSource.hoursSaved || 0);
+        summary.hoursSaved += hoursSaved;
+        summary.capacityReleaseFte += capacityFte;
         summary.totalBenefitPhp += Number(benefitSource.totalBenefitPhp || 0);
+        summary.projects.push({
+            project,
+            hoursSaved,
+            capacityReleaseFte: capacityFte,
+            totalBenefitPhp: Number(benefitSource.totalBenefitPhp || 0),
+            department: String(benefitSource.department || "").trim()
+        });
     });
 
     return [
@@ -2021,6 +2052,59 @@ function buildAutomationStatusSummaries() {
         summaryMap["in-progress"],
         summaryMap["not-started"]
     ];
+}
+
+function buildLifecycleProjectsModal(summary) {
+    const projects = Array.isArray(summary?.projects) ? summary.projects : [];
+    const label = String(summary?.label || "Projects");
+
+    const rows = projects
+        .slice()
+        .sort((a, b) => b.totalBenefitPhp - a.totalBenefitPhp)
+        .map((item) => {
+            const project = item.project || {};
+            const systemUrl = String(project.systemUrl || "").trim();
+            const systemLink = systemUrl
+                ? `<a class="lifecycle-project-link" href="${escapeHtml(systemUrl)}" target="_blank" rel="noopener noreferrer">Open system ↗</a>`
+                : "";
+            const status = String(project.status || "").trim();
+            return `
+                <div class="lifecycle-project-row">
+                    <div class="lifecycle-project-main">
+                        <strong>${escapeHtml(project.name || "Untitled project")}</strong>
+                        <small>${escapeHtml(project.description || "No description available.")}</small>
+                        <div class="lifecycle-project-meta">
+                            <span class="automation-chip">${escapeHtml(status || "Unknown status")}</span>
+                            <span>Progress: <strong>${clampProgress(project.progress, 0)}%</strong></span>
+                            ${item.department ? `<span>Dept: <strong>${escapeHtml(item.department)}</strong></span>` : ""}
+                            <span>Owner: <strong>${escapeHtml(project.ownerName || project.owner || "Unassigned")}</strong></span>
+                            ${item.hoursSaved ? `<span>Hours saved: <strong>${formatCompactNumber(item.hoursSaved)}</strong></span>` : ""}
+                            ${item.capacityReleaseFte ? `<span>FTE: <strong>${formatDecimal(item.capacityReleaseFte)}</strong></span>` : ""}
+                            ${item.totalBenefitPhp ? `<span>Benefits: <strong>${formatCurrencyCompact(item.totalBenefitPhp)}</strong></span>` : ""}
+                        </div>
+                        ${systemLink ? `<div class="lifecycle-project-actions">${systemLink}</div>` : ""}
+                    </div>
+                </div>
+            `;
+        })
+        .join("");
+
+    if (!projects.length) {
+        return `
+            <div class="modal-block">
+                <h2 id="modal-title">${escapeHtml(label)} Projects</h2>
+                <p class="admin-feedback">No projects are currently in this lifecycle stage.</p>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="modal-block">
+            <h2 id="modal-title">${escapeHtml(label)} Projects</h2>
+            <p class="admin-feedback">${projects.length} ${projects.length === 1 ? "project" : "projects"} in this lifecycle stage · ${formatCompactNumber(summary.hoursSaved)} estimated hours saved · ${formatDecimal(summary.capacityReleaseFte)} FTE savings · ${formatCurrencyCompact(summary.totalBenefitPhp)} estimated total benefits</p>
+            <div class="lifecycle-project-list">${rows}</div>
+        </div>
+    `;
 }
 
 function initializeExchangeRate() {

@@ -1510,6 +1510,73 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
     gap: 10px;
 }
 
+.automation-status-card-clickable {
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.automation-status-card-clickable:hover,
+.automation-status-card-clickable:focus-visible {
+    border-color: rgba(0, 201, 167, 0.5);
+    box-shadow: 0 0 0 1px rgba(0, 201, 167, 0.22), 0 12px 26px rgba(8, 15, 28, 0.2);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.lifecycle-project-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.lifecycle-project-row {
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(118, 193, 242, 0.14);
+}
+
+.lifecycle-project-main {
+    display: grid;
+    gap: 6px;
+}
+
+.lifecycle-project-main strong {
+    font-size: 1.05rem;
+    color: var(--text-white);
+}
+
+.lifecycle-project-main small {
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+.lifecycle-project-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    color: var(--text-faint);
+    font-size: 0.85rem;
+}
+
+.lifecycle-project-meta strong {
+    color: var(--text-muted);
+}
+
+.lifecycle-project-actions {
+    margin-top: 4px;
+}
+
+.lifecycle-project-link {
+    color: var(--accent-gold);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.lifecycle-project-link:hover {
+    text-decoration: underline;
+}
+
 .automation-status-metrics {
     display: grid;
     gap: 6px;
