@@ -10,7 +10,7 @@
 
 [[redirects]]
   from = "/api-itsm/*"
-  to = "https://madison88-itsm.onrender.com/api/:splat"
+  to = "/.netlify/functions/itsm-proxy/:splat"
   status = 200
   force = true
 

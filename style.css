@@ -1040,12 +1040,92 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
     border: 1px solid rgba(61, 79, 92, 0.34);
     border-radius: 999px;
     color: var(--text-muted);
-    animation: ticker-slide 18s linear infinite;
 }
 
-@keyframes ticker-slide {
-    from { transform: translateX(0); }
-    to { transform: translateX(-100%); }
+/* Live feed pills — rendered inside the search card's status-ticker panel. */
+.live-feed-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    background:
+        linear-gradient(90deg, rgba(42, 74, 53, 0.18), rgba(61, 79, 92, 0.12)),
+        rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(61, 79, 92, 0.34);
+    border-radius: 999px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 260px;
+    cursor: default;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.live-feed-pill:hover {
+    border-color: rgba(0, 201, 167, 0.5);
+    color: var(--text-white);
+}
+
+/* Featured/active pill — latest feed item gets a brighter, more prominent treatment. */
+.live-feed-pill.is-featured {
+    background:
+        linear-gradient(90deg, rgba(0, 201, 167, 0.22), rgba(61, 79, 92, 0.18)),
+        rgba(0, 201, 167, 0.08);
+    border-color: var(--accent-gold);
+    color: var(--text-white);
+    box-shadow: 0 0 0 1px rgba(0, 201, 167, 0.28), 0 6px 18px rgba(0, 201, 167, 0.18);
+}
+
+.live-feed-pill.is-featured:hover {
+    color: var(--text-white);
+}
+
+/* Panel-level layout: label on its own row, pills wrap below it. */
+.status-ticker.glass {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    padding: 14px 12px;
+}
+
+.status-ticker.glass .ticker-label {
+    position: static;
+    flex-basis: 100%;
+    justify-content: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Teal live indicator dot inside the label, matching the UI screenshot. */
+.status-ticker.glass .ticker-label::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    box-shadow: 0 0 8px var(--accent-gold);
+    animation: live-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.55;
+        transform: scale(0.85);
+    }
 }
 
 .hero-stats {
@@ -1303,9 +1383,79 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
     font-size: clamp(1.6rem, 2.5vw, 2.4rem);
 }
 
+.automation-filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(118, 193, 242, 0.1);
+}
+
+.automation-filter-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.automation-filter-label {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.automation-department-filter {
+    appearance: none;
+    -webkit-appearance: none;
+    min-width: 210px;
+    padding: 9px 36px 9px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(118, 193, 242, 0.18);
+    background:
+        url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2376c1f2' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center,
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+        rgba(15, 29, 49, 0.5);
+    color: var(--text-white);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.automation-department-filter:hover,
+.automation-department-filter:focus-visible {
+    border-color: rgba(118, 193, 242, 0.42);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(118, 193, 242, 0.12);
+}
+
+.automation-department-filter option {
+    background: #0f1d31;
+    color: #f5f1e8;
+}
+
+.automation-filter-meta {
+    color: var(--text-faint);
+    font-size: 0.82rem;
+}
+
 .automation-dashboard-body {
     display: grid;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
+}
+
+.automation-dashboard > *,
+.automation-dashboard-body > *,
+.automation-overall-chart-copy > * {
+    min-width: 0;
 }
 
 .automation-kpi-grid {
@@ -1358,6 +1508,73 @@ button { background: none; border: 0; color: inherit; cursor: pointer; }
 
 .automation-status-card {
     gap: 10px;
+}
+
+.automation-status-card-clickable {
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.automation-status-card-clickable:hover,
+.automation-status-card-clickable:focus-visible {
+    border-color: rgba(0, 201, 167, 0.5);
+    box-shadow: 0 0 0 1px rgba(0, 201, 167, 0.22), 0 12px 26px rgba(8, 15, 28, 0.2);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.lifecycle-project-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.lifecycle-project-row {
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(118, 193, 242, 0.14);
+}
+
+.lifecycle-project-main {
+    display: grid;
+    gap: 6px;
+}
+
+.lifecycle-project-main strong {
+    font-size: 1.05rem;
+    color: var(--text-white);
+}
+
+.lifecycle-project-main small {
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+.lifecycle-project-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    color: var(--text-faint);
+    font-size: 0.85rem;
+}
+
+.lifecycle-project-meta strong {
+    color: var(--text-muted);
+}
+
+.lifecycle-project-actions {
+    margin-top: 4px;
+}
+
+.lifecycle-project-link {
+    color: var(--accent-gold);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.lifecycle-project-link:hover {
+    text-decoration: underline;
 }
 
 .automation-status-metrics {
@@ -2329,6 +2546,85 @@ body:not(.admin-mode) .project-card { cursor: default; }
     margin-top: 10px;
 }
 
+.automation-edit-data-button {
+    margin-top: 0;
+    margin-left: 12px;
+    align-self: center;
+}
+
+.automation-editor-block {
+    max-width: 960px;
+}
+
+.automation-editor-scroll {
+    max-height: 55vh;
+    overflow: auto;
+    margin: 14px 0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+}
+
+.automation-editor-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 820px;
+}
+
+.automation-editor-table th {
+    position: sticky;
+    top: 0;
+    background: rgba(13, 20, 33, 0.96);
+    text-align: left;
+    padding: 10px 8px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1;
+}
+
+.automation-editor-table td {
+    padding: 6px 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.automation-editor-table input {
+    width: 100%;
+    min-width: 90px;
+    padding: 7px 9px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: inherit;
+    font-size: 13px;
+}
+
+.automation-editor-table input:focus {
+    outline: none;
+    border-color: rgba(45, 212, 191, 0.6);
+    box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.15);
+}
+
+.automation-editor-delete {
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.automation-editor-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.automation-editor-feedback {
+    margin-top: 10px;
+    min-height: 1em;
+}
+
 .content-columns {
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
@@ -3065,7 +3361,7 @@ body:not(.admin-mode) #add-quickhelp-card-button {
     right: 14px;
     bottom: 14px;
     display: none;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 6px;
     padding: 10px;
     border-radius: 24px;
@@ -3075,7 +3371,9 @@ body:not(.admin-mode) #add-quickhelp-card-button {
 .mobile-nav-link {
     flex-direction: column;
     gap: 4px;
-    min-height: 62px;
+    min-height: 48px;
+    min-width: 0;
+    padding: 6px 2px;
     font-size: 0.76rem;
     justify-content: center;
 }
@@ -3823,6 +4121,8 @@ body:not(.admin-mode) #add-quickhelp-card-button {
 }
 
 .reveal.active { opacity: 1; transform: translateY(0); }
+/* Long sections must stay readable even when only a small part is on screen. */
+.section-shell.reveal { opacity: 1; transform: none; }
 .hidden-by-search { display: none !important; }
 
 html.lenis { height: auto; }
@@ -4517,6 +4817,24 @@ body.modal-open { overflow: hidden; }
     background: rgba(248, 249, 253, 0.56);
     border: 1px solid rgba(126, 157, 180, 0.18);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.54);
+}
+
+:root[data-theme="light"] .automation-filter-bar {
+    background: rgba(248, 249, 253, 0.5);
+    border-color: rgba(126, 157, 180, 0.16);
+}
+
+:root[data-theme="light"] .automation-department-filter {
+    background:
+        url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%230f4d64' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center,
+        rgba(255, 255, 255, 0.85);
+    border-color: rgba(126, 157, 180, 0.22);
+    color: #0f4d64;
+}
+
+:root[data-theme="light"] .automation-department-filter option {
+    background: #ffffff;
+    color: #0f4d64;
 }
 
 :root[data-theme="light"] .automation-period-btn {

@@ -14,8 +14,8 @@ window.M88_SUPABASE = {
 
 // Initialize Admin credentials from environment variables
 window.M88_ADMIN = {
-    username: import.meta.env.VITE_ADMIN_USERNAME || "admin123",
-    password: import.meta.env.VITE_ADMIN_PASSWORD || "admin123"
+    username: import.meta.env.VITE_ADMIN_USERNAME || "",
+    password: import.meta.env.VITE_ADMIN_PASSWORD || ""
 };
 
 const HERO_LOCATIONS = {
@@ -91,7 +91,7 @@ const APP_CONFIG = {
     overview: {
         currentUser: "Madison88 Team",
         heroDescription: "One launchpad for support, systems, projects, and the people keeping Madison88 running at full speed.",
-        stats: { tickets: 0, uptime: 99.98, users: 110, projects: 14 },
+        stats: { tickets: 0, uptime: 99.98, users: 0, projects: 14 },
         ticketUpdates: [
             "3 printer incidents were cleared in the last hour",
             "ERP maintenance begins tonight at 9:00 PM PHT",
@@ -100,17 +100,21 @@ const APP_CONFIG = {
         ]
     },
     projects: [
-        { id: "m88-it-headquarters", name: "m88-it-headquarters", status: "Live", filter: "active", description: "IT headquarters dashboard deployed from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 10 at 9:26 AM", team: ["JC"], systemUrl: "", restricted: false },
-        { id: "m88itsm", name: "m88itsm", status: "Live", filter: "active", description: "IT service management deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Mar 18", team: ["JC", "MP"], systemUrl: "https://m88itsm.netlify.app", restricted: false },
-        { id: "poinstructions", name: "poinstructions", status: "Live", filter: "active", description: "PO instructions deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Jan 6", team: ["JC"], systemUrl: "https://poinstructions.netlify.app", restricted: false },
-        { id: "m88accountallocation", name: "m88accountallocation", status: "Live", filter: "active", description: "Account allocation deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Sep 9, 2025", team: ["JC"], systemUrl: "https://m88accountallocation.netlify.app", restricted: false },
-        { id: "m88ipt", name: "m88ipt", status: "Live", filter: "active", description: "IT procurement deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 10 at 10:29 AM", team: ["JC"], systemUrl: "https://m88ipt.netlify.app", restricted: false },
-        { id: "m88cashflow", name: "m88cashflow", status: "Live", filter: "active", description: "Cash flow deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 7", team: ["JC"], systemUrl: "https://m88cashflow.netlify.app", restricted: false },
-        { id: "m88-po-cutting", name: "m88-po-cutting", status: "Live", filter: "active", description: "PO cutting deployment from GitHub with Next.js.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Mar 31", team: ["JC"], systemUrl: "https://m88-po-cutting.netlify.app", restricted: false },
-        { id: "m88devtracker", name: "m88devtracker", status: "Live", filter: "active", description: "Developer tracker deployment from GitHub.", progress: 100, owner: "MP", ownerName: "Mhark Pentinio", updated: "Published Mar 26", team: ["SS"], systemUrl: "https://m88devtracker.netlify.app", restricted: false },
+        { id: "m88-it-headquarters", name: "m88-it-headquarters", status: "Live", filter: "active", description: "IT headquarters dashboard.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 10 at 9:26 AM", team: ["JC"], systemUrl: "", restricted: false },
+        { id: "m88itsm", name: "m88itsm", status: "Live", filter: "active", description: "IT service management system.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Mar 18", team: ["JC", "MP"], systemUrl: "https://m88itsm.netlify.app", restricted: false },
+        { id: "poinstructions", name: "poinstructions", status: "Live", filter: "active", description: "PO instructions system.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Jan 6", team: ["JC"], systemUrl: "https://poinstructions.netlify.app", restricted: false },
+        { id: "m88accountallocation", name: "m88accountallocation", status: "Live", filter: "active", description: "Account allocation system.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Sep 9, 2025", team: ["JC"], systemUrl: "https://m88accountallocation.netlify.app", restricted: false },
+        { id: "m88ipt", name: "m88ipt", status: "Live", filter: "active", description: "IT procurement system.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 10 at 10:29 AM", team: ["JC"], systemUrl: "https://m88ipt.netlify.app", restricted: false },
+        { id: "m88cashflow", name: "m88cashflow", status: "Live", filter: "active", description: "Cash flow management system.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Apr 7", team: ["JC"], systemUrl: "https://m88cashflow.netlify.app", restricted: false },
+        { id: "m88-po-cutting", name: "m88-po-cutting", status: "Live", filter: "active", description: "PO cutting system built with Next.js.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Mar 31", team: ["JC"], systemUrl: "https://m88-po-cutting.netlify.app", restricted: false },
+        { id: "m88devtracker", name: "m88devtracker", status: "Live", filter: "active", description: "Developer tracking system.", progress: 100, owner: "MP", ownerName: "Mhark Pentinio", updated: "Published Mar 26", team: ["SS"], systemUrl: "https://m88devtracker.netlify.app", restricted: false },
         { id: "madison88-orgchart", name: "madison88-orgchart", status: "Live", filter: "active", description: "Organization chart deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Mar 10", team: ["JC"], systemUrl: "https://madison88-orgchart.netlify.app", restricted: false },
         { id: "m88ideaintake", name: "m88ideaintake", status: "Live", filter: "active", description: "Idea intake deployment from GitHub.", progress: 100, owner: "MP", ownerName: "Mhark Pentinio", updated: "Published Mar 5", team: ["MP", "SS"], systemUrl: "https://m88ideaintake.netlify.app", restricted: false },
-        { id: "costingautomationm88", name: "costingautomationm88", status: "Live", filter: "active", description: "Costing automation deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Feb 27", team: ["JC"], systemUrl: "https://costingautomationm88.netlify.app", restricted: false }
+        { id: "costingautomationm88", name: "costingautomationm88", status: "Live", filter: "active", description: "Costing automation deployment from GitHub.", progress: 100, owner: "JC", ownerName: "John Carlo Manalo", updated: "Published Feb 27", team: ["JC"], systemUrl: "https://costingautomationm88.netlify.app", restricted: false },
+        { id: "m88apinvoice", name: "AP Invoice", status: "UAT", filter: "in-progress", description: "Accounts payable invoice system currently under user acceptance testing.", progress: 85, owner: "JC", ownerName: "John Carlo Manalo", updated: "Under UAT", team: ["JC"], systemUrl: "https://m88apinvoice.netlify.app/login", restricted: false },
+        { id: "m88trimautomation", name: "Trim Summary", status: "UAT", filter: "in-progress", description: "Trim Summary automation currently under user acceptance testing.", progress: 85, owner: "MP", ownerName: "Mhark Pentinio", updated: "Under UAT", team: ["MP"], systemUrl: "https://app.netlify.com/projects/m88trimautomation/overview", restricted: false },
+        { id: "smart-techpack-to-costing", name: "Smart Techpack to Costing", status: "In Progress", filter: "in-progress", description: "Smart Techpack to Costing system currently under development.", progress: 70, owner: "JC", ownerName: "John Carlo Manalo", updated: "Under Development", team: ["JC"], systemUrl: "", restricted: false },
+        { id: "techpack-creation", name: "Techpack Creation", status: "In Progress", filter: "in-progress", description: "Techpack Creation system currently under development.", progress: 50, owner: "MP", ownerName: "Mhark Pentinio", updated: "Under Development", team: ["MP"], systemUrl: "", restricted: false }
     ],
     services: [
         { category: "IT Services", items: [
@@ -220,7 +224,7 @@ const APP_CONFIG = {
             anonKey: "",
             table: "dashboard_content"
         },
-        itsmBearerToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI1MzBmNzUtYTRkNi00ZDU3LTk3NzgtMGVhZTg2ZTAwZjEyIiwiZW1haWwiOiJhZG1pbm1hZGlzb244OEBnbWFpbC5jb20iLCJyb2xlIjoic3lzdGVtX2FkbWluIiwiaWF0IjoxNzc4NTc0NDQ2LCJleHAiOjE3Nzg2NjA4NDZ9.KHCgUD7kmqUfWeEwP4u56CGfvoQTgY8WTdXNQ5oV04k"
+        itsmBearerToken: import.meta.env.VITE_ITSM_BEARER_TOKEN || ""
     }
 };
 
@@ -237,6 +241,7 @@ const STORAGE_KEYS = {
     themePreference: "madison88-theme-preference",
     automationDashboardHidden: "madison88-automation-dashboard-hidden",
     automationPeriod: "madison88-automation-period",
+    automationDepartment: "madison88-automation-department",
     exchangeRateData: "madison88-exchange-rate-data"
 };
 
@@ -249,7 +254,8 @@ const SUPABASE_SECTION_KEYS = {
     contactGuide: "contact_guide",
     supportCards: "support_cards",
     policyDocuments: "policy_documents",
-    missionVision: "mission_vision"
+    missionVision: "mission_vision",
+    automationData: "automation_data"
 };
 
 const APP_RUNTIME = {
@@ -350,24 +356,24 @@ const POLICY_VISUALS = [
 
 const AUTOMATION_SOURCE_DATA = [
     {
-        sourceKey: "PO_prep",
+        sourceKey: "PO_Cutting",
         projectId: "m88-po-cutting",
-        label: "PO Preparation Hub",
+        label: "PO Cutting Automation",
         department: "Planning",
-        processName: "Purchase Order Prep (PO-cutting)",
-        automationTool: "PO preparation hub",
-        manualAvgMins: 150,
-        manualVolumeDay: 1,
-        manualVolumeWeek: 1,
-        manualVolumeMonth: 2,
-        autoAvgMins: 60,
-        autoVolumeDay: 1,
-        autoVolumeWeek: 1,
-        autoVolumeMonth: 2,
-        reportedManualMonthlyMins: 300,
-        reportedSavedMins: 180,
-        roles: "Planning Associate",
-        hourlyCostPhp: 450
+        processName: "PO Cutting (Buy File Preparation)",
+        automationTool: "PO Cutting Automation & Product Sheet Integration",
+        manualAvgMins: 180,
+        manualVolumeDay: 7,
+        manualVolumeWeek: 37,
+        manualVolumeMonth: 160,
+        autoAvgMins: 20,
+        autoVolumeDay: 7,
+        autoVolumeWeek: 37,
+        autoVolumeMonth: 160,
+        reportedManualMonthlyMins: 28800,
+        reportedSavedMins: 25600,
+        roles: "Rank and File",
+        hourlyCostPhp: 150
     },
     {
         sourceKey: "Trim_Summary",
@@ -376,18 +382,20 @@ const AUTOMATION_SOURCE_DATA = [
         department: "Costing",
         processName: "Trim Summary",
         automationTool: "Costing Automation",
-        manualAvgMins: 480,
-        manualVolumeDay: 2,
-        manualVolumeWeek: 2,
-        manualVolumeMonth: 4,
-        autoAvgMins: 30,
-        autoVolumeDay: 2,
-        autoVolumeWeek: 2,
-        autoVolumeMonth: 4,
-        reportedManualMonthlyMins: 7680,
-        reportedSavedMins: 7200,
-        roles: "Costing Supervisor/Associate",
-        hourlyCostPhp: 450
+        // Workbook auto-effort is 10 min/transaction plus 2 min exception handling
+        // at a 5% exception rate (1,414 min/month), i.e. 10.1 min/transaction effective.
+        manualAvgMins: 30,
+        manualVolumeDay: 6,
+        manualVolumeWeek: 32,
+        manualVolumeMonth: 140,
+        autoAvgMins: 10.1,
+        autoVolumeDay: 6,
+        autoVolumeWeek: 32,
+        autoVolumeMonth: 140,
+        reportedManualMonthlyMins: 4200,
+        reportedSavedMins: 2786,
+        roles: "Supervisor, Rank and File",
+        hourlyCostPhp: 150
     },
     {
         sourceKey: "ITSM",
@@ -396,78 +404,78 @@ const AUTOMATION_SOURCE_DATA = [
         department: "Information Technology",
         processName: "I.T. Technical Support",
         automationTool: "I.T. Service Management Tool",
-        manualAvgMins: 120,
-        manualVolumeDay: 2,
-        manualVolumeWeek: 8,
-        manualVolumeMonth: 15,
-        autoAvgMins: 90,
-        autoVolumeDay: 2,
-        autoVolumeWeek: 8,
-        autoVolumeMonth: 15,
-        reportedManualMonthlyMins: 28800,
-        reportedSavedMins: 7200,
-        roles: "Systems Admin",
-        hourlyCostPhp: 450
+        manualAvgMins: 60,
+        manualVolumeDay: 1,
+        manualVolumeWeek: 7,
+        manualVolumeMonth: 30,
+        autoAvgMins: 30,
+        autoVolumeDay: 1,
+        autoVolumeWeek: 7,
+        autoVolumeMonth: 30,
+        reportedManualMonthlyMins: 1800,
+        reportedSavedMins: 900,
+        roles: "Rank and File",
+        hourlyCostPhp: 300
     },
     {
         sourceKey: "Dev_Tracker",
         projectId: "m88devtracker",
         label: "Dev Tracker",
         department: "Information Technology",
-        processName: "Development Tracker File",
-        automationTool: "Development Tracker File",
-        manualAvgMins: 120,
-        manualVolumeDay: 4,
-        manualVolumeWeek: 6,
-        manualVolumeMonth: 12,
-        autoAvgMins: 20,
-        autoVolumeDay: 4,
-        autoVolumeWeek: 6,
-        autoVolumeMonth: 12,
-        reportedManualMonthlyMins: 34560,
-        reportedSavedMins: 28800,
-        roles: "IT Team",
-        hourlyCostPhp: 450
+        processName: "Proto Tracking System",
+        automationTool: "Proto Tracking System",
+        manualAvgMins: 10,
+        manualVolumeDay: 42,
+        manualVolumeWeek: 210,
+        manualVolumeMonth: 910,
+        autoAvgMins: 3,
+        autoVolumeDay: 42,
+        autoVolumeWeek: 210,
+        autoVolumeMonth: 910,
+        reportedManualMonthlyMins: 9100,
+        reportedSavedMins: 6370,
+        roles: "PBD, TD, MD, Costing, Factory",
+        hourlyCostPhp: 150
     },
     {
         sourceKey: "Cash_Flow",
         projectId: "m88cashflow",
         label: "Cash Flow",
-        department: "Finance",
+        department: "Accounting",
         processName: "Cash Flow",
-        automationTool: "Cash Flow",
-        manualAvgMins: 180,
-        manualVolumeDay: 1,
-        manualVolumeWeek: 1,
-        manualVolumeMonth: 1,
-        autoAvgMins: 20,
-        autoVolumeDay: 1,
-        autoVolumeWeek: 1,
-        autoVolumeMonth: 1,
-        reportedManualMonthlyMins: 180,
-        reportedSavedMins: 160,
-        roles: "Finance Team",
-        hourlyCostPhp: 450
+        automationTool: "Cash Flow Dashboard Automation",
+        manualAvgMins: 16,
+        manualVolumeDay: 4,
+        manualVolumeWeek: 18,
+        manualVolumeMonth: 80,
+        autoAvgMins: 3.5,
+        autoVolumeDay: 4,
+        autoVolumeWeek: 18,
+        autoVolumeMonth: 80,
+        reportedManualMonthlyMins: 1280,
+        reportedSavedMins: 1000,
+        roles: "Supervisor",
+        hourlyCostPhp: 250
     },
     {
         sourceKey: "IPT",
         projectId: "",
         label: "Interns Productivity Tool",
-        department: "Information Technology",
+        department: "Admin",
         processName: "Interns Daily Time Logs and Task",
         automationTool: "Interns Productivity Tool",
-        manualAvgMins: 60,
-        manualVolumeDay: 1,
-        manualVolumeWeek: 5,
-        manualVolumeMonth: 26,
-        autoAvgMins: 30,
-        autoVolumeDay: 1,
-        autoVolumeWeek: 5,
-        autoVolumeMonth: 26,
-        reportedManualMonthlyMins: 7800,
-        reportedSavedMins: 3900,
-        roles: "IT Interns",
-        hourlyCostPhp: 450
+        manualAvgMins: 52.5,
+        manualVolumeDay: 4,
+        manualVolumeWeek: 18,
+        manualVolumeMonth: 80,
+        autoAvgMins: 7.5,
+        autoVolumeDay: 4,
+        autoVolumeWeek: 18,
+        autoVolumeMonth: 80,
+        reportedManualMonthlyMins: 4200,
+        reportedSavedMins: 3600,
+        roles: "Rank and File, Supervisor",
+        hourlyCostPhp: 150
     },
     {
         sourceKey: "KPI",
@@ -484,36 +492,180 @@ const AUTOMATION_SOURCE_DATA = [
         autoVolumeDay: 1,
         autoVolumeWeek: 5,
         autoVolumeMonth: 20,
-        reportedManualMonthlyMins: 12000,
-        reportedSavedMins: 10000,
+        reportedManualMonthlyMins: 2400,
+        reportedSavedMins: 2000,
         roles: "Manager & Supervisor",
-        hourlyCostPhp: 450
+        hourlyCostPhp: 255
     },
     {
-        sourceKey: "Packing_List",
+        sourceKey: "Invoice_Packing_List",
         projectId: "",
-        label: "Packing List Generator",
+        label: "Invoice & Packing List Automation",
         department: "Logistics",
-        processName: "Packing List",
-        automationTool: "Packing List Generator",
-        manualAvgMins: 90,
+        processName: "Non-EDI Invoice & Packing List Creation",
+        automationTool: "Invoice & Packing List Automation (Non-EDI → Automated)",
+        manualAvgMins: 125,
+        manualVolumeDay: 2,
+        manualVolumeWeek: 11,
+        manualVolumeMonth: 49,
+        autoAvgMins: 5,
+        autoVolumeDay: 2,
+        autoVolumeWeek: 11,
+        autoVolumeMonth: 49,
+        reportedManualMonthlyMins: 6125,
+        reportedSavedMins: 5880,
+        roles: "Logistics Rank and File",
+        hourlyCostPhp: 144.29,
+        // Workbook computes FTE capacity at 208 h/month (26 working days x 8 h)
+        // for this logistics process, unlike the 160 h/month used elsewhere.
+        productiveHoursPerMonth: 208
+    },
+    {
+        sourceKey: "AP_Invoice",
+        projectId: "",
+        label: "AP Invoice Automation",
+        department: "Purchasing",
+        processName: "AP Invoice Processing & Validation",
+        automationTool: "AP Invoice Automation (Digital Ingestion & Auto-Matching)",
+        manualAvgMins: 15,
+        manualVolumeDay: 52,
+        manualVolumeWeek: 262,
+        manualVolumeMonth: 1135,
+        autoAvgMins: 1,
+        autoVolumeDay: 52,
+        autoVolumeWeek: 262,
+        autoVolumeMonth: 1135,
+        reportedManualMonthlyMins: 17025,
+        reportedSavedMins: 15890,
+        roles: "Rank and File",
+        hourlyCostPhp: 127.31
+    },
+    {
+        sourceKey: "Accounting_AP",
+        projectId: "",
+        label: "Accounting AP Invoicing",
+        department: "Accounting",
+        processName: "AP Invoice Recording, Payment & SOA Reconciliation",
+        automationTool: "AP Invoice Automation (Accounting)",
+        manualAvgMins: 8,
+        manualVolumeDay: 115,
+        manualVolumeWeek: 577,
+        manualVolumeMonth: 2497,
+        autoAvgMins: 4,
+        autoVolumeDay: 115,
+        autoVolumeWeek: 577,
+        autoVolumeMonth: 2497,
+        reportedManualMonthlyMins: 19976,
+        reportedSavedMins: 9988,
+        roles: "Rank and File",
+        hourlyCostPhp: 127.31
+    },
+    {
+        sourceKey: "Brand_Analysis",
+        projectId: "",
+        label: "Brand Analysis",
+        department: "PBD, Planning, Production",
+        processName: "Brand Analysis",
+        automationTool: "Brand Analysis Automation",
+        manualAvgMins: 15,
+        manualVolumeDay: 5,
+        manualVolumeWeek: 25,
+        manualVolumeMonth: 108,
+        autoAvgMins: 5,
+        autoVolumeDay: 5,
+        autoVolumeWeek: 25,
+        autoVolumeMonth: 108,
+        reportedManualMonthlyMins: 1620,
+        reportedSavedMins: 1080,
+        roles: "Supervisor",
+        hourlyCostPhp: 350
+    },
+    {
+        sourceKey: "HR_PE",
+        projectId: "",
+        label: "HR Performance Evaluation System",
+        department: "Human Resource",
+        processName: "HR Performance Evaluation",
+        automationTool: "HR Performance Evaluation System",
+        manualAvgMins: 390,
+        manualVolumeDay: 2,
+        manualVolumeWeek: 9,
+        manualVolumeMonth: 37.5,
+        autoAvgMins: 82,
+        autoVolumeDay: 2,
+        autoVolumeWeek: 9,
+        autoVolumeMonth: 37.5,
+        reportedManualMonthlyMins: 14625,
+        reportedSavedMins: 11550,
+        roles: "Rank and File",
+        hourlyCostPhp: 150
+    },
+    {
+        sourceKey: "IT_Inventory",
+        projectId: "",
+        label: "I.T. Inventory System",
+        department: "IT & Data",
+        processName: "IT Equipment & Device Masterlist",
+        automationTool: "I.T. Inventory System",
+        manualAvgMins: 240,
         manualVolumeDay: 1,
-        manualVolumeWeek: 1,
-        manualVolumeMonth: 1,
-        autoAvgMins: 25,
+        manualVolumeWeek: 3,
+        manualVolumeMonth: 12,
+        autoAvgMins: 30,
         autoVolumeDay: 1,
-        autoVolumeWeek: 1,
-        autoVolumeMonth: 1,
-        reportedManualMonthlyMins: 90,
-        reportedSavedMins: 65,
-        roles: "Logistics Core",
-        hourlyCostPhp: 450
+        autoVolumeWeek: 3,
+        autoVolumeMonth: 12,
+        reportedManualMonthlyMins: 2880,
+        reportedSavedMins: 2520,
+        roles: "Rank and File",
+        hourlyCostPhp: 150
     }
 ];
 
 const AUTOMATION_INTEGRITY_TOLERANCE_MINS = 0.01;
-const AUTOMATION_COMPARISON = buildAutomationComparison(AUTOMATION_SOURCE_DATA);
 const PRODUCTIVE_HOURS_PER_MONTH = 160;
+let AUTOMATION_COMPARISON = buildAutomationComparison(AUTOMATION_SOURCE_DATA);
+
+function rebuildAutomationComparison() {
+    AUTOMATION_COMPARISON = buildAutomationComparison(getAutomationSourceData());
+}
+
+function normalizeAutomationSourceRows(rows) {
+    const source = Array.isArray(rows) && rows.length ? rows : AUTOMATION_SOURCE_DATA;
+    return source
+        .map((row) => {
+            const label = String(row?.label || "").trim();
+            if (!label) return null;
+            return {
+                sourceKey: String(row?.sourceKey || `custom_${label.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`).trim(),
+                projectId: String(row?.projectId || "").trim(),
+                label,
+                department: String(row?.department || "").trim(),
+                processName: String(row?.processName || "").trim(),
+                automationTool: String(row?.automationTool || "").trim(),
+                manualAvgMins: normalizeAutomationNumber(row?.manualAvgMins),
+                manualVolumeMonth: normalizeAutomationNumber(row?.manualVolumeMonth),
+                autoAvgMins: normalizeAutomationNumber(row?.autoAvgMins),
+                autoVolumeMonth: normalizeAutomationNumber(row?.autoVolumeMonth),
+                roles: String(row?.roles || "").trim(),
+                hourlyCostPhp: normalizeAutomationNumber(row?.hourlyCostPhp),
+                ...(normalizeAutomationNumber(row?.productiveHoursPerMonth) > 0
+                    ? { productiveHoursPerMonth: normalizeAutomationNumber(row?.productiveHoursPerMonth) }
+                    : {})
+            };
+        })
+        .filter(Boolean);
+}
+
+function getAutomationSourceData() {
+    const stored = APP_STATE.automationData;
+    if (Array.isArray(stored) && stored.length) return stored;
+    return cloneData(AUTOMATION_SOURCE_DATA);
+}
+
+// Reference PHP→USD rate used so savings are always reported in dollars,
+// even before the first live exchange-rate fetch completes or when it fails.
+const FALLBACK_PHP_TO_USD_RATE = 0.016;
 
 const AUTOMATION_PROJECT_ALIASES = {
     "po-cutting-system": "m88-po-cutting",
@@ -604,9 +756,11 @@ const APP_STATE = {
     theme: localStorage.getItem(STORAGE_KEYS.themePreference) === "light" ? "light" : "dark",
     automationDashboardHidden: localStorage.getItem(STORAGE_KEYS.automationDashboardHidden) === "true",
     automationPeriod: localStorage.getItem(STORAGE_KEYS.automationPeriod) || "monthly",
+    automationDepartment: localStorage.getItem(STORAGE_KEYS.automationDepartment) || "all",
     currentProjectFilter: "all",
     currentProjectPage: 1,
-    projectsPerPage: 8
+    projectsPerPage: 8,
+    automationData: null
 };
 
 let startupLoaderHidden = false;
@@ -793,6 +947,8 @@ const ITSM_API_BASE = getItsmApiBase();
 const ITSM_LOGIN_URL = `${ITSM_API_BASE}/auth/login`;
 const ITSM_ACTIVE_TICKET_STATUSES = ["New", "In Progress", "Pending"];
 const ITSM_TOKEN_STORAGE_KEYS = ["madison88-itsm-runtime-token", "madison88-itsm-token", "m88itsm-token", "itsmToken"];
+const ITSM_LIVE_FEED_MAX_ITEMS = 8;
+const itsmLiveFeedItems = [];
 
 function getSupabaseSettings() {
     const runtimeConfig = window.M88_SUPABASE || {};
@@ -900,9 +1056,11 @@ async function hydrateAppStateFromSupabase() {
                     ...(snapshot[SUPABASE_SECTION_KEYS.overview]?.stats || {})
                 }
             };
+            // This card now represents resolved tickets; do not reuse the legacy active-user count.
+            APP_STATE.overview.stats.users = 0;
         }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.projects])) {
-            APP_STATE.projects = snapshot[SUPABASE_SECTION_KEYS.projects].map(normalizeProject);
+            APP_STATE.projects = reconcileSystemProjects(snapshot[SUPABASE_SECTION_KEYS.projects]);
         }
         if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.services])) {
             APP_STATE.services = snapshot[SUPABASE_SECTION_KEYS.services];
@@ -937,6 +1095,10 @@ async function hydrateAppStateFromSupabase() {
                 ...APP_CONFIG.missionVision,
                 ...snapshot[SUPABASE_SECTION_KEYS.missionVision]
             };
+        }
+        if (Array.isArray(snapshot[SUPABASE_SECTION_KEYS.automationData]) && snapshot[SUPABASE_SECTION_KEYS.automationData].length) {
+            APP_STATE.automationData = normalizeAutomationSourceRows(snapshot[SUPABASE_SECTION_KEYS.automationData]);
+            rebuildAutomationComparison();
         }
 
         APP_RUNTIME.supabaseStatus = "connected";
@@ -1131,8 +1293,22 @@ function renderStats() {
 function renderTicker() {
     const track = document.getElementById("status-ticker-track");
     if (!track) return;
-    const items = [...APP_STATE.overview.ticketUpdates, ...APP_STATE.overview.ticketUpdates];
-    track.innerHTML = items.map((item) => `<span class="ticker-pill"><strong>IT Update</strong><span>${item}</span></span>`).join("");
+
+    const items = (typeof itsmLiveFeedItems !== "undefined" && Array.isArray(itsmLiveFeedItems) && itsmLiveFeedItems.length)
+        ? itsmLiveFeedItems
+        : (APP_STATE.overview.ticketUpdates || []);
+
+    if (!items.length) {
+        track.innerHTML = "";
+        return;
+    }
+
+    const pills = items.map((item, index) => {
+        const isFirst = index === 0;
+        return `<span class="live-feed-pill${isFirst ? " is-featured" : ""}" title="${escapeHtml(item)}">${escapeHtml(item)}</span>`;
+    }).join("");
+
+    track.innerHTML = pills;
 }
 
 function renderAutomationDashboard() {
@@ -1141,8 +1317,11 @@ function renderAutomationDashboard() {
 
     const period = getAutomationPeriodConfig(APP_STATE.automationPeriod);
     const annualPeriod = getAutomationPeriodConfig("annual");
-    const annualRows = AUTOMATION_COMPARISON.map((entry) => computeAutomationBenefits(entry, annualPeriod.multiplier));
-    const rows = AUTOMATION_COMPARISON.map((entry) => {
+    const departments = [...new Set(AUTOMATION_COMPARISON.map((entry) => String(entry.department || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+    const activeDepartment = departments.includes(APP_STATE.automationDepartment) ? APP_STATE.automationDepartment : "all";
+    const sourceRows = AUTOMATION_COMPARISON.filter((entry) => activeDepartment === "all" || String(entry.department || "").trim() === activeDepartment);
+    const annualRows = sourceRows.map((entry) => computeAutomationBenefits(entry, annualPeriod.multiplier));
+    const rows = sourceRows.map((entry) => {
         const project = APP_STATE.projects.find((item) => item.id === entry.projectId);
         return {
             ...computeAutomationBenefits(entry, period.multiplier),
@@ -1175,8 +1354,19 @@ function renderAutomationDashboard() {
             <div>
                 <span class="quick-help-label">Automation Dashboard</span>
                 <h3>Automation Impact Summary</h3>
-                <p class="service-copy">This view follows the benefits policy framework across all solutions: baseline hours, time saved, capacity release, and cost avoidance. Every total is recalculated using average handling time and one monthly transaction volume baseline before reporting.</p>
-                <p class="service-copy">Estimated values based on Benefits Calculation Policy monthly-volume model.</p>
+                <p class="service-copy">This view follows the benefits policy framework across all solutions: baseline hours, time saved, capacity release, and cost avoidance. Every total is recalculated using average handling time and one monthly transaction volume baseline, then annualized to a 12-month horizon before reporting.</p>
+                <p class="service-copy">Estimated values based on the Benefits Calculation Policy annual model.</p>
+            </div>
+            <div class="automation-filter-bar">
+                <div class="automation-filter-control">
+                    <label class="automation-filter-label" for="automation-department-filter">Department</label>
+                    <select class="automation-department-filter" id="automation-department-filter" aria-label="Filter automation solutions by department">
+                        <option value="all">All departments</option>
+                        ${departments.map((dept) => `<option value="${escapeHtml(dept)}"${dept === activeDepartment ? " selected" : ""}>${escapeHtml(dept)}</option>`).join("")}
+                    </select>
+                </div>
+                <span class="automation-filter-meta">${rows.length} of ${AUTOMATION_COMPARISON.length} solutions shown</span>
+                <button class="btn btn-secondary admin-inline-button automation-edit-data-button" type="button" id="edit-automation-data-button"${APP_STATE.adminLoggedIn ? "" : " hidden"}>Edit Automation Data</button>
             </div>
             <div class="automation-kpi-grid">
                 <article class="automation-kpi-card">
@@ -1190,7 +1380,7 @@ function renderAutomationDashboard() {
                     <small>estimated hours removed from manual work annually</small>
                 </article>
                 <article class="automation-kpi-card">
-                    <span>Estimated Capacity Release</span>
+                    <span>FTE Savings</span>
                     <strong>${formatDecimal(annualCapacityRelease)} FTE</strong>
                     <small>estimated annual redeployable capacity</small>
                 </article>
@@ -1202,12 +1392,13 @@ function renderAutomationDashboard() {
             </div>
             <div class="automation-status-grid">
                 ${statusSummaries.map((summary) => `
-                    <article class="automation-kpi-card automation-status-card">
-                        <span>${summary.label}</span>
+                    <article class="automation-kpi-card automation-status-card automation-status-card-clickable" data-status-key="${escapeHtml(summary.key)}" tabindex="0" role="button" aria-label="View ${escapeHtml(summary.label)} projects (${summary.projectCount})">
+                        <span>${escapeHtml(summary.label)}</span>
                         <strong>${summary.projectCount}</strong>
                         <small>${summary.projectCount === 1 ? "project" : "projects"} in this lifecycle stage</small>
                         <div class="automation-status-metrics">
                             <p><strong>${formatCompactNumber(summary.hoursSaved)}</strong> estimated hours saved</p>
+                            <p><strong>${formatDecimal(summary.capacityReleaseFte)} FTE</strong> FTE savings</p>
                             <p><strong>${formatCurrencyCompact(summary.totalBenefitPhp)}</strong> estimated total benefits</p>
                         </div>
                     </article>
@@ -1215,71 +1406,6 @@ function renderAutomationDashboard() {
             </div>
         </div>
         <div class="automation-dashboard-body" id="automation-dashboard-body"${isHidden ? " hidden" : ""}>
-        <div class="automation-overall-chart-card">
-            <div class="automation-overall-chart-copy">
-                <div>
-                    <span class="quick-help-label">Overall Chart</span>
-                    <h4>Effort Reduction and Total Benefits by Solution</h4>
-                    <p class="automation-chart-intro">Gray bars show estimated manual effort hours, green bars show estimated automation effort hours, and the blue line shows total computed benefits in ${getSavingsNarrativeLabel()}.</p>
-                    <p class="automation-chart-intro"><strong>Viewing:</strong> ${period.label}${period.key === "annual" ? " totals for the full year" : ` estimates derived from the monthly baseline dataset`}</p>
-                    <p class="automation-chart-intro">${exchangeRateNote}</p>
-                </div>
-                <div class="automation-chart-toolbar">
-                    <div class="automation-period-switch" role="tablist" aria-label="Automation timeframe filter">
-                        ${AUTOMATION_PERIODS.map((item) => `
-                            <button
-                                class="automation-period-btn${item.key === period.key ? " is-active" : ""}"
-                                type="button"
-                                data-automation-period="${item.key}"
-                                aria-pressed="${String(item.key === period.key)}"
-                            >${item.label}</button>
-                        `).join("")}
-                    </div>
-                    <div class="automation-chart-legend">
-                    <span><i class="legend-swatch legend-swatch-manual"></i>Manual effort hours</span>
-                    <span><i class="legend-swatch legend-swatch-auto"></i>Automation effort hours</span>
-                    <span><i class="legend-line legend-line-savings"></i>Total benefits (${savingsLabel})</span>
-                    </div>
-                </div>
-            </div>
-            <div class="automation-panels-grid">
-                <div class="automation-insight-strip">
-                    <div class="automation-insight-card">
-                        <span>Highest Total Benefit</span>
-                        <strong>${bestPerformer.projectName}</strong>
-                        <small>${formatCurrencyCompact(bestPerformer.totalBenefitPhp)} in computed ${period.label.toLowerCase()} benefits</small>
-                    </div>
-                    <div class="automation-insight-card">
-                        <span>Overall Throughput</span>
-                        <strong>${Math.round((totalVolumeAutomated / Math.max(totalVolumeManual, 1)) * 100)}%</strong>
-                        <small>of the ${period.label.toLowerCase()} baseline volume handled through automation</small>
-                    </div>
-                </div>
-                <div class="automation-multiplier-card">
-                    <div class="automation-multiplier-header">
-                        <span class="quick-help-label">Capacity</span>
-                        <h5>${period.label} Capacity Release Per Solution</h5>
-                    </div>
-                    <div class="automation-multiplier-list">
-                        ${rows.map((item) => {
-                            return `
-                                <div class="automation-multiplier-row" data-automation-key="${escapeHtml(item.automationKey)}" tabindex="0">
-                                    <span>${escapeHtml(item.label)}</span>
-                                    <div class="automation-multiplier-track">
-                                        <div class="automation-multiplier-fill" style="width:${(item.capacityReleaseFte / Math.max(...rows.map((row) => row.capacityReleaseFte), 1)) * 100}%"></div>
-                                        <strong>${formatDecimal(item.capacityReleaseFte)} FTE</strong>
-                                    </div>
-                                </div>
-                            `;
-                        }).join("")}
-                    </div>
-                </div>
-            </div>
-            <div class="automation-chart-shell automation-chart-shell-interactive" data-automation-tooltip-shell>
-                ${overallChart}
-                <div class="automation-chart-tooltip" data-automation-tooltip hidden></div>
-            </div>
-        </div>
             <div class="automation-overall-chart-card">
                 <div class="automation-overall-chart-copy">
                     <div>
@@ -1341,11 +1467,76 @@ function renderAutomationDashboard() {
                 </table>
             </div>
         </div>
+            <div class="automation-overall-chart-card">
+                <div class="automation-overall-chart-copy">
+                    <div>
+                        <span class="quick-help-label">Overall Chart</span>
+                        <h4>Effort Reduction and Total Benefits by Solution</h4>
+                        <p class="automation-chart-intro">Gray bars show estimated manual effort hours, green bars show estimated automation effort hours, and the blue line shows total computed benefits in ${getSavingsNarrativeLabel()}.</p>
+                        <p class="automation-chart-intro"><strong>Viewing:</strong> ${period.label}${period.key === "annual" ? " totals for the full year" : ` estimates derived from the monthly baseline dataset`}</p>
+                        <p class="automation-chart-intro">${exchangeRateNote}</p>
+                    </div>
+                    <div class="automation-chart-toolbar">
+                        <div class="automation-period-switch" role="tablist" aria-label="Automation timeframe filter">
+                            ${AUTOMATION_PERIODS.map((item) => `
+                                <button
+                                    class="automation-period-btn${item.key === period.key ? " is-active" : ""}"
+                                    type="button"
+                                    data-automation-period="${item.key}"
+                                    aria-pressed="${String(item.key === period.key)}"
+                                >${item.label}</button>
+                            `).join("")}
+                        </div>
+                        <div class="automation-chart-legend">
+                            <span><i class="legend-swatch legend-swatch-manual"></i>Manual effort hours</span>
+                            <span><i class="legend-swatch legend-swatch-auto"></i>Automation effort hours</span>
+                            <span><i class="legend-line legend-line-savings"></i>Total benefits (${savingsLabel})</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="automation-panels-grid">
+                    <div class="automation-insight-strip">
+                        <div class="automation-insight-card">
+                            <span>Highest Total Benefit</span>
+                            <strong>${bestPerformer.projectName}</strong>
+                            <small>${formatCurrencyCompact(bestPerformer.totalBenefitPhp)} in computed ${period.label.toLowerCase()} benefits</small>
+                        </div>
+                        <div class="automation-insight-card">
+                            <span>Overall Throughput</span>
+                            <strong>${Math.round((totalVolumeAutomated / Math.max(totalVolumeManual, 1)) * 100)}%</strong>
+                            <small>of the ${period.label.toLowerCase()} baseline volume handled through automation</small>
+                        </div>
+                    </div>
+                    <div class="automation-multiplier-card">
+                        <div class="automation-multiplier-header">
+                            <span class="quick-help-label">Capacity</span>
+                            <h5>${period.label} Capacity Release Per Solution</h5>
+                        </div>
+                        <div class="automation-multiplier-list">
+                            ${rows.map((item) => {
+                                return `
+                                    <div class="automation-multiplier-row" data-automation-key="${escapeHtml(item.automationKey)}" tabindex="0">
+                                        <span>${escapeHtml(item.label)}</span>
+                                        <div class="automation-multiplier-track">
+                                            <div class="automation-multiplier-fill" style="width:${(item.capacityReleaseFte / Math.max(...rows.map((row) => row.capacityReleaseFte), 1)) * 100}%"></div>
+                                            <strong>${formatDecimal(item.capacityReleaseFte)} FTE</strong>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join("")}
+                        </div>
+                    </div>
+                </div>
+                <div class="automation-chart-shell automation-chart-shell-interactive" data-automation-tooltip-shell>
+                    ${overallChart}
+                    <div class="automation-chart-tooltip" data-automation-tooltip hidden></div>
+                </div>
+            </div>
         </div>
     `;
 
     applyAutomationDashboardVisibility(container, isHidden);
-    setupAutomationDashboardInteractions(container);
+    setupAutomationDashboardInteractions(container, statusSummaries);
 }
 
 function toggleAutomationDashboardVisibility() {
@@ -1386,7 +1577,7 @@ function applyAutomationDashboardVisibility(container, isHidden) {
     }
 }
 
-function setupAutomationDashboardInteractions(container) {
+function setupAutomationDashboardInteractions(container, latestStatusSummaries = []) {
     if (!container) return;
     const tooltipShell = container.querySelector("[data-automation-tooltip-shell]");
     const tooltip = container.querySelector("[data-automation-tooltip]");
@@ -1401,6 +1592,34 @@ function setupAutomationDashboardInteractions(container) {
         });
     });
 
+    const departmentFilter = container.querySelector("#automation-department-filter");
+    if (departmentFilter) {
+        departmentFilter.addEventListener("change", () => {
+            if (departmentFilter.value === APP_STATE.automationDepartment) return;
+            APP_STATE.automationDepartment = departmentFilter.value;
+            localStorage.setItem(STORAGE_KEYS.automationDepartment, APP_STATE.automationDepartment);
+            renderAutomationDashboard();
+        });
+    }
+
+    container.querySelectorAll(".automation-status-card-clickable").forEach((card) => {
+        const openLifecycleModal = () => {
+            const statusKey = card.getAttribute("data-status-key");
+            const summary = latestStatusSummaries.find((item) => item.key === statusKey);
+            if (summary && typeof window.dashboardOpenModal === "function") {
+                window.dashboardOpenModal(buildLifecycleProjectsModal(summary));
+            }
+        };
+
+        card.addEventListener("click", openLifecycleModal);
+        card.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openLifecycleModal();
+            }
+        });
+    });
+
     const clearActive = () => {
         container.classList.remove("has-linked-active");
         container.querySelectorAll(".is-linked-active").forEach((node) => node.classList.remove("is-linked-active"));
@@ -1409,6 +1628,14 @@ function setupAutomationDashboardInteractions(container) {
             tooltip.innerHTML = "";
         }
     };
+
+    const editDataButton = container.querySelector("#edit-automation-data-button");
+    if (editDataButton) {
+        editDataButton.addEventListener("click", () => {
+            if (!APP_STATE.adminLoggedIn) return;
+            openManagedModal(buildAutomationDataEditorModal());
+        });
+    }
 
     const updateTooltipPosition = (event) => {
         if (!tooltipShell || !tooltip || tooltip.hidden) return;
@@ -1509,6 +1736,7 @@ function resolveMonthlyAutomationVolume(monthlyValue, weeklyValue, dailyValue) {
 }
 
 function buildAutomationValidation(row = {}) {
+    const productiveHoursPerMonth = normalizeAutomationNumber(row.productiveHoursPerMonth) || PRODUCTIVE_HOURS_PER_MONTH;
     const manualAvgMins = normalizeAutomationNumber(row.manualAvgMins);
     const manualVolumeDay = normalizeAutomationNumber(row.manualVolumeDay || 1);
     const manualVolumeWeek = normalizeAutomationNumber(row.manualVolumeWeek || 1);
@@ -1570,6 +1798,7 @@ function buildAutomationValidation(row = {}) {
         autoVolumeDay,
         autoVolumeWeek,
         autoVolumeMonth,
+        productiveHoursPerMonth,
         calculatedManualMonthlyMins,
         calculatedAutoMonthlyMins,
         calculatedSavedMins,
@@ -1607,6 +1836,7 @@ function buildAutomationComparison(sourceRows = []) {
                 manualWeightedMins: validation.calculatedManualMonthlyMins,
                 autoWeightedMins: validation.calculatedAutoMonthlyMins,
                 hourlyCostPhpWeighted: normalizeAutomationNumber(row.hourlyCostPhp || 0) * Math.max(validation.calculatedManualMonthlyMins, 1),
+                productiveHoursPerMonth: validation.productiveHoursPerMonth,
                 sourceCount: 1,
                 integrityChecks: [validation.integrityCheck],
                 integrityMessages: [validation.integrityMessage],
@@ -1650,6 +1880,7 @@ function buildAutomationComparison(sourceRows = []) {
             avgHandlingTimeMins: manualMonthlyMins / manualVolume,
             automatedHandlingTimeMins: autoMonthlyMins / autoVolume,
             hourlyCostPhp: Number(entry.hourlyCostPhpWeighted || 0) / weightBase,
+            productiveHoursPerMonth: Number(entry.productiveHoursPerMonth || PRODUCTIVE_HOURS_PER_MONTH),
             integrityCheck: entry.integrityChecks.every((status) => status === "PASS") ? "PASS" : "FAIL",
             integrityMessage: entry.integrityMessages.filter(Boolean).join(" || "),
             integrityMismatches: Number(entry.integrityMismatches || 0),
@@ -1694,7 +1925,8 @@ function computeAutomationBenefits(entry, multiplier = 1) {
     const monthlyTransactions = Number(entry.monthlyTransactions || 0);
     const avgHandlingTimeMins = Number(entry.avgHandlingTimeMins || 0);
     const automatedHandlingTimeMins = Number(entry.automatedHandlingTimeMins || 0);
-    const productiveHoursForPeriod = Math.max(PRODUCTIVE_HOURS_PER_MONTH * Number(multiplier || 1), 1);
+    const productiveHoursPerMonth = Number(entry.productiveHoursPerMonth || PRODUCTIVE_HOURS_PER_MONTH);
+    const productiveHoursForPeriod = Math.max(productiveHoursPerMonth * Number(multiplier || 1), 1);
     const automatedVolume = scaleAutomationMetric(entry.automatedVolume, multiplier);
     const manualVolume = scaleAutomationMetric(monthlyTransactions, multiplier);
     const calculatedManualMonthlyMins = Number(entry.manualMonthlyMins || (monthlyTransactions * avgHandlingTimeMins));
@@ -1708,7 +1940,7 @@ function computeAutomationBenefits(entry, multiplier = 1) {
     const hourlyCostPhp = Number(entry.hourlyCostPhp || 450);
     const timeSavedValuePhp = hoursSaved * hourlyCostPhp;
     const capacityReleaseFte = hoursSaved / productiveHoursForPeriod;
-    const annualCostPerFte = hourlyCostPhp * PRODUCTIVE_HOURS_PER_MONTH * 12;
+    const annualCostPerFte = hourlyCostPhp * productiveHoursPerMonth * 12;
     // Policy-based inference: without separate growth/hiring assumptions,
     // treat released FTE capacity as the avoided future FTE requirement.
     const annualCostAvoidancePhp = capacityReleaseFte * annualCostPerFte;
@@ -1837,9 +2069,9 @@ function buildAutomationStatusSummaries() {
     const benchmarks = getAutomationPortfolioBenchmarks();
 
     const summaryMap = {
-        completed: { key: "completed", label: "Completed", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0 },
-        "in-progress": { key: "in-progress", label: "In Progress", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0 },
-        "not-started": { key: "not-started", label: "Not Started", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0 }
+        completed: { key: "completed", label: "Completed", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0, capacityReleaseFte: 0, projects: [] },
+        "in-progress": { key: "in-progress", label: "In Development", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0, capacityReleaseFte: 0, projects: [] },
+        "not-started": { key: "not-started", label: "Pipeline", projectCount: 0, hoursSaved: 0, totalBenefitPhp: 0, capacityReleaseFte: 0, projects: [] }
     };
 
     APP_STATE.projects.forEach((project) => {
@@ -1850,9 +2082,21 @@ function buildAutomationStatusSummaries() {
         summary.projectCount += 1;
         const automation = resolveAutomationBenefitsForProject(project, automationLookup);
         const benefitSource = automation || estimateAutomationBenefitsForProject(project, lifecycleStatus, benchmarks);
+        const hoursSaved = Number(benefitSource.hoursSaved || 0);
+        const capacityFte = Number(
+            benefitSource.capacityReleaseFte || hoursSaved / (PRODUCTIVE_HOURS_PER_MONTH * 12)
+        );
 
-        summary.hoursSaved += Number(benefitSource.hoursSaved || 0);
+        summary.hoursSaved += hoursSaved;
+        summary.capacityReleaseFte += capacityFte;
         summary.totalBenefitPhp += Number(benefitSource.totalBenefitPhp || 0);
+        summary.projects.push({
+            project,
+            hoursSaved,
+            capacityReleaseFte: capacityFte,
+            totalBenefitPhp: Number(benefitSource.totalBenefitPhp || 0),
+            department: String(benefitSource.department || "").trim()
+        });
     });
 
     return [
@@ -1860,6 +2104,59 @@ function buildAutomationStatusSummaries() {
         summaryMap["in-progress"],
         summaryMap["not-started"]
     ];
+}
+
+function buildLifecycleProjectsModal(summary) {
+    const projects = Array.isArray(summary?.projects) ? summary.projects : [];
+    const label = String(summary?.label || "Projects");
+
+    const rows = projects
+        .slice()
+        .sort((a, b) => b.totalBenefitPhp - a.totalBenefitPhp)
+        .map((item) => {
+            const project = item.project || {};
+            const systemUrl = String(project.systemUrl || "").trim();
+            const systemLink = systemUrl
+                ? `<a class="lifecycle-project-link" href="${escapeHtml(systemUrl)}" target="_blank" rel="noopener noreferrer">Open system ↗</a>`
+                : "";
+            const status = String(project.status || "").trim();
+            return `
+                <div class="lifecycle-project-row">
+                    <div class="lifecycle-project-main">
+                        <strong>${escapeHtml(project.name || "Untitled project")}</strong>
+                        <small>${escapeHtml(project.description || "No description available.")}</small>
+                        <div class="lifecycle-project-meta">
+                            <span class="automation-chip">${escapeHtml(status || "Unknown status")}</span>
+                            <span>Progress: <strong>${clampProgress(project.progress, 0)}%</strong></span>
+                            ${item.department ? `<span>Dept: <strong>${escapeHtml(item.department)}</strong></span>` : ""}
+                            <span>Owner: <strong>${escapeHtml(project.ownerName || project.owner || "Unassigned")}</strong></span>
+                            ${item.hoursSaved ? `<span>Hours saved: <strong>${formatCompactNumber(item.hoursSaved)}</strong></span>` : ""}
+                            ${item.capacityReleaseFte ? `<span>FTE: <strong>${formatDecimal(item.capacityReleaseFte)}</strong></span>` : ""}
+                            ${item.totalBenefitPhp ? `<span>Benefits: <strong>${formatCurrencyCompact(item.totalBenefitPhp)}</strong></span>` : ""}
+                        </div>
+                        ${systemLink ? `<div class="lifecycle-project-actions">${systemLink}</div>` : ""}
+                    </div>
+                </div>
+            `;
+        })
+        .join("");
+
+    if (!projects.length) {
+        return `
+            <div class="modal-block">
+                <h2 id="modal-title">${escapeHtml(label)} Projects</h2>
+                <p class="admin-feedback">No projects are currently in this lifecycle stage.</p>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="modal-block">
+            <h2 id="modal-title">${escapeHtml(label)} Projects</h2>
+            <p class="admin-feedback">${projects.length} ${projects.length === 1 ? "project" : "projects"} in this lifecycle stage · ${formatCompactNumber(summary.hoursSaved)} estimated hours saved · ${formatDecimal(summary.capacityReleaseFte)} FTE savings · ${formatCurrencyCompact(summary.totalBenefitPhp)} estimated total benefits</p>
+            <div class="lifecycle-project-list">${rows}</div>
+        </div>
+    `;
 }
 
 function initializeExchangeRate() {
@@ -1973,17 +2270,18 @@ async function fetchLatestExchangeRate() {
 
 function convertPhpToUsd(value) {
     const amount = Number(value);
-    const rate = Number(APP_RUNTIME.exchangeRate.rate);
+    const liveRate = Number(APP_RUNTIME.exchangeRate.rate);
+    const rate = Number.isFinite(liveRate) && liveRate > 0 ? liveRate : FALLBACK_PHP_TO_USD_RATE;
     if (!Number.isFinite(amount) || !Number.isFinite(rate) || rate <= 0) return null;
     return amount * rate;
 }
 
 function getSavingsCurrencyLabel() {
-    return convertPhpToUsd(1) === null ? "PHP" : "USD";
+    return "USD";
 }
 
 function getSavingsNarrativeLabel() {
-    return convertPhpToUsd(1) === null ? "Philippine pesos" : "U.S. dollars";
+    return "U.S. dollars";
 }
 
 function formatExchangeRateTimestamp(value) {
@@ -2033,11 +2331,12 @@ function getExchangeRateNote() {
         return `${freshness}: 1 PHP = ${formatExchangeRateValue(rate)} from ${APP_RUNTIME.exchangeRate.source || "exchange feed"}.${providerLabel}${checkedLabel}`;
     }
 
+    const referenceNote = `Reference rate: 1 PHP = ${formatExchangeRateValue(FALLBACK_PHP_TO_USD_RATE)}.`;
     if (APP_RUNTIME.exchangeRate.status === "loading") {
-        return "Loading the latest PHP to USD exchange rate. Savings will switch to dollars as soon as the rate is available.";
+        return `${referenceNote} Fetching the live PHP to USD rate.`;
     }
 
-    return "Live USD rate is temporarily unavailable, so savings are still shown in Philippine pesos for now.";
+    return `${referenceNote} Live USD rate is temporarily unavailable, so savings stay on the reference rate.`;
 }
 
 function scaleAutomationMetric(value, multiplier) {
@@ -3591,16 +3890,14 @@ function setupLiveItsmTicketStat() {
         try {
             syncTicketCardState("syncing");
             
-            // Fallback to live ITSM API using the dashboard ticket-volume endpoint
-            const token = await resolveItsmToken();
-            if (!token) {
-                syncTicketCardState(APP_STATE.adminLoggedIn ? "connectable" : "fallback");
-                return;
-            }
-
             // Fetch from the real-time dashboard volume endpoint
+            // Auth is handled server-side by the Netlify function
             const url = `${ITSM_API_BASE}/dashboard/ticket-volume`;
-            const response = await fetchItsmWithAuth(url, token);
+            const response = await fetch(url, {
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
 
             if (!response.ok) {
                 const errorBody = await response.text().catch(() => "No error body");
@@ -3608,39 +3905,91 @@ function setupLiveItsmTicketStat() {
             }
 
             const payload = await response.json();
+            if (payload?.status && payload.status !== "success") {
+                throw new Error(`ITSM ticket volume API returned status: ${payload.status}`);
+            }
             
             // Extract the volume/count from various possible response structures
-            let total = 0;
+            let activeTotal = 0;
+            let resolvedTotal = 0;
             const byStatus = payload?.data?.ticket_volume?.by_status;
             
             if (Array.isArray(byStatus)) {
-                // Sum active statuses (New, In Progress, Pending)
+                // Sum active statuses (New, In Progress, Pending) and resolved statuses (Resolved, Closed)
                 const activeStatuses = ["New", "In Progress", "Pending"];
-                total = byStatus
-                    .filter(item => activeStatuses.includes(item.key))
-                    .reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+                const resolvedStatuses = ["Resolved", "Closed", "Done", "Completed"];
+                byStatus.forEach(item => {
+                    const status = String(item?.key ?? item?.status ?? item?.name ?? "").trim();
+                    const count = Number(item?.value ?? item?.count ?? item?.total) || 0;
+                    if (activeStatuses.includes(status)) activeTotal += count;
+                    if (resolvedStatuses.includes(status)) resolvedTotal += count;
+                });
             } else {
                 // Fallback to simple keys if by_status is not available
-                const findCount = (obj) => {
+                const findCount = (obj, targetKeys) => {
                     if (!obj || typeof obj !== 'object') return null;
-                    const keys = ['volume', 'total', 'count', 'active', 'active_count', 'ticket_count', 'tickets', 'activeTickets', 'totalTickets'];
-                    for (const key of keys) {
+                    for (const key of targetKeys) {
                         if (obj[key] !== undefined && obj[key] !== null && Number.isFinite(Number(obj[key]))) {
                             return Number(obj[key]);
                         }
                     }
                     return null;
                 };
-                total = findCount(payload?.data?.ticket_volume) ?? findCount(payload?.data) ?? findCount(payload) ?? 0;
+                const volumeKeys = ['volume', 'total', 'count', 'active', 'active_count', 'ticket_count', 'tickets', 'activeTickets', 'totalTickets'];
+                const resolvedKeys = ['resolved', 'closed', 'done', 'completed', 'resolved_count', 'closed_count'];
+                activeTotal = findCount(payload?.data?.ticket_volume, volumeKeys) ?? findCount(payload?.data, volumeKeys) ?? findCount(payload, volumeKeys) ?? 0;
+                resolvedTotal = findCount(payload?.data?.ticket_volume, resolvedKeys) ?? findCount(payload?.data, resolvedKeys) ?? findCount(payload, resolvedKeys) ?? 0;
             }
 
-            APP_STATE.overview.stats.tickets = total;
-            updateSingleStatValue("tickets", total);
+            APP_STATE.overview.stats.tickets = activeTotal;
+            updateSingleStatValue("tickets", activeTotal);
+            APP_STATE.overview.stats.users = resolvedTotal;
+            updateSingleStatValue("users", resolvedTotal);
             syncTicketCardState("live");
         } catch (error) {
             console.error("❌ ITSM live ticket volume sync failed:", error);
             const errorMsg = describeItsmConnectionError(error);
             if (noteEl) noteEl.textContent = errorMsg;
+        }
+    };
+
+    const pushItsmLiveFeedItem = (message) => {
+        if (!message || typeof message !== "string") return;
+        itsmLiveFeedItems.unshift(message.trim());
+        if (itsmLiveFeedItems.length > ITSM_LIVE_FEED_MAX_ITEMS) {
+            itsmLiveFeedItems.length = ITSM_LIVE_FEED_MAX_ITEMS;
+        }
+        renderTicker();
+    };
+
+    const refreshLiveFeedFromTickets = async () => {
+        try {
+            const response = await fetch(`${ITSM_API_BASE}/tickets`, {
+                headers: { "Accept": "application/json" }
+            });
+            if (!response.ok) return;
+
+            const payload = await response.json();
+            const tickets = Array.isArray(payload?.data?.tickets) ? payload.data.tickets : [];
+            if (!tickets.length) return;
+
+            const sorted = tickets
+                .slice()
+                .sort((a, b) => new Date(b.updated_at || b.created_at || 0) - new Date(a.updated_at || a.created_at || 0));
+
+            const feedMessages = sorted.slice(0, ITSM_LIVE_FEED_MAX_ITEMS).map((ticket) => {
+                const number = String(ticket?.ticket_number || "").trim();
+                const title = String(ticket?.title || "").trim();
+                const status = String(ticket?.status || "").trim();
+                const label = number || "Ticket";
+                return title ? `${label} · ${title}${status ? ` (${status})` : ""}` : label;
+            });
+
+            itsmLiveFeedItems.length = 0;
+            feedMessages.forEach((message) => itsmLiveFeedItems.push(message));
+            renderTicker();
+        } catch (error) {
+            // Live feed is best-effort; the static ticketUpdates remain as fallback.
         }
     };
 
@@ -3687,6 +4036,34 @@ function setupLiveItsmTicketStat() {
                     if (['ticket-created', 'ticket-updated', 'ticket-status-changed'].includes(data.type)) {
                         console.log("📊 Ticket event received, refreshing count...", data.type);
                         updateLiveTicketCount();
+
+                        // Push a live feed item derived from the event payload so the
+                        // dashboard ticker reflects ITSM activity in near-real-time.
+                        const eventType = String(data.type || "").trim();
+                        const ticketId = String(data.ticketId || data.id || data.ticket_number || "").trim();
+                        const summary = String(data.summary || data.title || data.subject ||
+                            data.message || data.text || data.event || "").trim();
+                        const status = String(data.status || data.new_status || data.newState || "").trim();
+                        const source = `ITSM ${eventType}`;
+
+                        let feedMessage = ``;
+                        if (eventType === "ticket-created") {
+                            feedMessage = ticketId
+                                ? `New ITSM ticket #${ticketId}${summary ? ` — ${summary}` : ``}`
+                                : `New ITSM ticket received${summary ? ` — ${summary}` : ``}`;
+                        } else if (eventType === "ticket-status-changed") {
+                            feedMessage = ticketId
+                                ? `Ticket #${ticketId} moved to ${status}${summary ? ` — ${summary}` : ``}`
+                                : `Ticket status updated to ${status}${summary ? ` — ${summary}` : ``}`;
+                        } else if (eventType === "ticket-updated") {
+                            feedMessage = ticketId
+                                ? `Ticket #${ticketId} updated${summary ? ` — ${summary}` : ``}`
+                                : `ITSM ticket updated${summary ? ` — ${summary}` : ``}`;
+                        }
+
+                        if (feedMessage) {
+                            pushItsmLiveFeedItem(feedMessage);
+                        }
                     }
                 } catch (e) {
                     console.warn("WebSocket message parse error:", e);
@@ -3719,12 +4096,19 @@ function setupLiveItsmTicketStat() {
 
     // Initial fetch
     updateLiveTicketCount();
+    void refreshLiveFeedFromTickets();
 
     // Fallback polling (slower, as backup)
     if (window.__itsmLiveTicketInterval) {
         clearInterval(window.__itsmLiveTicketInterval);
     }
     window.__itsmLiveTicketInterval = setInterval(updateLiveTicketCount, 60 * 1000); // Every minute as backup
+
+    // Poll the ticket list on the same cadence so the live feed pills stay current.
+    if (window.__itsmLiveFeedInterval) {
+        clearInterval(window.__itsmLiveFeedInterval);
+    }
+    window.__itsmLiveFeedInterval = setInterval(() => void refreshLiveFeedFromTickets(), 60 * 1000);
 }
 
 function getItsmToken() {
@@ -3761,8 +4145,8 @@ async function resolveItsmToken(forceRefresh = false) {
                 'Accept': 'application/json'
             },
             body: JSON.stringify({
-                email: "adminmadison88@gmail.com",
-                password: "admin123"
+                email: import.meta.env.VITE_ITSM_USERNAME || "",
+                password: import.meta.env.VITE_ITSM_PASSWORD || ""
             })
         });
 
@@ -4492,6 +4876,41 @@ function setupModalSystem() {
     });
 
     document.addEventListener("click", (event) => {
+        const editorAddRow = event.target.closest("#automation-editor-add-row");
+        if (editorAddRow) {
+            const body = document.getElementById("automation-editor-body");
+            if (!body) return;
+            const index = body.querySelectorAll(".automation-editor-row").length;
+            const temp = document.createElement("tbody");
+            temp.innerHTML = buildAutomationEditorRow({ label: "", department: "", manualVolumeMonth: "", manualAvgMins: "", autoAvgMins: "", hourlyCostPhp: "" }, index);
+            const row = temp.querySelector(".automation-editor-row");
+            if (!row) return;
+            body.appendChild(row);
+            row.querySelector("input")?.focus();
+            return;
+        }
+
+        const editorDeleteRow = event.target.closest(".automation-editor-delete");
+        if (editorDeleteRow) {
+            editorDeleteRow.closest(".automation-editor-row")?.remove();
+            return;
+        }
+
+        const editorReset = event.target.closest("#automation-editor-reset");
+        if (editorReset) {
+            if (!confirm("Reset all automation data to the built-in defaults? Unsaved edits will be lost.")) return;
+            saveAutomationData(cloneData(AUTOMATION_SOURCE_DATA));
+            const modalBody = document.getElementById("modal-body");
+            if (modalBody) modalBody.innerHTML = buildAutomationDataEditorModal();
+            return;
+        }
+
+        const editorSave = event.target.closest("#automation-editor-save");
+        if (editorSave) {
+            handleAutomationEditorSave();
+            return;
+        }
+
         const editPolicyDocumentButton = event.target.closest("[data-edit-policy-document]");
         if (editPolicyDocumentButton) {
             if (!APP_STATE.adminLoggedIn) return;
@@ -4811,7 +5230,7 @@ function setupRevealAnimations() {
                 observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.12 });
+    }, { threshold: 0 });
     elements.forEach((element) => { if (!element.classList.contains("active")) observer.observe(element); });
 }
 
@@ -5239,6 +5658,93 @@ function buildSupportCenterModal() {
             <div class="support-stack modal-support-stack">${cards}</div>
         </div>
     `;
+}
+
+function buildAutomationEditorRow(row, index) {
+    const productiveHours = normalizeAutomationNumber(row.productiveHoursPerMonth) || PRODUCTIVE_HOURS_PER_MONTH;
+    return `
+        <tr class="automation-editor-row" data-editor-index="${index}">
+            <td data-label="Solution"><input type="text" name="label" value="${escapeHtml(row.label || "")}" placeholder="Solution name"></td>
+            <td data-label="Department"><input type="text" name="department" value="${escapeHtml(row.department || "")}" placeholder="Department"></td>
+            <td data-label="Trans / month"><input type="number" step="any" min="0" name="manualVolumeMonth" value="${normalizeAutomationNumber(row.manualVolumeMonth)}"></td>
+            <td data-label="Manual mins"><input type="number" step="any" min="0" name="manualAvgMins" value="${normalizeAutomationNumber(row.manualAvgMins)}"></td>
+            <td data-label="Auto mins"><input type="number" step="any" min="0" name="autoAvgMins" value="${normalizeAutomationNumber(row.autoAvgMins)}"></td>
+            <td data-label="Cost / hr (PHP)"><input type="number" step="any" min="0" name="hourlyCostPhp" value="${normalizeAutomationNumber(row.hourlyCostPhp)}"></td>
+            <td data-label="Productive hrs"><input type="number" step="any" min="1" name="productiveHoursPerMonth" value="${productiveHours}"></td>
+            <td data-label=""><button class="btn btn-danger automation-editor-delete" type="button" data-delete-row="${index}" title="Remove this solution">&times;</button></td>
+        </tr>
+    `;
+}
+
+function buildAutomationDataEditorModal() {
+    const rows = getAutomationSourceData();
+    const editorRows = rows.map((row, index) => buildAutomationEditorRow(row, index)).join("");
+
+    return `
+        <div class="modal-block automation-editor-block">
+            <h2 id="modal-title">Automation Data Editor</h2>
+            <p>Edit the source data behind the Automation Dashboard: transaction volume, handling times, hourly cost, and department per solution. All dashboard totals, charts, and breakdowns recalculate from these values.</p>
+            <div class="automation-editor-scroll">
+                <table class="automation-editor-table">
+                    <thead>
+                        <tr>
+                            <th>Solution</th>
+                            <th>Department</th>
+                            <th>Trans / month</th>
+                            <th>Manual mins</th>
+                            <th>Auto mins</th>
+                            <th>Cost / hr (PHP)</th>
+                            <th>Productive hrs</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="automation-editor-body">${editorRows}</tbody>
+                </table>
+            </div>
+            <div class="automation-editor-actions">
+                <button class="btn btn-secondary" type="button" id="automation-editor-add-row">+ Add Solution</button>
+                <button class="btn btn-secondary" type="button" id="automation-editor-reset">Reset to Defaults</button>
+                <button class="btn btn-primary" type="button" id="automation-editor-save">Save Changes</button>
+            </div>
+            <p class="admin-feedback automation-editor-feedback" style="color:#f3c8c8;"></p>
+        </div>
+    `;
+}
+
+function collectAutomationEditorRows() {
+    const body = document.getElementById("automation-editor-body");
+    if (!body) return null;
+
+    return [...body.querySelectorAll(".automation-editor-row")].map((row) => ({
+        label: String(row.querySelector("[name=\"label\"]")?.value || "").trim(),
+        department: String(row.querySelector("[name=\"department\"]")?.value || "").trim(),
+        manualVolumeMonth: normalizeAutomationNumber(row.querySelector("[name=\"manualVolumeMonth\"]")?.value),
+        manualAvgMins: normalizeAutomationNumber(row.querySelector("[name=\"manualAvgMins\"]")?.value),
+        autoAvgMins: normalizeAutomationNumber(row.querySelector("[name=\"autoAvgMins\"]")?.value),
+        hourlyCostPhp: normalizeAutomationNumber(row.querySelector("[name=\"hourlyCostPhp\"]")?.value),
+        productiveHoursPerMonth: normalizeAutomationNumber(row.querySelector("[name=\"productiveHoursPerMonth\"]")?.value)
+    }));
+}
+
+function handleAutomationEditorSave() {
+    const feedback = document.querySelector(".automation-editor-feedback");
+    const rows = collectAutomationEditorRows();
+    if (!rows) return;
+
+    if (rows.some((row) => !row.label)) {
+        if (feedback) feedback.textContent = "Every solution needs a name.";
+        return;
+    }
+    if (rows.some((row) => row.manualVolumeMonth <= 0)) {
+        if (feedback) feedback.textContent = "Transactions per month must be greater than 0 for every solution.";
+        return;
+    }
+
+    saveAutomationData(rows);
+    if (feedback) {
+        feedback.style.color = "#9fe8c8";
+        feedback.textContent = "Saved. Dashboard updated.";
+    }
 }
 
 function buildAdminLoginModal() {
@@ -5736,7 +6242,7 @@ function buildSupabaseSetupModal() {
         overview: {
             currentUser: "Madison88 Team",
             heroDescription: "One launchpad for support, systems, projects, and the people keeping Madison88 running at full speed.",
-            stats: { tickets: 8, uptime: 99.98, users: 110, projects: 14 },
+            stats: { tickets: 8, uptime: 99.98, users: 0, projects: 14 },
             ticketUpdates: ["Update 1", "Update 2"]
         },
         projects: [
@@ -5841,6 +6347,8 @@ function updateAdminUI() {
     if (addTeamButton) addTeamButton.hidden = !APP_STATE.adminLoggedIn;
     if (addSupportCardButton) addSupportCardButton.hidden = !APP_STATE.adminLoggedIn;
     if (addQuickHelpCardButton) addQuickHelpCardButton.hidden = !APP_STATE.adminLoggedIn;
+    const editAutomationDataButton = document.getElementById("edit-automation-data-button");
+    if (editAutomationDataButton) editAutomationDataButton.hidden = !APP_STATE.adminLoggedIn;
     window.dispatchEvent(new CustomEvent("itsm-token-updated"));
 }
 
@@ -5891,6 +6399,13 @@ function saveSupportCards() {
 function savePolicyDocuments() {
     APP_STATE.policyDocuments = APP_STATE.policyDocuments.map(normalizePolicyDocument);
     void persistSupabaseSection(SUPABASE_SECTION_KEYS.policyDocuments, APP_STATE.policyDocuments);
+}
+
+function saveAutomationData(rows) {
+    APP_STATE.automationData = normalizeAutomationSourceRows(rows);
+    rebuildAutomationComparison();
+    void persistSupabaseSection(SUPABASE_SECTION_KEYS.automationData, APP_STATE.automationData);
+    renderAutomationDashboard();
 }
 
 function loadProjects(source = "default") {
