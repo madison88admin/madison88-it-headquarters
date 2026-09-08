@@ -1262,7 +1262,7 @@ function renderTicker() {
 
     const pills = items.map((item, index) => {
         const isFirst = index === 0;
-        return `<span class="live-feed-pill${isFirst ? " is-featured" : ""}"><strong>IT Update</strong><span>${escapeHtml(item)}</span></span>`;
+        return `<span class="live-feed-pill${isFirst ? " is-featured" : ""}" title="${escapeHtml(item)}">${escapeHtml(item)}</span>`;
     }).join("");
 
     track.innerHTML = pills;
