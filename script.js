@@ -1248,7 +1248,16 @@ function renderStats() {
 function renderTicker() {
     const track = document.getElementById("status-ticker-track");
     if (!track) return;
-    const items = [...APP_STATE.overview.ticketUpdates, ...APP_STATE.overview.ticketUpdates];
+
+    const staticItems = APP_STATE.overview.ticketUpdates || [];
+    const itsmLiveItems = (typeof itsmLiveFeedItems !== 'undefined' && Array.isArray(itsmLiveFeedItems))
+        ? itsmLiveFeedItems
+        : [];
+    const items = [
+        ...itsmLiveItems,
+        ...staticItems,
+        ...staticItems
+    ];
     track.innerHTML = items.map((item) => `<span class="ticker-pill"><strong>IT Update</strong><span>${item}</span></span>`).join("");
 }
 
@@ -3801,6 +3810,18 @@ function setupLiveItsmTicketStat() {
         }
     };
 
+    const itsmLiveFeedItems = [];
+    const MAX_LIVE_FEED_ITEMS = 25;
+
+    const pushItsmLiveFeedItem = (message) => {
+        if (!message || typeof message !== 'string') return;
+        itsmLiveFeedItems.unshift(message.trim());
+        if (itsmLiveFeedItems.length > MAX_LIVE_FEED_ITEMS) {
+            itsmLiveFeedItems.length = MAX_LIVE_FEED_ITEMS;
+        }
+        renderTicker();
+    };
+
     const connectWebSocket = async () => {
         const token = await resolveItsmToken();
         if (!token) {
@@ -3844,6 +3865,34 @@ function setupLiveItsmTicketStat() {
                     if (['ticket-created', 'ticket-updated', 'ticket-status-changed'].includes(data.type)) {
                         console.log("📊 Ticket event received, refreshing count...", data.type);
                         updateLiveTicketCount();
+
+                        // Push a live feed item derived from the event payload so the
+                        // dashboard ticker reflects ITSM activity in near-real-time.
+                        const eventType = String(data.type || "").trim();
+                        const ticketId = String(data.ticketId || data.id || data.ticket_number || "").trim();
+                        const summary = String(data.summary || data.title || data.subject ||
+                            data.message || data.text || data.event || "").trim();
+                        const status = String(data.status || data.new_status || data.newState || "").trim();
+                        const source = `ITSM ${eventType}`;
+
+                        let feedMessage = ``;
+                        if (eventType === "ticket-created") {
+                            feedMessage = ticketId
+                                ? `New ITSM ticket #${ticketId}${summary ? ` — ${summary}` : ``}`
+                                : `New ITSM ticket received${summary ? ` — ${summary}` : ``}`;
+                        } else if (eventType === "ticket-status-changed") {
+                            feedMessage = ticketId
+                                ? `Ticket #${ticketId} moved to ${status}${summary ? ` — ${summary}` : ``}`
+                                : `Ticket status updated to ${status}${summary ? ` — ${summary}` : ``}`;
+                        } else if (eventType === "ticket-updated") {
+                            feedMessage = ticketId
+                                ? `Ticket #${ticketId} updated${summary ? ` — ${summary}` : ``}`
+                                : `ITSM ticket updated${summary ? ` — ${summary}` : ``}`;
+                        }
+
+                        if (feedMessage) {
+                            pushItsmLiveFeedItem(feedMessage);
+                        }
                     }
                 } catch (e) {
                     console.warn("WebSocket message parse error:", e);
