@@ -908,6 +908,8 @@ const ITSM_API_BASE = getItsmApiBase();
 const ITSM_LOGIN_URL = `${ITSM_API_BASE}/auth/login`;
 const ITSM_ACTIVE_TICKET_STATUSES = ["New", "In Progress", "Pending"];
 const ITSM_TOKEN_STORAGE_KEYS = ["madison88-itsm-runtime-token", "madison88-itsm-token", "m88itsm-token", "itsmToken"];
+const ITSM_LIVE_FEED_MAX_ITEMS = 8;
+const itsmLiveFeedItems = [];
 
 function getSupabaseSettings() {
     const runtimeConfig = window.M88_SUPABASE || {};
@@ -1249,33 +1251,18 @@ function renderTicker() {
     const track = document.getElementById("status-ticker-track");
     if (!track) return;
 
-    const staticItems = APP_STATE.overview.ticketUpdates || [];
-    const itsmLiveItems = (typeof itsmLiveFeedItems !== 'undefined' && Array.isArray(itsmLiveFeedItems))
+    const items = (typeof itsmLiveFeedItems !== "undefined" && Array.isArray(itsmLiveFeedItems) && itsmLiveFeedItems.length)
         ? itsmLiveFeedItems
-        : [];
-    const items = [
-        ...itsmLiveItems,
-        ...staticItems
-    ];
+        : (APP_STATE.overview.ticketUpdates || []);
 
-    if (items.length === 0) {
-        track.innerHTML = '';
+    if (!items.length) {
+        track.innerHTML = "";
         return;
     }
 
-    // Dedupe consecutive identical items to avoid visual spam in the pill view.
-    const dedupeKey = (text) => String(text || '').trim().toLowerCase();
-    const seen = new Set();
-    const uniqueItems = items.filter((item) => {
-        const key = dedupeKey(item);
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-    });
-
-    const pills = uniqueItems.map((item, index) => {
+    const pills = items.map((item, index) => {
         const isFirst = index === 0;
-        return `<span class="live-feed-pill${isFirst ? ' is-featured' : ''}"><strong>IT Update</strong><span>${escapeHtml(item)}</span></span>`;
+        return `<span class="live-feed-pill${isFirst ? " is-featured" : ""}"><strong>IT Update</strong><span>${escapeHtml(item)}</span></span>`;
     }).join("");
 
     track.innerHTML = pills;
@@ -3830,16 +3817,44 @@ function setupLiveItsmTicketStat() {
         }
     };
 
-    const itsmLiveFeedItems = [];
-    const MAX_LIVE_FEED_ITEMS = 25;
-
     const pushItsmLiveFeedItem = (message) => {
-        if (!message || typeof message !== 'string') return;
+        if (!message || typeof message !== "string") return;
         itsmLiveFeedItems.unshift(message.trim());
-        if (itsmLiveFeedItems.length > MAX_LIVE_FEED_ITEMS) {
-            itsmLiveFeedItems.length = MAX_LIVE_FEED_ITEMS;
+        if (itsmLiveFeedItems.length > ITSM_LIVE_FEED_MAX_ITEMS) {
+            itsmLiveFeedItems.length = ITSM_LIVE_FEED_MAX_ITEMS;
         }
         renderTicker();
+    };
+
+    const refreshLiveFeedFromTickets = async () => {
+        try {
+            const response = await fetch(`${ITSM_API_BASE}/tickets`, {
+                headers: { "Accept": "application/json" }
+            });
+            if (!response.ok) return;
+
+            const payload = await response.json();
+            const tickets = Array.isArray(payload?.data?.tickets) ? payload.data.tickets : [];
+            if (!tickets.length) return;
+
+            const sorted = tickets
+                .slice()
+                .sort((a, b) => new Date(b.updated_at || b.created_at || 0) - new Date(a.updated_at || a.created_at || 0));
+
+            const feedMessages = sorted.slice(0, ITSM_LIVE_FEED_MAX_ITEMS).map((ticket) => {
+                const number = String(ticket?.ticket_number || "").trim();
+                const title = String(ticket?.title || "").trim();
+                const status = String(ticket?.status || "").trim();
+                const label = number || "Ticket";
+                return title ? `${label} · ${title}${status ? ` (${status})` : ""}` : label;
+            });
+
+            itsmLiveFeedItems.length = 0;
+            feedMessages.forEach((message) => itsmLiveFeedItems.push(message));
+            renderTicker();
+        } catch (error) {
+            // Live feed is best-effort; the static ticketUpdates remain as fallback.
+        }
     };
 
     const connectWebSocket = async () => {
@@ -3945,12 +3960,19 @@ function setupLiveItsmTicketStat() {
 
     // Initial fetch
     updateLiveTicketCount();
-    
+    void refreshLiveFeedFromTickets();
+
     // Fallback polling (slower, as backup)
     if (window.__itsmLiveTicketInterval) {
         clearInterval(window.__itsmLiveTicketInterval);
     }
     window.__itsmLiveTicketInterval = setInterval(updateLiveTicketCount, 60 * 1000); // Every minute as backup
+
+    // Poll the ticket list on the same cadence so the live feed pills stay current.
+    if (window.__itsmLiveFeedInterval) {
+        clearInterval(window.__itsmLiveFeedInterval);
+    }
+    window.__itsmLiveFeedInterval = setInterval(() => void refreshLiveFeedFromTickets(), 60 * 1000);
 }
 
 function getItsmToken() {
