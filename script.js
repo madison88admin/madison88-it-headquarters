@@ -1431,7 +1431,7 @@ function renderAutomationDashboard() {
             </div>
         </div>
         <div class="automation-dashboard-body" id="automation-dashboard-body"${isHidden ? " hidden" : ""}>
-            <div class="automation-overall-chart-card">
+            <div class="automation-overall-chart-card automation-lifecycle-chart-card">
                 <div class="automation-overall-chart-copy">
                     <div>
                         <span class="quick-help-label">Lifecycle Chart</span>
@@ -1492,7 +1492,7 @@ function renderAutomationDashboard() {
                 </table>
             </div>
         </div>
-            <div class="automation-overall-chart-card">
+            <div class="automation-overall-chart-card automation-overall-comparison-card">
                 <div class="automation-overall-chart-copy">
                     <div>
                         <span class="quick-help-label">Overall Chart</span>
@@ -1549,6 +1549,16 @@ function renderAutomationDashboard() {
             </div>
         </div>
     `;
+
+    // Keep the portfolio comparison first and the lifecycle view last, after
+    // the supporting breakdown table, in both visual and reading order.
+    const dashboardBody = container.querySelector("#automation-dashboard-body");
+    const overallComparisonCard = dashboardBody?.querySelector(".automation-overall-comparison-card");
+    const lifecycleChartCard = dashboardBody?.querySelector(".automation-lifecycle-chart-card");
+    if (dashboardBody && overallComparisonCard && lifecycleChartCard) {
+        dashboardBody.prepend(overallComparisonCard);
+        dashboardBody.append(lifecycleChartCard);
+    }
 
     applyAutomationDashboardVisibility(container, isHidden);
     setupAutomationDashboardInteractions(container, statusSummaries);
