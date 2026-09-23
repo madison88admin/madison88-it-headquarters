@@ -1377,6 +1377,19 @@ function renderAutomationDashboard() {
                         ${departments.map((dept) => `<option value="${escapeHtml(dept)}"${dept === activeDepartment ? " selected" : ""}>${escapeHtml(dept)}</option>`).join("")}
                     </select>
                 </div>
+                <div class="automation-filter-control automation-period-filter-control">
+                    <span class="automation-filter-label" id="automation-period-label">Period</span>
+                    <div class="automation-period-switch" role="tablist" aria-labelledby="automation-period-label">
+                        ${AUTOMATION_PERIODS.map((item) => `
+                            <button
+                                class="automation-period-btn${item.key === period.key ? " is-active" : ""}"
+                                type="button"
+                                data-automation-period="${item.key}"
+                                aria-pressed="${String(item.key === period.key)}"
+                            >${item.label}</button>
+                        `).join("")}
+                    </div>
+                </div>
                 <span class="automation-filter-meta">${rows.length} of ${AUTOMATION_COMPARISON.length} solutions shown</span>
                 ${APP_STATE.adminLoggedIn ? '<button class="btn btn-secondary admin-inline-button automation-edit-data-button" type="button" id="edit-automation-data-button">Edit Automation Data</button>' : ""}
             </div>
@@ -1489,16 +1502,6 @@ function renderAutomationDashboard() {
                         <p class="automation-chart-intro">${exchangeRateNote}</p>
                     </div>
                     <div class="automation-chart-toolbar">
-                        <div class="automation-period-switch" role="tablist" aria-label="Automation timeframe filter">
-                            ${AUTOMATION_PERIODS.map((item) => `
-                                <button
-                                    class="automation-period-btn${item.key === period.key ? " is-active" : ""}"
-                                    type="button"
-                                    data-automation-period="${item.key}"
-                                    aria-pressed="${String(item.key === period.key)}"
-                                >${item.label}</button>
-                            `).join("")}
-                        </div>
                         <div class="automation-chart-legend">
                             <span><i class="legend-swatch legend-swatch-manual"></i>Manual effort hours</span>
                             <span><i class="legend-swatch legend-swatch-auto"></i>Automation effort hours</span>
